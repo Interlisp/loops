@@ -1,13 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED " 6-Nov-91 16:43:37" {DSK}<python>RELEASE>loops>2.0>src>LOOPSSPEEDUP.;2 13768  
 
-      changes to%:  (MACROS \GETDTD)
+(FILECREATED "11-Mar-2022 19:19:08" {DSK}<Users>briggs>Projects>loops>src>LOOPSSPEEDUP.;2 13756  
 
-      previous date%: "15-Aug-90 12:54:56" {DSK}<python>RELEASE>loops>2.0>src>LOOPSSPEEDUP.;1)
+      :CHANGES-TO (MACROS \GETDTD)
+
+      :PREVIOUS-DATE " 6-Nov-91 16:43:37" {DSK}<Users>briggs>Projects>loops>src>LOOPSSPEEDUP.;1)
 
 
 (* ; "
-Copyright (c) 1986, 1987, 1990, 1991 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1986-1987, 1990-1991, 2022 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSSPEEDUPCOMS)
@@ -93,7 +94,7 @@ Copyright (c) 1986, 1987, 1990, 1991 by Venue & Xerox Corporation.  All rights r
 (* "FOLLOWING DEFINITIONS EXPORTED")(DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS \GETDTD MACRO ((typeNum)
-                                 (ADDBASE \DTDSpaceBase (LLSH typeNum 4))))
+                         (ADDBASE \DTDSpaceBase (ITIMES typeNum 18))))
 )
 
 (* "END EXPORTED DEFINITIONS")
@@ -339,9 +340,9 @@ Copyright (c) 1986, 1987, 1990, 1991 by Venue & Xerox Corporation.  All rights r
 )
 
 (ADDTOVAR GLOBALVARS *Global-Method-Cache*)
-(PUTPROPS LOOPSSPEEDUP COPYRIGHT ("Venue & Xerox Corporation" 1986 1987 1990 1991))
+(PUTPROPS LOOPSSPEEDUP COPYRIGHT ("Venue & Xerox Corporation" 1986 1987 1990 1991 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2228 3435 (Make-Not-Reference-Counted 2238 . 3433)) (9888 11377 (FlushIVIndexCache 9898
- . 10642) (\Make-IV-Cache-Entry 10644 . 11375)) (11821 13242 (FlushMethodCache 11831 . 12483) (
-\Make-Method-Cache-Entry 12485 . 13240)))))
+  (FILEMAP (NIL (2216 3423 (Make-Not-Reference-Counted 2226 . 3421)) (9871 11360 (FlushIVIndexCache 9881
+ . 10625) (\Make-IV-Cache-Entry 10627 . 11358)) (11804 13225 (FlushMethodCache 11814 . 12466) (
+\Make-Method-Cache-Entry 12468 . 13223)))))
 STOP
