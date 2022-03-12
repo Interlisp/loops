@@ -1,14 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "15-Aug-90 13:15:21" {DSK}<usr>local>lde>SOURCES>loops>SYSTEM>LOOPSUID.;2 17229  
 
-      changes to%:  (VARS LOOPSUIDCOMS)
-                    (FNS HasUID? UID DeleteObjectUID)
+(FILECREATED "11-Mar-2022 18:42:34" {DSK}<Users>briggs>Projects>loops>src>LOOPSUID.;2 17406  
 
-      previous date%: "21-Apr-88 12:10:05" {DSK}<usr>local>lde>SOURCES>loops>SYSTEM>LOOPSUID.;1)
+      :CHANGES-TO (FNS InitializeUIDs)
+
+      :PREVIOUS-DATE "15-Aug-90 13:15:21" {DSK}<Users>briggs>Projects>loops>src>LOOPSUID.;1)
 
 
 (* ; "
-Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1984-1988, 1990, 2022 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSUIDCOMS)
@@ -132,12 +132,10 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporation.  
 (GLOBALVARS *UID-SESSION* *UID-COUNT*)
 )
 (DECLARE%: EVAL@COMPILE DONTCOPY 
-(* "FOLLOWING DEFINITIONS EXPORTED")
-
-(DECLARE%: EVAL@COMPILE
+(* "FOLLOWING DEFINITIONS EXPORTED")(DECLARE%: EVAL@COMPILE
 
 (RECORD UID (sessionID . uidNumber)
-                (SYSTEM))
+            (SYSTEM))
 )
 
 (* "END EXPORTED DEFINITIONS")
@@ -152,36 +150,38 @@ DONTEVAL@COMPILE DOCOPY
 (DEFINEQ
 
 (InitializeUIDs
-  [LAMBDA NIL                                                (* ; "Edited 21-Apr-88 11:38 by jrb:")
+  [LAMBDA NIL                                             (* ; "Edited 11-Mar-2022 18:41 by briggs")
+                                                             (* ; "Edited 21-Apr-88 11:38 by jrb:")
 
 (* ;;; "Initializes the UniqueIdentifer Generation System in DB.  Sets the global variables *UID-SESSION* and and *UID-COUNT*")
                                                              (* ; 
                                                              "Make sure that we have a valid time!")
-
     (DECLARE (GLOBALVARS \RCLKMILLISECOND \MY.NSHOSTNUMBER))
     (while (IGREATERP (IDATE MAKESYSDATE)
                   (IDATE)) do (ERROR "Time is not set! Call" 
                                      "(SETTIME %"dd-mmm-yy hh:mm:ss%") and type RETURN"))
                                                              (* ; 
                                                       "Compute *UID-SESSION* and DB.UIREC for today.")
-
-    (LET (date year month day monthCode startIndex nsHostNumber)
+    (LET (date separator year month day monthCode startIndex nsHostNumber)
          (SETQ nsHostNumber (OR (LISTP \MY.NSHOSTNUMBER)
                                 (LIST 'NSHOSTNUMBER (DAYTIME)
                                       0 0)))
-          
-          (* ;; "Set up hostNumbe from \MY.NSHOSTNUMBER which should always be set in Interlisp-D -- else compute a random one which should not be used by any one")
+
+         (* ;; "Set up hostNumbe from \MY.NSHOSTNUMBER which should always be set in Interlisp-D -- else compute a random one which should not be used by any one")
+
+         (* ;; "Compensate for DATE post Y2K producing 4-digit year")
 
          (SETQ date (DATE))
-         (SETQ year (SUBATOM date 8 9))
+         (SETQ separator (STRPOS " " date))
+         (SETQ year (IMOD (SUBATOM date 8 (SUB1 separator))
+                          100))
          (SETQ month (SUBATOM date 4 6))
          (SETQ day (OR (NUMBERP (SUBATOM date 1 2))
                        (SUBATOM date 2 2)))
          [SETQ startIndex (IDIFFERENCE (IDATE date)
-                                 (IDATE (CONCAT (SUBSTRING date 1 10)
+                                 (IDATE (CONCAT (SUBSTRING date 1 separator)
                                                "00:00:00"]   (* ; 
             "start index is seconds today.  Wait a second to be sure no one can use this index again")
-
          (forDuration 1 timerUnits 'SECONDS do NIL)
          (SETQ monthCode (SELECTQ month
                              ((Jan JAN) 
@@ -209,8 +209,8 @@ DONTEVAL@COMPILE DOCOPY
                              ((Dec DEC) 
                                   'D)
                              (ERROR month "IS NOT A MONTH")))
-          
-          (* ;; "An unique ID consists of a front followed by a count.  The front is set up any time one enters -- It is unique because it contains the machine ID, the date, time of day in seconds, and has waited a second.  It then creates all of the UIDS in order from there.")
+
+         (* ;; "An unique ID consists of a front followed by a count.  The front is set up any time one enters -- It is unique because it contains the machine ID, the date, time of day in seconds, and has waited a second.  It then creates all of the UIDS in order from there.")
 
          (SETQ *UID-COUNT* 0)
          (SETQ *UID-SESSION* (PACK* monthCode (CHARACTER (IPLUS 64 day))
@@ -424,11 +424,11 @@ DONTEVAL@COMPILE DOCOPY
 )
 
 (ADDTOVAR AROUNDEXITFNS \Loops.AroundExit)
-(PUTPROPS LOOPSUID COPYRIGHT ("Venue & Xerox Corporation" 1984 1985 1986 1987 1988 1990))
+(PUTPROPS LOOPSUID COPYRIGHT ("Venue & Xerox Corporation" 1984 1985 1986 1987 1988 1990 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2622 4148 (HasUID? 2632 . 2955) (Make-UID 2957 . 3506) (UID 3508 . 3911) (UIDP 3913 . 
-4146)) (4589 9130 (InitializeUIDs 4599 . 8370) (RADIX64NUM 8372 . 9128)) (9186 14168 (Unpack-UID 9196
- . 13597) (ConvertFromRadix64 13599 . 14166)) (14288 16377 (GetObjFromUID 14298 . 14579) (PutObjectUID
- 14581 . 14993) (DeleteObjectUID 14995 . 15382) (MapObjectUID 15384 . 15600) (UIDHashBits 15602 . 
-15977) (UIDEqual 15979 . 16375)) (16654 17068 (\Loops.AroundExit 16664 . 17066)))))
+  (FILEMAP (NIL (2528 4054 (HasUID? 2538 . 2861) (Make-UID 2863 . 3412) (UID 3414 . 3817) (UIDP 3819 . 
+4052)) (4489 9302 (InitializeUIDs 4499 . 8542) (RADIX64NUM 8544 . 9300)) (9358 14340 (Unpack-UID 9368
+ . 13769) (ConvertFromRadix64 13771 . 14338)) (14460 16549 (GetObjFromUID 14470 . 14751) (PutObjectUID
+ 14753 . 15165) (DeleteObjectUID 15167 . 15554) (MapObjectUID 15556 . 15772) (UIDHashBits 15774 . 
+16149) (UIDEqual 16151 . 16547)) (16826 17240 (\Loops.AroundExit 16836 . 17238)))))
 STOP
