@@ -1597,7 +1597,7 @@ Copyright (c) 1986, 1987, 1988 by Xerox Corporation.  All rights reserved.
        ((EQ (GETSYNTAX (PEEKC fileHandle readTable))
             'OTHER)
         (LIST '$ (READ fileHandle readTable)))
-      (T '$])
+       (T '$])
 )
 
 (ADDTOVAR DWIMUSERFORMS (TRANS@$))
@@ -1655,7 +1655,7 @@ Copyright (c) 1986, 1987, 1988 by Xerox Corporation.  All rights reserved.
                                                               (COND
                                                                  (FLG (SETQ CHANGEDFLG T))
                                                                  (T (RETFROM 'EC NAME]
-  ]        [COND
+          [COND
              (CHANGEDFLG                                     (* Here if the source has changed at 
                                                              all)
                     (COND
