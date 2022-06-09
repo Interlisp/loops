@@ -1,8 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "17-Mar-2022 16:22:46" {DSK}<Users>briggs>Projects>loops>src>LOOPSUID.;2 17368  
+(FILECREATED " 2-Jun-2022 13:44:04" {DSK}<var>tmp>loops>sources>LOOPSUID.;2 17549  
 
-      :PREVIOUS-DATE "11-Mar-2022 18:42:34" {DSK}<Users>briggs>Projects>loops>src>LOOPSUID.;1)
+      :CHANGES-TO (FNS InitializeUIDs)
+
+      :PREVIOUS-DATE "17-Mar-2022 16:22:46" {DSK}<var>tmp>loops>sources>LOOPSUID.;1)
 
 
 (* ; "
@@ -148,7 +150,8 @@ DONTEVAL@COMPILE DOCOPY
 (DEFINEQ
 
 (InitializeUIDs
-  [LAMBDA NIL                                             (* ; "Edited 11-Mar-2022 18:41 by briggs")
+  [LAMBDA NIL                                             (* ; "Edited  2-Jun-2022 13:43 by briggs")
+                                                          (* ; "Edited 11-Mar-2022 18:41 by briggs")
                                                              (* ; "Edited 21-Apr-88 11:38 by jrb:")
 
 (* ;;; "Initializes the UniqueIdentifer Generation System in DB.  Sets the global variables *UID-SESSION* and and *UID-COUNT*")
@@ -170,7 +173,7 @@ DONTEVAL@COMPILE DOCOPY
          (* ;; "Compensate for DATE post Y2K producing 4-digit year")
 
          (SETQ date (DATE))
-         (SETQ separator (STRPOS " " date))
+         (SETQ separator (STRPOS " " date 2))                (* ; "may start with a space")
          (SETQ year (IMOD (SUBATOM date 8 (SUB1 separator))
                           100))
          (SETQ month (SUBATOM date 4 6))
@@ -424,9 +427,9 @@ DONTEVAL@COMPILE DOCOPY
 (ADDTOVAR AROUNDEXITFNS \Loops.AroundExit)
 (PUTPROPS LOOPSUID COPYRIGHT ("Venue & Xerox Corporation" 1984 1985 1986 1987 1988 1990 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2490 4016 (HasUID? 2500 . 2823) (Make-UID 2825 . 3374) (UID 3376 . 3779) (UIDP 3781 . 
-4014)) (4451 9264 (InitializeUIDs 4461 . 8504) (RADIX64NUM 8506 . 9262)) (9320 14302 (Unpack-UID 9330
- . 13731) (ConvertFromRadix64 13733 . 14300)) (14422 16511 (GetObjFromUID 14432 . 14713) (PutObjectUID
- 14715 . 15127) (DeleteObjectUID 15129 . 15516) (MapObjectUID 15518 . 15734) (UIDHashBits 15736 . 
-16111) (UIDEqual 16113 . 16509)) (16788 17202 (\Loops.AroundExit 16798 . 17200)))))
+  (FILEMAP (NIL (2510 4036 (HasUID? 2520 . 2843) (Make-UID 2845 . 3394) (UID 3396 . 3799) (UIDP 3801 . 
+4034)) (4471 9445 (InitializeUIDs 4481 . 8685) (RADIX64NUM 8687 . 9443)) (9501 14483 (Unpack-UID 9511
+ . 13912) (ConvertFromRadix64 13914 . 14481)) (14603 16692 (GetObjFromUID 14613 . 14894) (PutObjectUID
+ 14896 . 15308) (DeleteObjectUID 15310 . 15697) (MapObjectUID 15699 . 15915) (UIDHashBits 15917 . 
+16292) (UIDEqual 16294 . 16690)) (16969 17383 (\Loops.AroundExit 16979 . 17381)))))
 STOP
