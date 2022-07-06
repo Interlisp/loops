@@ -1,13 +1,15 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "15-Aug-91 17:09:26" {DSK}<python>release>loops>2.0>TRUCKIN>TRUCKINLOAD.;2 2405   
 
-      changes to%:  (FNS LoadTruckin)
+(FILECREATED " 6-Jul-2022 14:05:08" {DSK}<home>larry>loops>TRUCKIN-src>TRUCKINLOAD.;2 2483   
 
-      previous date%: "18-Jul-88 20:27:41" {DSK}<python>release>loops>2.0>TRUCKIN>TRUCKINLOAD.;1)
+      :CHANGES-TO (FNS LoadTruckin)
+                  (VARS TRUCKINLOADCOMS)
+
+      :PREVIOUS-DATE " 6-Jul-2022 13:53:04" {DSK}<home>larry>loops>TRUCKIN-src>TRUCKINLOAD.;1)
 
 
 (* ; "
-Copyright (c) 1987, 1988, 1991 by Xerox Corporation.  All rights reserved.
+Copyright (c) 1987-1988, 1991 by Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT TRUCKINLOADCOMS)
@@ -16,11 +18,12 @@ Copyright (c) 1987, 1988, 1991 by Xerox Corporation.  All rights reserved.
        (
         (* ;; "Random patches to make Truckin work")
 
-        (VARS TruckinDirectory TruckinPlayersDirectory)
+        (VARS (TruckinDirectory (MEDLEYDIR "../loops/TRUCKIN>"))
+              (TruckinPlayersDirectory (CONCAT TruckinDirectory "players>")))
         (FUNCTIONS INMENU)
-        (P (MOVD 'PROMPTPRINT 'PROMPT)
-           (MOVD 'DISMISS 'WAITMS)
-           (MOVD 'RS.INTTY 'INTTY))
+        (P (MOVD? 'PROMPTPRINT 'PROMPT)
+           (MOVD? 'DISMISS 'WAITMS)
+           (MOVD? 'RS.INTTY 'INTTY))
         (FNS LoadTruckin)))
 
 
@@ -28,25 +31,25 @@ Copyright (c) 1987, 1988, 1991 by Xerox Corporation.  All rights reserved.
 (* ;; "Random patches to make Truckin work")
 
 
-(RPAQQ TruckinDirectory "{Pogo:AISNorth:Xerox}<LoopsCore>TRUCKIN>")
+(RPAQ TruckinDirectory (MEDLEYDIR "../loops/TRUCKIN>"))
 
-(RPAQQ TruckinPlayersDirectory "{Pogo:AISNorth:Xerox}<LoopsCore>TRUCKIN>players>")
+(RPAQ TruckinPlayersDirectory (CONCAT TruckinDirectory "players>"))
 
 (CL:DEFUN INMENU (TITLE ITEMS &OPTIONAL (PROMPTSTRING "Choose one")
-                            FLG)
+                        FLG)
    (MENU (create MENU
                 TITLE _ TITLE
                 ITEMS _ ITEMS)))
 
-(MOVD 'PROMPTPRINT 'PROMPT)
+(MOVD? 'PROMPTPRINT 'PROMPT)
 
-(MOVD 'DISMISS 'WAITMS)
+(MOVD? 'DISMISS 'WAITMS)
 
-(MOVD 'RS.INTTY 'INTTY)
+(MOVD? 'RS.INTTY 'INTTY)
 (DEFINEQ
 
 (LoadTruckin
-  [LAMBDA NIL                                            (* ; "Edited 18-Jul-88 20:01 by Bane")
+  [LAMBDA NIL                                                (* ; "Edited 18-Jul-88 20:01 by Bane")
     (CL:UNLESS (GETD 'LOADLOOPS)
            (CL:ERROR "Please load LOOPS so I can find everything else"))
 
@@ -78,5 +81,5 @@ Copyright (c) 1987, 1988, 1991 by Xerox Corporation.  All rights reserved.
 )
 (PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (1237 2312 (LoadTruckin 1247 . 2310)))))
+  (FILEMAP (NIL (1039 1228 (INMENU 1039 . 1228)) (1311 2390 (LoadTruckin 1321 . 2388)))))
 STOP
