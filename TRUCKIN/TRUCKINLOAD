@@ -1,11 +1,11 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 6-Jul-2022 14:40:36" {DSK}<home>larry>loops>TRUCKIN-src>TRUCKINLOAD.;2 2489   
+(FILECREATED " 7-Jul-2022 21:58:26" {DSK}<Users>larry>loops>truckin>TRUCKINLOAD.;3 3920   
 
       :CHANGES-TO (FNS LoadTruckin)
                   (VARS TRUCKINLOADCOMS)
 
-      :PREVIOUS-DATE " 6-Jul-2022 14:05:08" {DSK}<home>larry>loops>TRUCKIN-src>TRUCKINLOAD.;1)
+      :PREVIOUS-DATE " 6-Jul-2022 14:40:36" {DSK}<Users>larry>loops>truckin>TRUCKINLOAD.;1)
 
 
 (* ; "
@@ -18,7 +18,17 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
        (
         (* ;; "Random patches to make Truckin work")
 
-        (VARS (TruckinDirectory (MEDLEYDIR "../loops/TRUCKIN-SRC"))
+        (VARS [TruckinDirectory (OR (MEDLEYDIR "../loops/truckin" NIL NIL T)
+                                    (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T
+                                                                 NIL UPPERCASEARRAY T)
+                                                          (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T
+                                                                 NIL UPPERCASEARRAY T]
+                                         (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING 
+                                                                                    LOOPSDIRECTORY 1
+                                                                                    (SUB1 POSSOURCES)
+                                                                                    )
+                                                                            "truckin>"))
+                                             ELSE LOOPSDIRECTORY]
               (TruckinPlayersDirectory (CONCAT TruckinDirectory "players>")))
         (FUNCTIONS INMENU)
         (P (MOVD? 'PROMPTPRINT 'PROMPT)
@@ -31,7 +41,13 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
 (* ;; "Random patches to make Truckin work")
 
 
-(RPAQ TruckinDirectory (MEDLEYDIR "../loops/TRUCKIN-SRC"))
+(RPAQ TruckinDirectory
+      (OR (MEDLEYDIR "../loops/truckin" NIL NIL T)
+          (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
+                                (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T]
+               (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
+                                                  "truckin>"))
+                   ELSE LOOPSDIRECTORY))))
 
 (RPAQ TruckinPlayersDirectory (CONCAT TruckinDirectory "players>"))
 
@@ -49,7 +65,8 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
 (DEFINEQ
 
 (LoadTruckin
-  [LAMBDA NIL                                                (* ; "Edited 18-Jul-88 20:01 by Bane")
+  [LAMBDA NIL                                                (* ; "Edited  7-Jul-2022 21:52 by lmm")
+                                                             (* ; "Edited 18-Jul-88 20:01 by Bane")
     (CL:UNLESS (GETD 'LOADLOOPS)
            (CL:ERROR "Please load LOOPS so I can find everything else"))
 
@@ -63,7 +80,7 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
     (* ;; "Then the rules")
 
     (FILESLOAD (FROM VALUEOF LOOPSUSERSRULESDIRECTORY)
-           LOOPSRULES-ROOT)
+           RULES-ROOT)
 
     (* ;; "Finally load Truckin")
 
@@ -81,5 +98,5 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
 )
 (PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (1045 1234 (INMENU 1045 . 1234)) (1317 2396 (LoadTruckin 1327 . 2394)))))
+  (FILEMAP (NIL (2372 2561 (INMENU 2372 . 2561)) (2644 3827 (LoadTruckin 2654 . 3825)))))
 STOP

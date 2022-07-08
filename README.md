@@ -7,8 +7,11 @@ Directories so far
 
 * system -- the Loops core system
   * has file LOADLOOPS
-  * has files that used to be in sources
-* library 
+     * do (FILESLOAD LOADLOOPS) (LOADLOOPS) to load LOOPS files
+* library
+  * (FILESLOAD GAUGELOADER) (LOADGAUGES) to load gauges
+  * (FILESLOAD LOOPSMS) to load masterscope enhancements 
+
 * users
    * users/rules
 * truckin -- the truckin demo
