@@ -1,15 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 7-Jul-2022 21:58:26" {DSK}<Users>larry>loops>truckin>TRUCKINLOAD.;3 3920   
+(FILECREATED " 9-Jul-2022 17:40:46" {DSK}<home>larry>loops>TRUCKIN>TRUCKINLOAD.;4 3963   
 
       :CHANGES-TO (FNS LoadTruckin)
-                  (VARS TRUCKINLOADCOMS)
 
-      :PREVIOUS-DATE " 6-Jul-2022 14:40:36" {DSK}<Users>larry>loops>truckin>TRUCKINLOAD.;1)
+      :PREVIOUS-DATE " 7-Jul-2022 21:58:26" {DSK}<home>larry>loops>TRUCKIN>TRUCKINLOAD.;3)
 
 
 (* ; "
-Copyright (c) 1987-1988, 1991 by Xerox Corporation.
+Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT TRUCKINLOADCOMS)
@@ -65,7 +64,8 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
 (DEFINEQ
 
 (LoadTruckin
-  [LAMBDA NIL                                                (* ; "Edited  7-Jul-2022 21:52 by lmm")
+  [LAMBDA NIL                                              (* ; "Edited  9-Jul-2022 13:04 by larry")
+                                                             (* ; "Edited  7-Jul-2022 21:52 by lmm")
                                                              (* ; "Edited 18-Jul-88 20:01 by Bane")
     (CL:UNLESS (GETD 'LOADLOOPS)
            (CL:ERROR "Please load LOOPS so I can find everything else"))
@@ -73,13 +73,13 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
     (* ;; "Then the gauges")
 
     (CL:UNLESS (GETD 'LOADGAUGES)
-        (FILESLOAD (FROM VALUEOF LOOPSLIBRARYDIRECTORY)
+        (FILESLOAD (FROM LOOPSLIBRARY)
                GAUGELOADER)
         (LOADGAUGES))
 
     (* ;; "Then the rules")
 
-    (FILESLOAD (FROM VALUEOF LOOPSUSERSRULESDIRECTORY)
+    (FILESLOAD (FROM LOOPSUSERSRULES)
            RULES-ROOT)
 
     (* ;; "Finally load Truckin")
@@ -96,7 +96,7 @@ Copyright (c) 1987-1988, 1991 by Xerox Corporation.
 (_ PlayerInterface BeginGame)
  to start."])
 )
-(PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991))
+(PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2372 2561 (INMENU 2372 . 2561)) (2644 3827 (LoadTruckin 2654 . 3825)))))
+  (FILEMAP (NIL (2335 2524 (INMENU 2335 . 2524)) (2607 3865 (LoadTruckin 2617 . 3863)))))
 STOP

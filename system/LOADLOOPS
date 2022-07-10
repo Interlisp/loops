@@ -1,11 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 7-Jul-2022 19:44:42" {DSK}<Users>larry>loops>system>LOADLOOPS.;2 19449  
+(FILECREATED " 9-Jul-2022 20:50:48" {DSK}<home>larry>loops>system>LOADLOOPS.;10 20920  
 
       :CHANGES-TO (VARS LOADLOOPSCOMS)
-                  (FNS LOADLOOPS)
 
-      :PREVIOUS-DATE "10-May-93 18:00:47" {DSK}<Users>larry>loops>system>LOADLOOPS.;1)
+      :PREVIOUS-DATE " 9-Jul-2022 20:11:08" {DSK}<home>larry>loops>system>LOADLOOPS.;9)
 
 
 (* ; "
@@ -15,23 +14,23 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 (PRETTYCOMPRINT LOADLOOPSCOMS)
 
 (RPAQQ LOADLOOPSCOMS
-       [
+       (
 
 (* ;;; "Loops loadup stuff")
 
         
         (* ;; "Bootstrap function until LOOPSBROWSE is loaded")
 
-        (P (MOVD? 'NILL 'UpdateClassBrowsers))
-        (FNS LOADLOOPS LoadLispUsers UnMarkChanges)
-        [VARS (LispUserFilesForLoops '(GRAPHER))
+        (FNS LOADLOOPS LoadLispUsers NOCACHEMACRO UnMarkChanges)
+        (VARS (LispUserFilesForLoops '(GRAPHER))
               (LoopsPatchFiles NIL)
               (*DEFAULT-CLEANUP-COMPILER* 'CL:COMPILE-FILE)
               (LOOPSFILES '(LOADLOOPS LOOPSSITE BLOCKLOOKUP LOOPSSPEEDUP LOOPSDATATYPES LOOPSSTRUC 
                                   LOOPSPRINT LOOPS-FILEPKG LOOPSACCESS LOOPSUID LOOPSEDIT 
                                   LOOPSMETHODS LOOPSKERNEL LOOPSACTIVEVALUES LOOPSUTILITY 
                                   LOOPSINSPECT LOOPSWINDOW LOOPSBROWSE LOOPSDEBUG LOOPSUSERINTERFACE
-                                  LOOPS-TTYEDIT INSPECT-PATCH]
+                                  LOOPS-TTYEDIT INSPECT-PATCH))
+              (*REMOVE-INTERLISP-COMMENTS* T))
         
         (* ;; "Loopsms  in library")
 
@@ -66,7 +65,7 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
         
         (* ;; "Some reasonable defaults, in case they wern't set by the site file")
 
-        (INITVARS (LoadLoopsForms NIL)
+        [INITVARS (LoadLoopsForms NIL)
                (OptionalLispuserFiles NIL)
                
                (* ;; "All these variables were set by the LOOPS.DFASL file with this as the fallback")
@@ -107,7 +106,16 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
                                                                                    LOOPSDIRECTORY 1
                                                                                    (SUB1 POSSOURCES))
                                                                                  "USERS>RULES>"))
-                                                  ELSE LOOPSDIRECTORY])
+                                                  ELSE LOOPSDIRECTORY]
+        (VARS (DIRECTORIES (UNION (LIST LOOPSDIRECTORY LOOPSLIBRARYDIRECTORY LOOPSUSERSDIRECTORY 
+                                        LOOPSUSERSRULESDIRECTORY)
+                                  DIRECTORIES)))
+        (P (MOVD? 'NILL 'UpdateClassBrowsers)
+           (FOR X IN FILELST BIND FOUND WHEN (SETQ FOUND (FINDFILE X))
+                DO
+                (RPLACD (CAR (GETPROP X 'FILEDATES))
+                       FOUND)))
+        (ADVISE CL:COMPILE-FILE)))
 
 
 
@@ -118,8 +126,6 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 
 (* ;; "Bootstrap function until LOOPSBROWSE is loaded")
 
-
-(MOVD? 'NILL 'UpdateClassBrowsers)
 (DEFINEQ
 
 (LOADLOOPS
@@ -197,6 +203,10 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
     (DOFILESLOAD (CONS '(SYSLOAD FROM VALUEOF LISPUSERSDIRECTORIES)
                        LispUserFilesForLoops])
 
+(NOCACHEMACRO
+  [LAMBDA (FN BODY ENV)
+    (CL:FUNCALL FN BODY ENV])
+
 (UnMarkChanges
   [LAMBDA (FILES)                                        (* smL "10-Dec-86 19:19")
 
@@ -224,6 +234,8 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
                          LOOPS-FILEPKG LOOPSACCESS LOOPSUID LOOPSEDIT LOOPSMETHODS LOOPSKERNEL 
                          LOOPSACTIVEVALUES LOOPSUTILITY LOOPSINSPECT LOOPSWINDOW LOOPSBROWSE 
                          LOOPSDEBUG LOOPSUSERINTERFACE LOOPS-TTYEDIT INSPECT-PATCH))
+
+(RPAQQ *REMOVE-INTERLISP-COMMENTS* T)
 
 
 
@@ -417,10 +429,29 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
             (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
                                                "USERS>RULES>"))
                 ELSE LOOPSDIRECTORY)))
+
+(RPAQ DIRECTORIES (UNION (LIST LOOPSDIRECTORY LOOPSLIBRARYDIRECTORY LOOPSUSERSDIRECTORY 
+                               LOOPSUSERSRULESDIRECTORY)
+                         DIRECTORIES))
+
+(MOVD? 'NILL 'UpdateClassBrowsers)
+
+(FOR X IN FILELST BIND FOUND WHEN (SETQ FOUND (FINDFILE X))
+   DO (RPLACD (CAR (GETPROP X 'FILEDATES))
+             FOUND))
+
+[XCL:REINSTALL-ADVICE 'CL:COMPILE-FILE :AROUND '((:LAST (LET ((*MACROEXPAND-HOOK* 'NOCACHEMACRO))
+                                                             (DECLARE (SPECVARS *MACROEXPAND-HOOK))
+                                                             *))
+                                                 (:LAST (LET ((*MACROEXPAND-HOOK* 'NOCACHEMACRO))
+                                                             (DECLARE (SPECVARS *MACROEXPAND-HOOK*))
+                                                             *]
+
+(READVISE CL:COMPILE-FILE)
 (PUTPROPS LOADLOOPS COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
 1993 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (6323 10661 (LOADLOOPS 6333 . 9547) (LoadLispUsers 9549 . 9955) (UnMarkChanges 9957 . 
-10659)) (11399 14624 (PromptEval 11409 . 13105) (PromptRead 13107 . 14622)) (15230 16994 (NiceMenu 
-15240 . 15795) (ColumnateMenuItems 15797 . 16992)))))
+  (FILEMAP (NIL (6736 11147 (LOADLOOPS 6746 . 9960) (LoadLispUsers 9962 . 10368) (NOCACHEMACRO 10370 . 
+10441) (UnMarkChanges 10443 . 11145)) (11928 15153 (PromptEval 11938 . 13634) (PromptRead 13636 . 
+15151)) (15759 17523 (NiceMenu 15769 . 16324) (ColumnateMenuItems 16326 . 17521)))))
 STOP
