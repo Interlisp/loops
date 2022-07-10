@@ -1,43 +1,40 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "10-May-93 18:00:47" {DSK}<usr>local>lde>loops>src>LOADLOOPS.;5 20390  
 
-      changes to%:  (VARS LOADLOOPSCOMS)
+(FILECREATED "10-Jul-2022 12:25:25" {DSK}<home>larry>loops>system>LOADLOOPS.;5 15503  
 
-      previous date%: " 7-Nov-91 14:17:06" {DSK}<usr>local>lde>loops>src>LOADLOOPS.;4)
+      :CHANGES-TO (FNS LOOPSINIT)
+                  (VARS LOADLOOPSCOMS)
+
+      :PREVIOUS-DATE "10-Jul-2022 11:26:27" {DSK}<home>larry>loops>system>LOADLOOPS.;3)
 
 
 (* ; "
-Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOADLOOPSCOMS)
 
 (RPAQQ LOADLOOPSCOMS
-       [
+       (
 
 (* ;;; "Loops loadup stuff")
 
         
         (* ;; "Bootstrap function until LOOPSBROWSE is loaded")
 
-        [P (PUTD 'UpdateClassBrowsers (GETD 'NILL]
-        (FNS LOADLOOPS LoadLispUsers UnMarkChanges)
-        
-        (* ;; "JRB - LAMBDATRAN is no longer necessary; ICONW lives in Lyric")
-
-        
-        (* ;; "JRB - Remember to remove SEDIT-PATCH for Medley")
-
-        [VARS (LispUserFilesForLoops '(GRAPHER))
+        (P (MOVD? 'NILL 'UpdateClassBrowsers))
+        (FNS LOADLOOPS LOOPSINIT LoadLispUsers UnMarkChanges)
+        (VARS (LispUserFilesForLoops '(GRAPHER))
               (LoopsPatchFiles NIL)
               (*DEFAULT-CLEANUP-COMPILER* 'CL:COMPILE-FILE)
               (LOOPSFILES '(LOADLOOPS LOOPSSITE BLOCKLOOKUP LOOPSSPEEDUP LOOPSDATATYPES LOOPSSTRUC 
                                   LOOPSPRINT LOOPS-FILEPKG LOOPSACCESS LOOPSUID LOOPSEDIT 
                                   LOOPSMETHODS LOOPSKERNEL LOOPSACTIVEVALUES LOOPSUTILITY 
                                   LOOPSINSPECT LOOPSWINDOW LOOPSBROWSE LOOPSDEBUG LOOPSUSERINTERFACE
-                                  LOOPS-TTYEDIT INSPECT-PATCH]
+                                  LOOPS-TTYEDIT INSPECT-PATCH))
+              (*REMOVE-INTERLISP-COMMENTS* T))
         
-        (* ;; "Loopsms is being moved to the library.")
+        (* ;; "Loopsms  in library")
 
         
         (* ;; "Loops version decl's")
@@ -45,70 +42,27 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
         (VARS (LoopsVersion 'Lyric/Medley))
         
         (* ;; 
-      "Some utility functions and macros we like having around - these are actually used in Loops")
+        "Some utility functions and macros we like having around - these are actually used in Loops")
 
         (FNS PromptEval PromptRead)
         (MACROS MenuGetOrCreate)
-                                                             (* ; "NiceMenu is used all over the place. It really doesn't belong in this file. Ditto ColumnateMenuItems (JDS 11/8/91)")
+        
+        (* ;; "NiceMenu is used all over the place. It really doesn't belong in this file. Ditto ColumnateMenuItems (JDS 11/8/91)")
+
         (FNS NiceMenu ColumnateMenuItems)
         
         (* ;; "Load the site specific file. Note that this assumes that the file is easily found, say on the same directory as this file. If no file is found, that is OK, it is assumed that there is no site file.")
 
-                                                             (* ; 
-                               "The ugly RESETLST stuff is to prevent the TTY window from hanging.")
-        (P (RESETLST
-               [RESETSAVE (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN (FUNCTION NILL))
-                      (LIST (FUNCTION WINDOWPROP)
-                            \TopLevelTtyWindow
-                            'PAGEFULLFN
-                            (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN]
-               (FILESLOAD (NOERROR)
-                      LoopsSite)))
+        (FILES (NOERROR)
+               LoopsSite)
         
         (* ;; "Some reasonable defaults, in case they wern't set by the site file")
 
-        (INITVARS (LoadLoopsForms NIL)
-               (OptionalLispuserFiles NIL)
-               
-               (* ;; "All this stuff now gets set by the LOOPS.DFASL file... YAAAY!")
+        
+        (* ;; " lmm 7/10/22 should move into main medley maybe")
 
-               [LOOPSDIRECTORY (LET [(thisFile (FULLNAME (GETSTREAM NIL 'INPUT]
-                                    (PACKFILENAME 'HOST (FILENAMEFIELD thisFile 'HOST)
-                                           'DEVICE
-                                           (FILENAMEFIELD thisFile 'DEVICE)
-                                           'DIRECTORY
-                                           (FILENAMEFIELD thisFile 'DIRECTORY]
-               
-               (* ;; "If LOOPSDIRECTORY happens to end in %"SOURCES>%" or %"SYSTEM>%", construct the library, users, and rules directory pathnames by replacing it with %"LIBRARY>%", %"USERS>%", and %"USERS>RULES>%" respectively.  Otherwise punt and set them the same as LOOPSDIRECTORY.")
-
-               (LOOPSLIBRARYDIRECTORY (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL
-                                                                   T NIL UPPERCASEARRAY T)
-                                                            (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL
-                                                                   T NIL UPPERCASEARRAY T]
-                                           (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING
-                                                                                LOOPSDIRECTORY 1
-                                                                                (SUB1 POSSOURCES))
-                                                                              "LIBRARY>"))
-                                               ELSE LOOPSDIRECTORY)))
-               (LOOPSUSERSDIRECTORY (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T
-                                                                 NIL UPPERCASEARRAY T)
-                                                          (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T
-                                                                 NIL UPPERCASEARRAY T]
-                                         (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING 
-                                                                                    LOOPSDIRECTORY 1
-                                                                                    (SUB1 POSSOURCES)
-                                                                                    )
-                                                                            "USERS>"))
-                                             ELSE LOOPSDIRECTORY)))
-               (LOOPSUSERSRULESDIRECTORY (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL
-                                                                      NIL T NIL UPPERCASEARRAY T)
-                                                               (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL 
-                                                                      NIL T NIL UPPERCASEARRAY T]
-                                              (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING
-                                                                                   LOOPSDIRECTORY 1
-                                                                                   (SUB1 POSSOURCES))
-                                                                                 "USERS>RULES>"))
-                                                  ELSE LOOPSDIRECTORY])
+        (FNS NOCACHEMACRO)
+        (ADVISE CL:COMPILE-FILE)))
 
 
 
@@ -120,13 +74,14 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 (* ;; "Bootstrap function until LOOPSBROWSE is loaded")
 
 
-(PUTD 'UpdateClassBrowsers (GETD 'NILL))
+(MOVD? 'NILL 'UpdateClassBrowsers)
 (DEFINEQ
 
 (LOADLOOPS
-  [LAMBDA (sysout-dir load-option)                    (* ; "Edited 28-Jun-88 18:08 by JAMES.PA")
+  [LAMBDA (sysout-dir load-option)                           (* ; "Edited  7-Jul-2022 19:44 by lmm")
+                                                          (* ; "Edited 28-Jun-88 18:08 by JAMES.PA")
     (DECLARE (GLOBALVARS LoopsPatchFiles LOOPSFILES LoadLoopsForms LOOPSDIRECTORY LoopsDate 
-                        *FEATURES*))
+                    *FEATURES*))
     (CNDIR LOOPSDIRECTORY)
     (RESETLST
 
@@ -138,7 +93,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
                      'PAGEFULLFN
                      (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN]
                                                              (* ; 
-                         "Binding the variables LISPXHIST and LISPXHISTORY so history is not saved")
+                           "Binding the variables LISPXHIST and LISPXHISTORY so history is not saved")
         [RESETVARS (LISPXHISTORY)
                    (PROG ((DIRECTORIES (CONS NIL (CONS (DIRECTORYNAME T T)
                                                        DIRECTORIES)))
@@ -147,10 +102,9 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
                     (* ;; "Load the files")
 
                          (COND
-                            (LoopsPatchFiles (for file in LoopsPatchFiles
-                                                when (ATOM file) do (PUTPROP (ROOTFILENAME
-                                                                                      file)
-                                                                                   'FILEDATES NIL))
+                            (LoopsPatchFiles (for file in LoopsPatchFiles when (ATOM file)
+                                                do (PUTPROP (ROOTFILENAME file)
+                                                          'FILEDATES NIL))
                                    (DOFILESLOAD LoopsPatchFiles)))
                          (LoadLispUsers)
                          (DOFILESLOAD (CONS (MKLIST (OR load-option 'COMPILED))
@@ -158,9 +112,6 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
                          (COND
                             ((EQ MAKESYSNAME ':MEDLEY)       (* ; "This load must be conditionalized here since the file will be compiled in Medley and not loadable in Lyric at all.")
                              (FILESLOAD MEDLEY-PATCH.DFASL)))
-                         (COND
-                            ((EQ MAKESYSNAME ':LYRIC)        (* ; "This is only needed in Lyric, a fix to make sure that LLSH compiles inline.  Important for the method and IV cache routines.")
-                             (FILESLOAD LOOPS-PATCH.DFASL)))
 
                     (* ;; "Replace any boot-strapping stuff with the real thing")
 
@@ -189,8 +140,25 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
               (COND
                  ((NEQ T sysout-dir)
                   (/CNDIR sysout-dir)))
-              (MAKESYS 'LOOPS.SYSOUT (PACK* 'LOOPS "/" MAKESYSNAME)))
-       (T (for file in LOOPSFILES do (change FILELST (DREMOVE file DATUM])
+              (MAKESYS 'LOOPS.SYSOUT (PACK* 'LOOPS "/" MAKESYSNAME])
+
+(LOOPSINIT
+  [LAMBDA (thisFile)
+    (DECLARE (CL:SPECIAL LOOPSDIRECTORY LOOPSLIBRARYDIRECTORY LOOPSUSERSDIRECTORY 
+                    LOOPSUSERSRULESDIRECTORY))             (* ; "Edited 10-Jul-2022 12:25 by larry")
+    [OR thisFile (SETQ thisFile (FULLNAME (GETSTREAM NIL 'INPUT]
+    [SETQ LOOPSDIRECTORY (PACKFILENAME.STRING 'HOST (FILENAMEFIELD thisFile 'HOST)
+                                'DEVICE
+                                (FILENAMEFIELD thisFile 'DEVICE)
+                                'DIRECTORY
+                                (FILENAMEFIELD thisFile 'DIRECTORY]
+    (LET* ((POS (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T))
+           (ROOT (if POS
+                     then (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POS))
+                   else LOOPSDIRECTORY)))
+          (LIST LOOPSDIRECTORY (SETQ LOOPSLIBRARYDIRECTORY (CONCAT ROOT "library>"))
+                (SETQ LOOPSUSERSDIRECTORY (CONCAT ROOT "users>"))
+                (SETQ LOOPSUSERSRULESDIRECTORY (CONCAT ROOT "users>rules>"])
 
 (LoadLispUsers
   [LAMBDA NIL                                            (* edited%: " 4-Apr-86 10:35")
@@ -219,30 +187,22 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
     OLDCHANGES])
 )
 
-
-
-(* ;; "JRB - LAMBDATRAN is no longer necessary; ICONW lives in Lyric")
-
-
-
-
-(* ;; "JRB - Remember to remove SEDIT-PATCH for Medley")
-
-
 (RPAQQ LispUserFilesForLoops (GRAPHER))
 
 (RPAQQ LoopsPatchFiles NIL)
 
 (RPAQQ *DEFAULT-CLEANUP-COMPILER* CL:COMPILE-FILE)
 
-(RPAQQ LOOPSFILES (LOADLOOPS LOOPSSITE BLOCKLOOKUP LOOPSSPEEDUP LOOPSDATATYPES LOOPSSTRUC 
-                             LOOPSPRINT LOOPS-FILEPKG LOOPSACCESS LOOPSUID LOOPSEDIT LOOPSMETHODS 
-                             LOOPSKERNEL LOOPSACTIVEVALUES LOOPSUTILITY LOOPSINSPECT LOOPSWINDOW 
-                             LOOPSBROWSE LOOPSDEBUG LOOPSUSERINTERFACE LOOPS-TTYEDIT INSPECT-PATCH))
+(RPAQQ LOOPSFILES (LOADLOOPS LOOPSSITE BLOCKLOOKUP LOOPSSPEEDUP LOOPSDATATYPES LOOPSSTRUC LOOPSPRINT
+                         LOOPS-FILEPKG LOOPSACCESS LOOPSUID LOOPSEDIT LOOPSMETHODS LOOPSKERNEL 
+                         LOOPSACTIVEVALUES LOOPSUTILITY LOOPSINSPECT LOOPSWINDOW LOOPSBROWSE 
+                         LOOPSDEBUG LOOPSUSERINTERFACE LOOPS-TTYEDIT INSPECT-PATCH))
+
+(RPAQQ *REMOVE-INTERLISP-COMMENTS* T)
 
 
 
-(* ;; "Loopsms is being moved to the library.")
+(* ;; "Loopsms  in library")
 
 
 
@@ -319,18 +279,17 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 (DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS MenuGetOrCreate MACRO [(name items)
-                                         (COND
-                                            ((type? MENU (GETTOPVAL 'name))
-                                             name)
-                                            (T (SETTOPVAL 'name
-                                                      (create MENU
-                                                             CHANGEOFFSETFLG _ T
-                                                             ITEMS _ items])
+                                 (COND
+                                    ((type? MENU (GETTOPVAL 'name))
+                                     name)
+                                    (T (SETTOPVAL 'name (create MENU
+                                                               CHANGEOFFSETFLG _ T
+                                                               ITEMS _ items])
 )
 
 
 
-(* ; 
+(* ;; 
 "NiceMenu is used all over the place. It really doesn't belong in this file. Ditto ColumnateMenuItems (JDS 11/8/91)"
 )
 
@@ -382,61 +341,38 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 )
 
 
-
-
-(* ; "The ugly RESETLST stuff is to prevent the TTY window from hanging.")
-
-
-(RESETLST
-    [RESETSAVE (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN (FUNCTION NILL))
-           (LIST (FUNCTION WINDOWPROP)
-                 \TopLevelTtyWindow
-                 'PAGEFULLFN
-                 (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN]
-    (FILESLOAD (NOERROR)
-           LoopsSite))
+(FILESLOAD (NOERROR)
+       LoopsSite)
 
 
 
 (* ;; "Some reasonable defaults, in case they wern't set by the site file")
 
 
-(RPAQ? LoadLoopsForms NIL)
 
-(RPAQ? OptionalLispuserFiles NIL)
 
-(RPAQ? LOOPSDIRECTORY
-       [LET [(thisFile (FULLNAME (GETSTREAM NIL 'INPUT]
-            (PACKFILENAME 'HOST (FILENAMEFIELD thisFile 'HOST)
-                   'DEVICE
-                   (FILENAMEFIELD thisFile 'DEVICE)
-                   'DIRECTORY
-                   (FILENAMEFIELD thisFile 'DIRECTORY])
+(* ;; " lmm 7/10/22 should move into main medley maybe")
 
-(RPAQ? LOOPSLIBRARYDIRECTORY
-       (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
-                             (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T]
-            (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
-                                               "LIBRARY>"))
-                ELSE LOOPSDIRECTORY)))
+(DEFINEQ
 
-(RPAQ? LOOPSUSERSDIRECTORY
-       (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
-                             (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T]
-            (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
-                                               "USERS>"))
-                ELSE LOOPSDIRECTORY)))
+(NOCACHEMACRO
+  [LAMBDA (FN BODY ENV)
+    (CL:FUNCALL FN BODY ENV])
+)
 
-(RPAQ? LOOPSUSERSRULESDIRECTORY
-       (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
-                             (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T]
-            (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
-                                               "USERS>RULES>"))
-                ELSE LOOPSDIRECTORY)))
+[XCL:REINSTALL-ADVICE 'CL:COMPILE-FILE :AROUND '((:LAST (LET ((*MACROEXPAND-HOOK* 'NOCACHEMACRO))
+                                                             (DECLARE (SPECVARS *MACROEXPAND-HOOK))
+                                                             *))
+                                                 (:LAST (LET ((*MACROEXPAND-HOOK* 'NOCACHEMACRO))
+                                                             (DECLARE (SPECVARS *MACROEXPAND-HOOK*))
+                                                             *]
+
+(READVISE CL:COMPILE-FILE)
 (PUTPROPS LOADLOOPS COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
-1993))
+1993 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (6631 11351 (LOADLOOPS 6641 . 10237) (LoadLispUsers 10239 . 10645) (UnMarkChanges 10647
- . 11349)) (12265 15490 (PromptEval 12275 . 13971) (PromptRead 13973 . 15488)) (16177 17941 (NiceMenu 
-16187 . 16742) (ColumnateMenuItems 16744 . 17939)))))
+  (FILEMAP (NIL (2541 7931 (LOADLOOPS 2551 . 5765) (LOOPSINIT 5767 . 6817) (LoadLispUsers 6819 . 7225) (
+UnMarkChanges 7227 . 7929)) (8712 11937 (PromptEval 8722 . 10418) (PromptRead 10420 . 11935)) (12543 
+14307 (NiceMenu 12553 . 13108) (ColumnateMenuItems 13110 . 14305)) (14714 14797 (NOCACHEMACRO 14724 . 
+14795)))))
 STOP
