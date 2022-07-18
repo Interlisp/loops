@@ -1,15 +1,15 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "15-Jun-93 13:59:37" {DSK}<python>release>loops>2.0>src>LOOPSSTRUC.;3 72842  
 
-      changes to%:  (FUNCTIONS Once-Only WithIVValue ChangeIVValue MakeIVPropDescr WithIVPropDescr 
-                           WithIVPropDescr!)
-                    (FNS FillInst UpdateIVDescrs UpdateClassIVs)
+(FILECREATED "10-Jul-2022 12:57:05" {DSK}<home>larry>loops>system>LOOPSSTRUC.;5 68389  
 
-      previous date%: "15-Jun-93 12:29:30" {DSK}<python>release>loops>2.0>src>LOOPSSTRUC.;2)
+      :CHANGES-TO (MACROS InstRemProp ExtractRealValue FetchCIVDescr FetchIVDescr ObjGetProp 
+                         ObjPutProp ObjRemProp ObjSetValue FastFindIndex)
+
+      :PREVIOUS-DATE "10-Jul-2022 12:48:29" {DSK}<home>larry>loops>system>LOOPSSTRUC.;3)
 
 
 (* ; "
-Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSSTRUCCOMS)
@@ -37,7 +37,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
                (ObjNameTable (HASHARRAY 8000))
                (LispClassTable (HASHARRAY 16)))
                                                              (* ; 
-                        "Bootstrap value for NotSetValue.  This gets fixed later on in the loadup.")
+                          "Bootstrap value for NotSetValue.  This gets fixed later on in the loadup.")
         (INITVARS (NotSetValue (create annotatedValue)))
         
         (* ;; "Access macros for instances")
@@ -90,8 +90,8 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 
 
 
-(* ;;; 
-"Basic records, operations and macros for dealing with implementation of classes and instances")
+(* ;;; "Basic records, operations and macros for dealing with implementation of classes and instances"
+)
 
 
 
@@ -105,7 +105,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 )
 
 (ADDTOVAR GLOBALVARS ErrorOnNameConflict ListMixinNames DefaultComment LASTCLASS LispClassTable 
-                               NotSetValue NoValueFound ObjNameTable)
+                           NotSetValue NoValueFound ObjNameTable)
 
 (RPAQ? NoValueFound NIL)
 
@@ -148,18 +148,17 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
          (Run-time-Vals (GENSYM))
          (Expand-time-Val-Forms NIL))
         [SETQ Expand-time-Val-Forms (for var in vars
-                                       collect
-                                       `(COND
-                                           ([OR (LITATOM ,var)
-                                                (NUMBERP ,var)
-                                                (AND (LISTP ,var)
-                                                     (MEMB (CAR ,var)
-                                                           ''FUNCTION]
-                                            ,var)
-                                           (T (LET ((,Gensym-Var (GENSYM)))
-                                                   (push ,Run-time-Vars ,Gensym-Var)
-                                                   (push ,Run-time-Vals ,var)
-                                                   ,Gensym-Var]
+                                       collect `(COND
+                                                   ([OR (LITATOM ,var)
+                                                        (NUMBERP ,var)
+                                                        (AND (LISTP ,var)
+                                                             (MEMB (CAR ,var)
+                                                                   ''FUNCTION]
+                                                    ,var)
+                                                   (T (LET ((,Gensym-Var (GENSYM)))
+                                                           (push ,Run-time-Vars ,Gensym-Var)
+                                                           (push ,Run-time-Vals ,var)
+                                                           ,Gensym-Var]
         `(LET* (,Run-time-Vars ,Run-time-Vals (WRAPPED-BODY ([LAMBDA ,vars ., body]
                                                              ., Expand-time-Val-Forms)))
                (COND
@@ -177,53 +176,49 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
                 (varDescr (GENSYM 'varDescr]
                (if cache
                    then `[if [AND (\GETBASEPTR ,cache 0)
-                                          (EQ (\GETBASEPTR ,cache 0)
-                                              (fetch (OBJECT VARNAMES) of ,self]
-                                 then (,ifFound ,self ,ivName (GetVarNth ,self
-                                                                         (\GETBASEPTR ,cache 2))
-                                                 (\GETBASEPTR ,cache 2))
-                               else (PROG (,value ,varDescr)
-                                              (DECLARE (LOCALVARS . T))
-                                              (SETQ ,varDescr (FindVarIndex ,ivName ,self))
-                                              (COND
-                                                 (,varDescr (\PUTBASEPTR ,cache 0 (fetch
-                                                                                   (OBJECT VARNAMES)
-                                                                                     of
-                                                                                     ,self))
-                                                        (\PUTBASEPTR ,cache 2 ,varDescr)
-                                                        (SETQ ,value (GetVarNth ,self ,varDescr))
-                                                        (GO IVFound)))
-                                              [SETQ ,varDescr (ASSOC ,ivName (fetch (instance
-                                                                                         otherIVs)
-                                                                                of ,self]
-                                              (COND
-                                                 (,varDescr (SETQ ,value (CDR ,varDescr))
-                                                        (GO IVFound)))
-                                              (COND
-                                                 ((FIXP ,ivName)
-                                                  (SETQ ,value (FetchNthDescr ,self ,ivName))
-                                                  (GO IVFound)))
-                                              (RETURN (,ifNotFound ,self ,ivName))
-                                          IVFound
-                                              (RETURN (,ifFound ,self ,ivName ,value ,varDescr]
+                                  (EQ (\GETBASEPTR ,cache 0)
+                                      (fetch (OBJECT VARNAMES) of ,self]
+                             then (,ifFound ,self ,ivName (GetVarNth ,self (\GETBASEPTR ,cache 2))
+                                         (\GETBASEPTR ,cache 2))
+                           else (PROG (,value ,varDescr)
+                                      (DECLARE (LOCALVARS . T))
+                                      (SETQ ,varDescr (FindVarIndex ,ivName ,self))
+                                      (COND
+                                         (,varDescr (\PUTBASEPTR ,cache 0 (fetch (OBJECT VARNAMES)
+                                                                             of ,self))
+                                                (\PUTBASEPTR ,cache 2 ,varDescr)
+                                                (SETQ ,value (GetVarNth ,self ,varDescr))
+                                                (GO IVFound)))
+                                      [SETQ ,varDescr (ASSOC ,ivName (fetch (instance otherIVs)
+                                                                        of ,self]
+                                      (COND
+                                         (,varDescr (SETQ ,value (CDR ,varDescr))
+                                                (GO IVFound)))
+                                      (COND
+                                         ((FIXP ,ivName)
+                                          (SETQ ,value (FetchNthDescr ,self ,ivName))
+                                          (GO IVFound)))
+                                      (RETURN (,ifNotFound ,self ,ivName))
+                                  IVFound
+                                      (RETURN (,ifFound ,self ,ivName ,value ,varDescr]
                  else `(PROG (,value ,varDescr)
-                                 (DECLARE (LOCALVARS . T))
-                                 (SETQ ,varDescr (FindVarIndex ,ivName ,self))
-                                 (COND
-                                    (,varDescr (SETQ ,value (GetVarNth ,self ,varDescr))
-                                           (GO IVFound)))
-                                 [SETQ ,varDescr (ASSOC ,ivName (fetch (instance otherIVs)
-                                                                   of ,self]
-                                 (COND
-                                    (,varDescr (SETQ ,value (CDR ,varDescr))
-                                           (GO IVFound)))
-                                 (COND
-                                    ((FIXP ,ivName)
-                                     (SETQ ,value (FetchNthDescr ,self ,ivName))
-                                     (GO IVFound)))
-                                 (RETURN (,ifNotFound ,self ,ivName))
-                             IVFound
-                                 (RETURN (,ifFound ,self ,ivName ,value ,varDescr])
+                             (DECLARE (LOCALVARS . T))
+                             (SETQ ,varDescr (FindVarIndex ,ivName ,self))
+                             (COND
+                                (,varDescr (SETQ ,value (GetVarNth ,self ,varDescr))
+                                       (GO IVFound)))
+                             [SETQ ,varDescr (ASSOC ,ivName (fetch (instance otherIVs)
+                                                               of ,self]
+                             (COND
+                                (,varDescr (SETQ ,value (CDR ,varDescr))
+                                       (GO IVFound)))
+                             (COND
+                                ((FIXP ,ivName)
+                                 (SETQ ,value (FetchNthDescr ,self ,ivName))
+                                 (GO IVFound)))
+                             (RETURN (,ifNotFound ,self ,ivName))
+                         IVFound
+                             (RETURN (,ifFound ,self ,ivName ,value ,varDescr])
 
 (DEFMACRO ChangeIVValue (self varName ivLoc newValue)
    [Once-Only (self varName ivLoc newValue)
@@ -237,91 +232,84 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 (DECLARE%: EVAL@COMPILE
 
 (RECORD IVPropDescr (IVName . IVPropList)
-                        (SYSTEM))
+                    (SYSTEM))
 )
 (DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS FetchIVPropDescr MACRO ((self ivName)
-                                          (ASSOC ivName (fetch instIVProps of self))))
+                                  (ASSOC ivName (fetch instIVProps of self))))
 )
 
 (DEFMACRO MakeIVPropDescr (self varName)
    `[CAR (push (fetch (instance instIVProps) of ,self)
-                (create IVPropDescr
-                       IVName _ ,varName])
+               (create IVPropDescr
+                      IVName _ ,varName])
 
 (DEFMACRO WithIVPropDescr (self ivName ifFound ifIVNotFound &OPTIONAL (cache NIL))
    `(WithIVValue ,self ,ivName [LAMBDA (self ivName)
-                                     (,ifFound self ivName (FetchIVPropDescr self ivName]
+                                 (,ifFound self ivName (FetchIVPropDescr self ivName]
            ,ifIVNotFound
            ,cache))
 
 (DEFMACRO WithIVPropDescr! (self ivName ifFound ifIVNotFound &OPTIONAL (cache NIL))
    `(WithIVValue ,self ,ivName [LAMBDA (self ivName)
-                                     (,ifFound self ivName (OR (FetchIVPropDescr self ivName)
-                                                               (MakeIVPropDescr self ivName]
+                                 (,ifFound self ivName (OR (FetchIVPropDescr self ivName)
+                                                           (MakeIVPropDescr self ivName]
            ,ifIVNotFound
            ,cache))
 (DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS InstGetProp MACRO [OPENLAMBDA (descr propName)
-                                           (COND
-                                              ((NULL descr)
-                                               NotSetValue)
-                                              (T (for tail on (fetch IVPropList
-                                                                         of descr)
-                                                    declare%: (LOCALVARS . T)
-                                                    by (CDDR tail)
-                                                    do [COND
-                                                              ((EQ propName (CAR tail))
-                                                               (RETURN (CADR tail]
-                                                    finally (RETURN NotSetValue])
+                              (COND
+                                 ((NULL descr)
+                                  NotSetValue)
+                                 (T (for tail on (fetch IVPropList of descr)
+                                       declare%: (LOCALVARS . T) by (CDDR tail)
+                                       do [COND
+                                             ((EQ propName (CAR tail))
+                                              (RETURN (CADR tail] finally (RETURN NotSetValue])
 
 (PUTPROPS InstPutProp MACRO (OPENLAMBDA (descr propName value)
-                                           (if (NULL (fetch IVPropList of descr))
-                                               then (change (fetch IVPropList
-                                                                       of descr)
-                                                               (LIST propName value))
-                                                     value
-                                             else (LISTPUT (fetch IVPropList of descr)
-                                                             propName value))))
+                              (if (NULL (fetch IVPropList of descr))
+                                  then (change (fetch IVPropList of descr)
+                                              (LIST propName value))
+                                       value
+                                else (LISTPUT (fetch IVPropList of descr)
+                                            propName value))))
 
 (PUTPROPS InstRemProp MACRO
           [OPENLAMBDA (descr propName)
 
-         (* * descr in an IVPropDescr with fields IVName and IVPropList Removes a 
-       property from that list. RETURNS NIL if not found, propname otherwise)
+         (* * descr in an IVPropDescr with fields IVName and IVPropList Removes a property 
+         from that list. RETURNS NIL if not found, propname otherwise)
 
-                 (AND descr (LET ((propList (fetch IVPropList of descr)))
-                                 (if (NULL propList)
-                                     then NIL
-                                   elseif (EQ propName (CAR propList))
-                                     then (replace IVProps of descr with (CDDR 
-                                                                                             propList
-                                                                                               ))
-                                           propName
-                                   else (for tail on (CDR propList)
-                                               by (CDDR tail)
-                                               do (if (NULL (CDR tail))
-                                                          then (RETURN NIL)
-                                                        elseif (EQ propName (CADR tail))
-                                                          then (RPLACD tail (CDDDR tail))
-                                                                (RETURN propName])
+            (AND descr (LET ((propList (fetch IVPropList of descr)))
+                            (if (NULL propList)
+                                then NIL
+                              elseif (EQ propName (CAR propList))
+                                then (replace IVProps of descr with (CDDR propList))
+                                     propName
+                              else (for tail on (CDR propList) by (CDDR tail)
+                                      do (if (NULL (CDR tail))
+                                             then (RETURN NIL)
+                                           elseif (EQ propName (CADR tail))
+                                             then (RPLACD tail (CDDDR tail))
+                                                  (RETURN propName])
 )
 (DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS ExtractRealValue MACRO (OPENLAMBDA (self varName value propName type)
 
          (* Called by Fetches and Gets which want to notice activeValues.
-       type is one of NIL for instance variables, CLASS for class properties, METHOD 
-       for method properties and CV for class variables and properties.
-       Returns either the value found or the result of evaluating the GETFN)
+         type is one of NIL for instance variables, CLASS for class properties, METHOD for 
+         method properties and CV for class variables and properties.
+         Returns either the value found or the result of evaluating the GETFN)
 
-                                                (COND
-                                                   ((type? annotatedValue value)
-                                                    (_ (fetch annotatedValue of value)
-                                                       GetWrappedValue self varName propName type))
-                                                   (T value))))
+                                   (COND
+                                      ((type? annotatedValue value)
+                                       (_ (fetch annotatedValue of value)
+                                          GetWrappedValue self varName propName type))
+                                      (T value))))
 )
 
 (* "END EXPORTED DEFINITIONS")
@@ -337,7 +325,7 @@ DONTEVAL@COMPILE DOCOPY
 (* "FOLLOWING DEFINITIONS EXPORTED")(DECLARE%: EVAL@COMPILE
 
 (RECORD IVDescr (IVValue . IVProps)
-                    IVValue _ NotSetValue IVProps _ NIL (SYSTEM))
+                IVValue _ NotSetValue IVProps _ NIL (SYSTEM))
 )
 
 (* "END EXPORTED DEFINITIONS")
@@ -347,207 +335,191 @@ DONTEVAL@COMPILE DOCOPY
 (DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS /PutNth MACRO ((list index entry)
-                                 (/RPLACA (FNTH list index)
-                                        entry)))
+                         (/RPLACA (FNTH list index)
+                                entry)))
 
 (PUTPROPS Class MACRO [OPENLAMBDA (self)
-                                     (COND
-                                        ((Object? self)
-                                         (fetch CLASS of self))
-                                        (T (GetLispClass self])
+                        (COND
+                           ((Object? self)
+                            (fetch CLASS of self))
+                           (T (GetLispClass self])
 
 (PUTPROPS ClassVariables MACRO ((self)
-                                        (APPEND (fetch (class cvNames) of self))))
+                                (APPEND (fetch (class cvNames) of self))))
 
-(PUTPROPS FetchCIVDescr MACRO [(self varName)    (* dgb%: "25-JAN-82 15:48")
+(PUTPROPS FetchCIVDescr MACRO [(self varName)                (* dgb%: "25-JAN-82 15:48")
 
          (* * Find the description list for the named variable in a class, returning NIL 
-       if none is there.)
+         if none is there.)
 
-                                       (PROG NIL             (* Short circuit GetNth with 
-                                                           embedded RETURN if no index found)
-                                             (RETURN (GetNth (fetch VARDESCRS of self)
-                                                            (OR (FindIndex varName
-                                                                       (fetch VARNAMES
-                                                                          of self))
-                                                                (RETURN NIL])
+                               (PROG NIL                     (* Short circuit GetNth with embedded 
+                                                             RETURN if no index found)
+                                     (RETURN (GetNth (fetch VARDESCRS of self)
+                                                    (OR (FindIndex varName (fetch VARNAMES
+                                                                              of self))
+                                                        (RETURN NIL])
 
 (PUTPROPS FetchCVDescr MACRO [(classRec varName)
-                                      (PROG [(index (FindIndex varName (fetch cvNames
-                                                                          of classRec]
-                                            (RETURN (COND
-                                                       (index (GetNth (fetch cvDescrs
-                                                                         of classRec)
-                                                                     index])
+                              (PROG [(index (FindIndex varName (fetch cvNames of classRec]
+                                    (RETURN (COND
+                                               (index (GetNth (fetch cvDescrs of classRec)
+                                                             index])
 
 (PUTPROPS FetchIVDescr MACRO [OPENLAMBDA (self varName)
 
          (* * Find the IVDescr for the named variable)
 
-                                            (LET (descr (varIndex (FindVarIndex varName self)))
-                                                 (DECLARE (LOCALVARS varIndex descr))
-                                                 (COND
-                                                    (varIndex (OR (GetVarNth self varIndex)
-                                                                  (create IVDescr)))
-                                                    [(SETQ descr (ASSOC varName (fetch otherIVs
-                                                                                   of self)))
+                               (LET (descr (varIndex (FindVarIndex varName self)))
+                                    (DECLARE (LOCALVARS varIndex descr))
+                                    (COND
+                                       (varIndex (OR (GetVarNth self varIndex)
+                                                     (create IVDescr)))
+                                       [(SETQ descr (ASSOC varName (fetch otherIVs of self)))
 
          (* * non standard instance variables are stored on an ALIST in otherIVs)
 
-                                                     (OR (CDR descr)
-                                                         (CDR (NCONC1 descr (create IVDescr]
-                                                    ((FIXP varName)
-                                                     (FetchNthDescr self varName])
+                                        (OR (CDR descr)
+                                            (CDR (NCONC1 descr (create IVDescr]
+                                       ((FIXP varName)
+                                        (FetchNthDescr self varName])
 
 (PUTPROPS FindIndex MACRO (OPENLAMBDA (entry table)
-                                         (for item in table as pos from 0
-                                            declare%: (LOCALVARS . T)
-                                            do (if (EQ item entry)
-                                                       then (RETURN pos))
-                                            finally (RETURN NIL))))
+                            (for item in table as pos from 0 declare%: (LOCALVARS . T)
+                               do (if (EQ item entry)
+                                      then (RETURN pos)) finally (RETURN NIL))))
 
 (PUTPROPS GetCIVNth MACRO (OPENLAMBDA (obj n)
-                                         (GetNth (fetch VARDESCRS of obj)
-                                                n)))
+                            (GetNth (fetch VARDESCRS of obj)
+                                   n)))
 
 (PUTPROPS GetClassDescr MACRO (OPENLAMBDA (class)
-                                             (CONS (fetch metaClass of class)
-                                                   (fetch otherClassDescription of class))))
+                                (CONS (fetch metaClass of class)
+                                      (fetch otherClassDescription of class))))
 
 (PUTPROPS GetInstanceIVValue MACRO [OPENLAMBDA (object ivName)
-                                                  (WithIVValue object ivName
-                                                         [LAMBDA (self varName value)
-                                                           (ExtractRealValue self varName value NIL
-                                                                  'IV]
-                                                         (LAMBDA (self varName)
-                                                           (_ self IVMissing varName NIL 'GetValue)])
+                                     (WithIVValue object ivName [LAMBDA (self varName value)
+                                                                  (ExtractRealValue self varName 
+                                                                         value NIL 'IV]
+                                            (LAMBDA (self varName)
+                                              (_ self IVMissing varName NIL 'GetValue)])
 
 (PUTPROPS GetNth MACRO [OPENLAMBDA (table index)
-                                      (CAR (FNTH table (ADD1 index])
+                         (CAR (FNTH table (ADD1 index])
 
 (PUTPROPS GetVarNth MACRO (OPENLAMBDA (obj n)
-                                         (\GETBASEPTR (fetch VARDESCRS of obj)
-                                                (LLSH n 1))))
+                            (\GETBASEPTR (fetch VARDESCRS of obj)
+                                   (LLSH n 1))))
 
 (PUTPROPS NDescrs MACRO (OPENLAMBDA (n)
-                                       (\ALLOCBLOCK n T)))
+                          (\ALLOCBLOCK n T)))
 
 (PUTPROPS NotSetValue MACRO ((arg)
-                                     (EQ NotSetValue arg)))
+                             (EQ NotSetValue arg)))
 
 (PUTPROPS NoValueFound MACRO ((arg)
-                                      (EQ NoValueFound arg)))
+                              (EQ NoValueFound arg)))
 
 (PUTPROPS ValueFound MACRO ((arg)
-                                    (NEQ NoValueFound arg)))
+                            (NEQ NoValueFound arg)))
 
 (PUTPROPS ObjGetProp MACRO [OPENLAMBDA (descr propName)
 
          (* Called by all fetch fns. Gets value in description list.
-       Does not check for activeValues.)
+         Does not check for activeValues.)
 
-                                          (COND
-                                             ((NULL descr)
-                                              NotSetValue)
-                                             ((NULL propName)
-                                              (fetch IVValue of descr))
-                                             (T (for tail on (fetch IVProps of descr)
-                                                   by (CDDR tail)
-                                                   do [COND
-                                                             ((EQ propName (CAR tail))
-                                                              (RETURN (CADR tail]
-                                                   finally (RETURN NotSetValue])
+                             (COND
+                                ((NULL descr)
+                                 NotSetValue)
+                                ((NULL propName)
+                                 (fetch IVValue of descr))
+                                (T (for tail on (fetch IVProps of descr) by (CDDR tail)
+                                      do [COND
+                                            ((EQ propName (CAR tail))
+                                             (RETURN (CADR tail] finally (RETURN NotSetValue])
 
 (PUTPROPS ObjPutProp MACRO (OPENLAMBDA (descr propName value)
 
          (* * Called to put a new value on a decr list by all the Store fns.
-       Adds property if no value there already.)
+         Adds property if no value there already.)
 
-                                          (COND
-                                             ((NULL propName)
-                                              (replace IVValue of descr with value))
-                                             (T (change (fetch IVProps of descr)
-                                                       (if (NULL DATUM)
-                                                           then (LIST propName value)
-                                                         else (LISTPUT DATUM propName value)
-                                                               DATUM))
-                                                value))))
+                             (COND
+                                ((NULL propName)
+                                 (replace IVValue of descr with value))
+                                (T (change (fetch IVProps of descr)
+                                          (if (NULL DATUM)
+                                              then (LIST propName value)
+                                            else (LISTPUT DATUM propName value)
+                                                 DATUM))
+                                   value))))
 
-(PUTPROPS ObjRemProp MACRO
-          [OPENLAMBDA (descr propName)
+(PUTPROPS ObjRemProp MACRO [OPENLAMBDA (descr propName)
 
-         (* * descr in an IVPropDescr with fields IVName and IVPropList Removes a 
-       property from that list. RETURNS NIL if not found, propname otherwise)
+         (* * descr in an IVPropDescr with fields IVName and IVPropList Removes a property 
+         from that list. RETURNS NIL if not found, propname otherwise)
 
-                 (LET ((propList (fetch IVPropList of descr)))
-                      (if (NULL propList)
-                          then NIL
-                        elseif (EQ propName (CAR propList))
-                          then (replace IVProps of descr with (CDDR propList))
-                                propName
-                        else (for tail on (CDR propList) by (CDDR tail)
-                                    do (if (NULL (CDR tail))
-                                               then (RETURN NIL)
-                                             elseif (EQ propName (CADR tail))
-                                               then (RPLACD tail (CDDDR tail))
-                                                     (RETURN propName])
+                             (LET ((propList (fetch IVPropList of descr)))
+                                  (if (NULL propList)
+                                      then NIL
+                                    elseif (EQ propName (CAR propList))
+                                      then (replace IVProps of descr with (CDDR propList))
+                                           propName
+                                    else (for tail on (CDR propList) by (CDDR tail)
+                                            do (if (NULL (CDR tail))
+                                                   then (RETURN NIL)
+                                                 elseif (EQ propName (CADR tail))
+                                                   then (RPLACD tail (CDDDR tail))
+                                                        (RETURN propName])
 
 (PUTPROPS ObjSetValue MACRO [(self varName newValue descr aValue propName type)
 
          (* Called by anyone who wants to set a value of a variable or property of any 
-       kind. Does the checking for active values.
-       The argument type is NIL for InstanceVariables, and otherwise is one of CV, 
-       CLASS, METHOD)
+         kind. Does the checking for active values.
+         The argument type is NIL for InstanceVariables, and otherwise is one of CV, 
+         CLASS, METHOD)
 
-                                     (COND
-                                        ((type? annotatedValue aValue)
-                                         (_ (fetch annotatedValue of aValue)
-                                            PutWrappedValue self varName newValue propName type))
-                                        (T (ObjPutProp descr propName newValue])
+                             (COND
+                                ((type? annotatedValue aValue)
+                                 (_ (fetch annotatedValue of aValue)
+                                    PutWrappedValue self varName newValue propName type))
+                                (T (ObjPutProp descr propName newValue])
 
 (PUTPROPS PutIVDescr MACRO [OPENLAMBDA (obj ivName ivDescr)
-                                          [WithIVValue obj ivName [LAMBDA (self varName oldValue
-                                                                                    loc)
-                                                                        (ChangeIVValue
-                                                                         self varName loc
-                                                                         (CAR ivDescr]
-                                                 (LAMBDA (self varName)
-                                                   (AddIV self varName (CAR ivDescr]
-                                          (if (CDR ivDescr)
-                                              then (WithIVPropDescr! obj ivName
-                                                              [LAMBDA (self varName propDescr)
-                                                                (replace IVPropList of 
-                                                                                            propDescr
-                                                                   with (CDR ivDescr]
-                                                              (LAMBDA (self varName)
-                                                                (HELPCHECK])
+                             [WithIVValue obj ivName [LAMBDA (self varName oldValue loc)
+                                                       (ChangeIVValue self varName loc (CAR ivDescr]
+                                    (LAMBDA (self varName)
+                                      (AddIV self varName (CAR ivDescr]
+                             (if (CDR ivDescr)
+                                 then (WithIVPropDescr! obj ivName [LAMBDA (self varName propDescr)
+                                                                     (replace IVPropList of propDescr
+                                                                        with (CDR ivDescr]
+                                             (LAMBDA (self varName)
+                                               (HELPCHECK])
 
 (PUTPROPS PutNth MACRO ((list index entry)
-                                (RPLACA (FNTH list (ADD1 index))
-                                       entry)))
+                        (RPLACA (FNTH list (ADD1 index))
+                               entry)))
 
 (PUTPROPS PutVarNth MACRO (OPENLAMBDA (obj n desc)
-                                         (\RPLPTR (fetch VARDESCRS of obj)
-                                                (LLSH n 1)
-                                                desc)))
+                            (\RPLPTR (fetch VARDESCRS of obj)
+                                   (LLSH n 1)
+                                   desc)))
 
 (PUTPROPS Supers MACRO ((classRec)
-                                (fetch supers of classRec)))
+                        (fetch supers of classRec)))
 )
 
 (DEFMACRO GetInitialValue (self varName ivDescr)
 
 (* ;;; "Compute the initial value to store in the self iv")
 
-   `[for p on (fetch (IVDescr IVProps) of ,ivDescr) by CDDR
-       declare%: (LOCALVARS . T) thereis (EQ (CAR p)
-                                                     '%:initForm)
-       finally (RETURN (if (NULL $$VAL)
-                               then NotSetValue
-                             else (LET ((self ,self)
-                                            (varName ,varName))
-                                           (DECLARE (SPECVARS self varName))
-                                           (EVAL (CADR $$VAL])
+   `[for p on (fetch (IVDescr IVProps) of ,ivDescr) by CDDR declare%: (LOCALVARS . T)
+       thereis (EQ (CAR p)
+                   '%:initForm) finally (RETURN (if (NULL $$VAL)
+                                                    then NotSetValue
+                                                  else (LET ((self ,self)
+                                                             (varName ,varName))
+                                                            (DECLARE (SPECVARS self varName))
+                                                            (EVAL (CADR $$VAL])
 
 
 
@@ -1130,50 +1102,41 @@ DONTEVAL@COMPILE DOCOPY
 (* "FOLLOWING DEFINITIONS EXPORTED")(DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS FindVarIndex MACRO (OPENLAMBDA (name obj)
-                                            (FastFindIndex name (fetch VARNAMES of obj))))
+                               (FastFindIndex name (fetch VARNAMES of obj))))
 
 (PUTPROPS FastFindIndex MACRO [OPENLAMBDA (ivName ivList)
 
          (* cacheBlockPos is an even postion on the page, computed from the xor of the 
-       ivName and the IVList addresses)
+         ivName and the IVList addresses)
 
-                                             (PROG ((ivIndex 0)
-                                                    (IVList ivList)
-                                                    (cacheBlockPos (LLSH (LOGAND 1023
-                                                                                (LOGXOR (\LOLOC
-                                                                                         ivList)
-                                                                                       (\LOLOC ivName
-                                                                                              )))
-                                                                         3)))
-                                                   (DECLARE (LOCALVARS . T))
-                                                   [COND
-                                                      ((AND (EQ IVList (\GETBASEPTR 
+                                (PROG ((ivIndex 0)
+                                       (IVList ivList)
+                                       (cacheBlockPos (LLSH (LOGAND 1023 (LOGXOR (\LOLOC ivList)
+                                                                                (\LOLOC ivName)))
+                                                            3)))
+                                      (DECLARE (LOCALVARS . T))
+                                      [COND
+                                         ((AND (EQ IVList (\GETBASEPTR *Global-IV-Cache-Block* 
+                                                                 cacheBlockPos))
+                                               (EQ ivName (\GETBASEPTR (\ADDBASE 
                                                                               *Global-IV-Cache-Block*
-                                                                              cacheBlockPos))
-                                                            (EQ ivName (\GETBASEPTR (\ADDBASE 
-                                                                              *Global-IV-Cache-Block*
-                                                                                           2)
-                                                                              cacheBlockPos)))
-                                                       (RETURN (\GETBASEPTR (\ADDBASE 
-                                                                              *Global-IV-Cache-Block*
-                                                                                   4)
-                                                                      cacheBlockPos]
-                                               TryNextIV
-                                                   (COND
-                                                      ((EQ ivName (CAR IVList))
-                                                       (\PUTBASEPTR *Global-IV-Cache-Block* 
-                                                              cacheBlockPos ivList)
-                                                       (\PUTBASEPTR (\ADDBASE *Global-IV-Cache-Block*
-                                                                           2)
-                                                              cacheBlockPos ivName)
-                                                       (\PUTBASEPTR (\ADDBASE *Global-IV-Cache-Block*
-                                                                           4)
-                                                              cacheBlockPos ivIndex)
-                                                       (RETURN ivIndex))
-                                                      ((NULL (SETQ IVList (CDR IVList)))
-                                                       (RETURN NIL))
-                                                      (T (add ivIndex 1)
-                                                         (GO TryNextIV])
+                                                                              2)
+                                                                 cacheBlockPos)))
+                                          (RETURN (\GETBASEPTR (\ADDBASE *Global-IV-Cache-Block* 4)
+                                                         cacheBlockPos]
+                                  TryNextIV
+                                      (COND
+                                         ((EQ ivName (CAR IVList))
+                                          (\PUTBASEPTR *Global-IV-Cache-Block* cacheBlockPos ivList)
+                                          (\PUTBASEPTR (\ADDBASE *Global-IV-Cache-Block* 2)
+                                                 cacheBlockPos ivName)
+                                          (\PUTBASEPTR (\ADDBASE *Global-IV-Cache-Block* 4)
+                                                 cacheBlockPos ivIndex)
+                                          (RETURN ivIndex))
+                                         ((NULL (SETQ IVList (CDR IVList)))
+                                          (RETURN NIL))
+                                         (T (add ivIndex 1)
+                                            (GO TryNextIV])
 )
 
 (* "END EXPORTED DEFINITIONS")
@@ -1480,30 +1443,31 @@ DONTEVAL@COMPILE DOCOPY
 (ADDTOVAR NLAMA DEFINST DEFINSTANCES DEFCLASS DEFCLASSES @ _@)
 (DECLARE%: EVAL@COMPILE 
 
-[I.S.OPR 'IN-SUPERS-OF NIL '(bind \Supers (\InitialObject _ BODY) declare%: (LOCALVARS 
-                                                                                           \Supers 
-                                                                                       \InitialObject
-                                                                                           )
+[I.S.OPR 'IN-SUPERS-OF NIL '(bind \Supers (\InitialObject _ BODY) declare%: (LOCALVARS \Supers 
+                                                                                   \InitialObject)
                                first (SETQ I.V. (if (type? class \InitialObject)
-                                                        then \InitialObject
-                                                      else (Class \InitialObject)))
+                                                    then \InitialObject
+                                                  else (Class \InitialObject)))
                                      (SETQ \Supers (fetch supers of I.V.))
                                repeatwhile (if \Supers
-                                                   then (SETQ I.V. (pop \Supers))
-                                                         T
-                                                 else NIL]
+                                               then (SETQ I.V. (pop \Supers))
+                                                    T
+                                             else NIL]
 )
 (PUTPROPS LOOPSSTRUC COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
-1993))
+1993 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (28163 37201 (Parse@ 28173 . 30119) (Parse@* 30121 . 30661) (ParseAccess 30663 . 33328) 
-(ParseBang 33330 . 34980) (ParseExpr 34982 . 36112) (ParsePut@ 36114 . 37199)) (37501 52419 (
-CreateEntity 37511 . 37994) (DeleteObjectName 37996 . 39764) (FastClassInitialize 39766 . 41194) (
-GetIVHere 41196 . 42018) (GetValueOnly 42020 . 43981) (GetClassRec 43983 . 44574) (GetLispClass 44576
- . 45101) (GetObjectName 45103 . 45864) (GetObjectRec 45866 . 46441) (MakeMixinClass 46443 . 47790) (
-NameEntity 47792 . 48856) (NewEntity 48858 . 49673) (PutObjectName 49675 . 50987) (PutValueOnly 50989
- . 52150) ($! 52152 . 52417)) (56151 71568 (BlankInstance 56161 . 57501) (BootNameObject 57503 . 57924
-) (FullNameObject 57926 . 58197) (FillInst 58199 . 59004) (FillIVs 59006 . 59615) (IVSource 59617 . 
-62667) (ModifyInstance 62669 . 64156) (NewClass 64158 . 65654) (NewObject 65656 . 66196) (
-UpdateClassIVs 66198 . 68130) (UpdateIVDescrs 68132 . 71566)))))
+  (FILEMAP (NIL (4992 6560 (Once-Only 4992 . 6560)) (6562 9756 (WithIVValue 6562 . 9756)) (9758 10134 (
+ChangeIVValue 9758 . 10134)) (10410 10602 (MakeIVPropDescr 10410 . 10602)) (10604 10878 (
+WithIVPropDescr 10604 . 10878)) (10880 11252 (WithIVPropDescr! 10880 . 11252)) (23928 24670 (
+GetInitialValue 23928 . 24670)) (24987 34025 (Parse@ 24997 . 26943) (Parse@* 26945 . 27485) (
+ParseAccess 27487 . 30152) (ParseBang 30154 . 31804) (ParseExpr 31806 . 32936) (ParsePut@ 32938 . 
+34023)) (34325 49243 (CreateEntity 34335 . 34818) (DeleteObjectName 34820 . 36588) (
+FastClassInitialize 36590 . 38018) (GetIVHere 38020 . 38842) (GetValueOnly 38844 . 40805) (GetClassRec
+ 40807 . 41398) (GetLispClass 41400 . 41925) (GetObjectName 41927 . 42688) (GetObjectRec 42690 . 43265
+) (MakeMixinClass 43267 . 44614) (NameEntity 44616 . 45680) (NewEntity 45682 . 46497) (PutObjectName 
+46499 . 47811) (PutValueOnly 47813 . 48974) ($! 48976 . 49241)) (51902 67319 (BlankInstance 51912 . 
+53252) (BootNameObject 53254 . 53675) (FullNameObject 53677 . 53948) (FillInst 53950 . 54755) (FillIVs
+ 54757 . 55366) (IVSource 55368 . 58418) (ModifyInstance 58420 . 59907) (NewClass 59909 . 61405) (
+NewObject 61407 . 61947) (UpdateClassIVs 61949 . 63881) (UpdateIVDescrs 63883 . 67317)))))
 STOP

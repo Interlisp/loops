@@ -1,0 +1,3 @@
+// LoadLoopsSources.cm
+
+Lisp [PHYLUM]<Lisp>Koto>Basics>Full.sysout ;(PROGN (LOAD (QUOTE {POGO:}<loopsCore>sources>loadloops)) (LOADLOOPS NIL (QUOTE SOURCE)))
