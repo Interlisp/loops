@@ -18,3 +18,6 @@ Directories so far
    * truckin/players
    
    
+CONN TRUCKIN
+(FILESLOAD TRUCKINLOADER)
+(LoadTruckin)
