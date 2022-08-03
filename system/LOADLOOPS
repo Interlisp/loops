@@ -1,10 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 9-Jul-2022 20:50:48" {DSK}<home>larry>loops>system>LOADLOOPS.;10 20920  
+(FILECREATED " 1-Aug-2022 09:28:41" {DSK}<home>larry>git-loops>system>LOADLOOPS.;11 20004  
 
       :CHANGES-TO (VARS LOADLOOPSCOMS)
 
-      :PREVIOUS-DATE " 9-Jul-2022 20:11:08" {DSK}<home>larry>loops>system>LOADLOOPS.;9)
+      :PREVIOUS-DATE " 9-Jul-2022 20:50:48" {DSK}<home>larry>git-loops>system>LOADLOOPS.;10)
 
 
 (* ; "
@@ -14,7 +14,7 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 (PRETTYCOMPRINT LOADLOOPSCOMS)
 
 (RPAQQ LOADLOOPSCOMS
-       (
+       [
 
 (* ;;; "Loops loadup stuff")
 
@@ -110,12 +110,7 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
         (VARS (DIRECTORIES (UNION (LIST LOOPSDIRECTORY LOOPSLIBRARYDIRECTORY LOOPSUSERSDIRECTORY 
                                         LOOPSUSERSRULESDIRECTORY)
                                   DIRECTORIES)))
-        (P (MOVD? 'NILL 'UpdateClassBrowsers)
-           (FOR X IN FILELST BIND FOUND WHEN (SETQ FOUND (FINDFILE X))
-                DO
-                (RPLACD (CAR (GETPROP X 'FILEDATES))
-                       FOUND)))
-        (ADVISE CL:COMPILE-FILE)))
+        (P (MOVD? 'NILL 'UpdateClassBrowsers])
 
 
 
@@ -435,23 +430,10 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
                          DIRECTORIES))
 
 (MOVD? 'NILL 'UpdateClassBrowsers)
-
-(FOR X IN FILELST BIND FOUND WHEN (SETQ FOUND (FINDFILE X))
-   DO (RPLACD (CAR (GETPROP X 'FILEDATES))
-             FOUND))
-
-[XCL:REINSTALL-ADVICE 'CL:COMPILE-FILE :AROUND '((:LAST (LET ((*MACROEXPAND-HOOK* 'NOCACHEMACRO))
-                                                             (DECLARE (SPECVARS *MACROEXPAND-HOOK))
-                                                             *))
-                                                 (:LAST (LET ((*MACROEXPAND-HOOK* 'NOCACHEMACRO))
-                                                             (DECLARE (SPECVARS *MACROEXPAND-HOOK*))
-                                                             *]
-
-(READVISE CL:COMPILE-FILE)
 (PUTPROPS LOADLOOPS COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
 1993 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (6736 11147 (LOADLOOPS 6746 . 9960) (LoadLispUsers 9962 . 10368) (NOCACHEMACRO 10370 . 
-10441) (UnMarkChanges 10443 . 11145)) (11928 15153 (PromptEval 11938 . 13634) (PromptRead 13636 . 
-15151)) (15759 17523 (NiceMenu 15769 . 16324) (ColumnateMenuItems 16326 . 17521)))))
+  (FILEMAP (NIL (6536 10947 (LOADLOOPS 6546 . 9760) (LoadLispUsers 9762 . 10168) (NOCACHEMACRO 10170 . 
+10241) (UnMarkChanges 10243 . 10945)) (11728 14953 (PromptEval 11738 . 13434) (PromptRead 13436 . 
+14951)) (15559 17323 (NiceMenu 15569 . 16124) (ColumnateMenuItems 16126 . 17321)))))
 STOP

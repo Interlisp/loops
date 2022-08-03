@@ -1,10 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 9-Jul-2022 17:40:46" {DSK}<home>larry>loops>TRUCKIN>TRUCKINLOAD.;4 3963   
+(FILECREATED " 1-Aug-2022 11:26:47" {DSK}<home>larry>git-loops>TRUCKIN>TRUCKINLOAD.;5 3848   
 
-      :CHANGES-TO (FNS LoadTruckin)
+      :CHANGES-TO (VARS TRUCKINLOADCOMS)
 
-      :PREVIOUS-DATE " 7-Jul-2022 21:58:26" {DSK}<home>larry>loops>TRUCKIN>TRUCKINLOAD.;3)
+      :PREVIOUS-DATE " 9-Jul-2022 17:40:46" {DSK}<home>larry>git-loops>TRUCKIN>TRUCKINLOAD.;4)
 
 
 (* ; "
@@ -17,8 +17,7 @@ Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
        (
         (* ;; "Random patches to make Truckin work")
 
-        (VARS [TruckinDirectory (OR (MEDLEYDIR "../loops/truckin" NIL NIL T)
-                                    (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T
+        (VARS [TruckinDirectory (OR (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T
                                                                  NIL UPPERCASEARRAY T)
                                                           (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T
                                                                  NIL UPPERCASEARRAY T]
@@ -41,8 +40,7 @@ Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
 
 
 (RPAQ TruckinDirectory
-      (OR (MEDLEYDIR "../loops/truckin" NIL NIL T)
-          (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
+      (OR (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
                                 (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T]
                (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
                                                   "truckin>"))
@@ -98,5 +96,5 @@ Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
 )
 (PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2335 2524 (INMENU 2335 . 2524)) (2607 3865 (LoadTruckin 2617 . 3863)))))
+  (FILEMAP (NIL (2220 2409 (INMENU 2220 . 2409)) (2492 3750 (LoadTruckin 2502 . 3748)))))
 STOP

@@ -1,14 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED " 6-Nov-91 14:53:35" {DSK}<python>RELEASE>loops>2.0>src>LOOPSBROWSE.;2 225583 
 
-      changes to%:  (METHODS LatticeBrowser.GetNodeList)
-                    (FNS DualSubItems LatticeBrowserExpandFn)
+(FILECREATED " 2-Aug-2022 10:18:49" {DSK}<home>larry>git-loops>system>LOOPSBROWSE.;3 221717 
 
-      previous date%: "14-Aug-90 15:13:28" {DSK}<python>RELEASE>loops>2.0>src>LOOPSBROWSE.;1)
+      :CHANGES-TO (FNS \Place-Menu-Group-In-Window)
+
+      :PREVIOUS-DATE " 6-Nov-91 14:53:35" {DSK}<home>larry>git-loops>system>LOOPSBROWSE.;2)
 
 
 (* ; "
-Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1983-1988, 1990-1991, 2022 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSBROWSECOMS)
@@ -129,7 +129,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Co
 
 (DEFCLASSES LatticeBrowser ClassBrowser FileBrowser InstanceBrowser SupersBrowser MetaBrowser)
 (DEFCLASS LatticeBrowser
-   (MetaClass Class Edited%:                             (* ; "Edited  4-Nov-87 13:43 by jrb:")
+   (MetaClass Class Edited%:                                 (* ; "Edited  4-Nov-87 13:43 by jrb:")
           doc "This is the default metaClass for all classes")
    (Supers Window)
    (ClassVariables (BoxLineWidth 1 doc "width to make box for BoxNode")
@@ -194,7 +194,7 @@ Unboxed by another BoxNode")
           (height 32 doc "outer height of window, including border")))
 
 (DEFCLASS ClassBrowser
-   (MetaClass Class Edited%:                             (* ; "Edited  7-Mar-88 18:55 by jrb:")
+   (MetaClass Class Edited%:                                 (* ; "Edited  7-Mar-88 18:55 by jrb:")
           doc "A window containing a lattice displaying classes.")
    (Supers IndexedObject LatticeBrowser)
    (ClassVariables (TitleItems #,($AV AppendSuperValue ((SQV0.%:F5.C38.9W8 . 15)) (localState (("Add Category Menu" AddCategoryMenu "Add an attached menu for changing the viewed method categories of this browser"))))
@@ -252,6 +252,9 @@ Unboxed by another BoxNode")
                                                                 ("AddMethod" AddNewMethod 
                                                                       "Add a new method to the class"
                                                                        )
+                                                                ("DefRSM" DefRSM 
+                                                              "Add a new ruleset method to the class"
+                                                                       )
                                                                 (SpecializeMethod 
                                                                        AddSpecializedMethod 
                                                           "Add a specialization of a selected method"
@@ -262,7 +265,8 @@ Unboxed by another BoxNode")
                                                                        )
                                                                 ("NewInstance" SetItNew 
                                                     "Set (SavedValue) to a new instance of the class"
-                                                                       )))
+                                                                       ))
+                                                        NIL)
                                      "Add Method (default) or add other items to class")
                               ("Delete (DeleteMethod)" (DeleteMethodUsingBrowser ((DeleteIV 
                                                                                  DeleteIVUsingBrowser
@@ -316,7 +320,7 @@ or the class itself")
                  doc "List of categories that should be considered when displaying class methods")))
 
 (DEFCLASS FileBrowser
-   (MetaClass Class doc "This implements a browser for multiple files." Edited%: 
+   (MetaClass Class doc "This implements a browser for multiple files." Edited%: 
                                                              (* smL "21-May-86 13:14"))
    (Supers ClassBrowser)
    (ClassVariables (LocalCommands 
@@ -341,7 +345,7 @@ or the class itself")
 
 (DEFCLASS InstanceBrowser
    (MetaClass Class doc "Follows the downward lattice in object named in subIV. If subIV is changed after display, will show the newly defined alternative lattice starting at the same starting points"
-          Edited%:                                       (* smL "29-Sep-86 19:31"))
+          Edited%:                                           (* smL "29-Sep-86 19:31"))
    (Supers LatticeBrowser)
    (ClassVariables (TitleItems ((Recompute 'Recompute "Recompute lattice from starting objects")
                                 (NewPath 'NewPath 
@@ -355,13 +359,13 @@ or the class itself")
           (title "Instance browser")))
 
 (DEFCLASS SupersBrowser
-   (MetaClass Class Edited%:                             (* smL "11-Jun-86 13:18")
+   (MetaClass Class Edited%:                                 (* smL "11-Jun-86 13:18")
           doc "Browses upwards from a class to all of its supers.")
    (Supers ClassBrowser)
    (InstanceVariables (title "Supers browser")))
 
 (DEFCLASS MetaBrowser
-   (MetaClass Class doc "Runs through the meta classes of a class" Edited%: 
+   (MetaClass Class doc "Runs through the meta classes of a class" Edited%: 
                                                              (* smL "11-Jun-86 13:18"))
    (Supers ClassBrowser)
    (InstanceVariables (title "MetaClass browser")))
@@ -674,7 +678,7 @@ evaluation in TTY process, and saves events on history" (category (Window)))
        NIL)
       ((OR (FMEMB object (@ goodList))
            (for c in (@ startingList) thereis (_Try
-                                                           object Subclass c])
+                                               object Subclass c])
 
 (Method ((FileBrowser Browse) self fileName) "Catches Browse messages and lets user BrowseFile"
    (if (LoopsHelp "The method to initialize a FileBrowser is BrowseFile, not Browse.
@@ -696,19 +700,19 @@ Type RETURN T to browse this file:" fileName)
       ((OR (FMEMB object (@ goodList))
            (FMEMB object (@ nonFileClasses))
            (for c in (@ startingList) thereis (_Try
-                                                           object Subclass c])
+                                               object Subclass c])
 
 (Method ((FileBrowser LoadMasterscope?) self)
    "Tests to see if LOOPS Masterscope is loaded and asks to load it"
    (if (NOT (GETD 'LoopsMethodMSGETDEF))
        then (_ self PromptPrint "Masterscope is not loaded yet
 ")
-             (if (NiceMenu '((YES T)
-                                 (NO NIL))
-                            "Load Masterscope?")
-                 then (FILESLOAD (FROM VALUEOF LOOPSLIBRARYDIRECTORY)
-                                 LOOPSMS)
-                       T)
+            (if (NiceMenu '((YES T)
+                            (NO NIL))
+                       "Load Masterscope?")
+                then (FILESLOAD (FROM VALUEOF LOOPSLIBRARYDIRECTORY)
+                            LOOPSMS)
+                     T)
      else T))
 
 (Method ((InstanceBrowser AddRoot) self newItem)
@@ -721,7 +725,7 @@ Type RETURN T to browse this file:" fileName)
        (_ self PromptPrint "That's not an instance!"))
       (T (_Super self AddRoot newItem))))
 
-(Method ((LatticeBrowser AddRoot) self newItem)          (* ; "smL 11-Dec-86 10:23")
+(Method ((LatticeBrowser AddRoot) self newItem)              (* ; "smL 11-Dec-86 10:23")
    "Add a named item to the starting list of the browser"
 
    (* ;; "Go get newItem if it wasn't supplied")
@@ -743,13 +747,13 @@ Type RETURN T to browse this file:" fileName)
            (T (if (_ self HasObject newObject)
                   then NIL
                 else (pushnew (@ startingList)
-                                newObject)
-                      (if (@ goodList)
-                          then (pushnew (@ goodList)
-                                          newObject))
-                      (_@ badList (DREMOVE newObject (@ badList)))
-                      (_ self Recompute)
-                      self])
+                            newObject)
+                     (if (@ goodList)
+                         then (pushnew (@ goodList)
+                                     newObject))
+                     (_@ badList (DREMOVE newObject (@ badList)))
+                     (_ self Recompute)
+                     self])
 
 (Method ((LatticeBrowser BoxNode) self object objName unboxPrevious)
                                                              (* ; "smL  8-Apr-87 18:34")
@@ -761,11 +765,11 @@ Type RETURN T to browse this file:" fileName)
                      (_ self HighlightNode object (@ |::BoxLineWidth|))
                      object)
                     ((EQ object (@ boxedNode))               (* Invert state if given boxnode a 
-                                                           second time)
+                                                             second time)
                      (_ self HighlightNode object 'INVERT)
                      NIL)
                     (T                                       (* If there was a previously boxed 
-                                                           node, remove the box from around it)
+                                                             node, remove the box from around it)
                        (AND unboxPrevious (_ self HighlightNode (@ boxedNode)
                                                   'INVERT))
                        (_ self HighlightNode object (@ |::BoxLineWidth|))
@@ -778,13 +782,13 @@ Type RETURN T to browse this file:" fileName)
    (_ self ShapeToHold)
    (_ self Move position))
 
-(Method ((LatticeBrowser BrowserObjects) self)           (* ; "dgb: 28-May-84 12:58")
+(Method ((LatticeBrowser BrowserObjects) self)               (* ; "dgb: 28-May-84 12:58")
    "Return a list of all the objects shown in the browser"
    (for node in (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                            'GRAPH)) when (NLISTP (CAR node))
+                                            'GRAPH)) when (NLISTP (CAR node))
       collect (CAR node)))
 
-(Method ((LatticeBrowser ChangeFontSize) self size)      (* ; "smL 13Dec-84 13:04")
+(Method ((LatticeBrowser ChangeFontSize) self size)          (* ; "smL 13Dec-84 13:04")
    "Change the font size from whatever it is to size"
    [OR size (SETQ size (MENU (COND
                                 ((type? MENU (GETTOPVAL 'MenuSize))
@@ -803,11 +807,11 @@ Type RETURN T to browse this file:" fileName)
    (* ;; "If size is NIL now, couldn't find the font")
 
    (if size
-       then (_@ browseFont size)                         (* clear out the label cache!)
-             (_ self RecomputeLabels)
+       then (_@ browseFont size)                             (* clear out the label cache!)
+            (_ self RecomputeLabels)
      else (PROMPTPRINT "Sorry, no font of that size!")))
 
-(Method ((LatticeBrowser ChangeFormat) self format)      (* ; "dgb: 21-Apr-84 19:52")
+(Method ((LatticeBrowser ChangeFormat) self format)          (* ; "dgb: 21-Apr-84 19:52")
    "Change format between Lattice and Tree"
    (COND
       ((LISTP format)
@@ -822,39 +826,39 @@ Type RETURN T to browse this file:" fileName)
    "change the max label dimensions and redisplay the nodes -- if new size is NULL, don't change"
    (if newMaxLines
        then (change (@ LabelMaxLines)
-                       newMaxLines))
+                   newMaxLines))
    (if newMaxWidth
        then (change (@ LabelMaxCharsWidth)
-                       newMaxWidth))                         (* ; "clear out the label cache")
+                   newMaxWidth))                             (* ; "clear out the label cache")
    (_ self RecomputeLabels))
 
-(Method ((LatticeBrowser Clear) self)                    (* ; "edited:  2-Jul-84 13:43")
+(Method ((LatticeBrowser Clear) self)                        (* ; "edited:  2-Jul-84 13:43")
    "empty the window of active regions, return the window"
    (WINDOWPROP (@ window)
           'GRAPH NIL)
    (_Super self Clear)
    (@ window))
 
-(Method ((LatticeBrowser ClearLabelCache) self objects)  (* ; "smL  5-Dec-85 12:02")
+(Method ((LatticeBrowser ClearLabelCache) self objects)      (* ; "smL  5-Dec-85 12:02")
    "Delete the cached label for these items"
    (if (LISTP objects)
-       then (for item in objects bind cachedLabel
-                   do (SETQ cachedLabel (ASSOC item (@ menus%:,objectLabels)))
-                         (if cachedLabel
-                             then (change (@ menus%:,objectLabels)
-                                             (DREMOVE cachedLabel DATUM))
-                           else))
+       then (for item in objects bind cachedLabel do (SETQ cachedLabel (ASSOC item (@ 
+                                                                                 menus%:,objectLabels)
+                                                                              ))
+                                                     (if cachedLabel
+                                                         then (change (@ menus%:,objectLabels)
+                                                                     (DREMOVE cachedLabel DATUM))
+                                                       else))
      elseif (EQ objects T)
        then (change (@ menus%:,objectLabels)
-                       NIL)
+                   NIL)
      else (LET [(cachedLabel (ASSOC objects (@ menus%:,objectLabels)]
-                   (if cachedLabel
-                       then (change (@ menus%:,objectLabels)
-                                       (DREMOVE cachedLabel DATUM))
-                     else))))
+               (if cachedLabel
+                   then (change (@ menus%:,objectLabels)
+                               (DREMOVE cachedLabel DATUM))
+                 else))))
 
-(Method ((LatticeBrowser DeleteFromBrowser) self obj objname)
-                                                             (* ; "smL  5-Aug-86 16:50")
+(Method ((LatticeBrowser DeleteFromBrowser) self obj objname)(* ; "smL  5-Aug-86 16:50")
    "Place on badList for Browser"
    (pushnew (@ badList)
           obj)
@@ -864,18 +868,18 @@ Type RETURN T to browse this file:" fileName)
                                                              (* ; "smL  5-Jun-86 14:14")
    "Delete this node and any of its subnodes from the graph"
    (\DeleteSubtree self (WINDOWPROP (@ window)
-                                   'GRAPH)
+                               'GRAPH)
           obj)
    (pushnew (@ badList)
           obj)
    (_ self Recompute))
 
-(Method ((LatticeBrowser DisplayBrowser) self)           (* ; "smL 29-Sep-86 12:15")
+(Method ((LatticeBrowser DisplayBrowser) self)               (* ; "smL 29-Sep-86 12:15")
    "New method template"
    [LET [(NODELST (AND (@ startingList)
                        (_ self GetNodeList (@ startingList)
                                (@ goodList))]                (* window should be invert so that 
-                                                           links etc. can be erased)
+                                                             links etc. can be erased)
         (DSPOPERATION 'INVERT (@ window))
         (COND
            (NODELST (APPLY* (@ showGraphFn)
@@ -886,14 +890,14 @@ Type RETURN T to browse this file:" fileName)
                            NIL NIL (@ topAlign))
 
          (* Kludge%: put the window back to make sure that the button event fns are 
-       correct)
+         correct)
 
                   (change (@ window)
                          DATUM)
                   (WINDOWPROP (@ window)
                          'TITLE
                          (@ title))                          (* kludge%: because GRAPHER adds its 
-                                                           own COPYBUTTONEVENTFN)
+                                                             own COPYBUTTONEVENTFN)
                   (WINDOWPROP (@ window)
                          'COPYBUTTONEVENTFN NIL))
            (T (_ self Clear)])
@@ -906,27 +910,24 @@ Type RETURN T to browse this file:" fileName)
                               (T boxWidth))
           (@ window)))
 
-(Method ((LatticeBrowser DisplayNodeShading) self node shade)
-                                                             (* ; "smL 13-Dec-85 15:13")
+(Method ((LatticeBrowser DisplayNodeShading) self node shade)(* ; "smL 13-Dec-85 15:13")
    "New method template"
    (RESET/NODE/LABELSHADE node (OR shade WHITESHADE)
           (@ window)))
 
 (Method ((LatticeBrowser DoCommandInProcess) self obj selector args node)
-                                                              (* ; "smL 17-Sep-86 17:46")
+                                                             (* ; "smL 17-Sep-86 17:46")
    "Does a lattice command in a separate process. Grays out the node at the beginning of the command, and 
 ungrays it when the command completes."
    (EVAL.IN.TTY.CONTEXT [if node
                             then `(LET ((*PACKAGE* (_ ,self MousePackage))
-                                            (*READTABLE* (_ ,self MouseReadtable)))
-                                           (_ ,self ShadeNode ,node ,GRAYSHADE2)
-                                           (LispxSend ,(_ self MessageFormForProcess obj selector
-                                                                   args))
-                                           (_ ,self ShadeNode ,node ,WHITESHADE))
+                                        (*READTABLE* (_ ,self MouseReadtable)))
+                                       (_ ,self ShadeNode ,node ,GRAYSHADE2)
+                                       (LispxSend ,(_ self MessageFormForProcess obj selector args))
+                                       (_ ,self ShadeNode ,node ,WHITESHADE))
                           else `(LET ((*PACKAGE* (_ ,self MousePackage))
-                                          (*READTABLE* (_ ,self MouseReadtable)))
-                                         (LispxSend ,(_ self MessageFormForProcess obj selector 
-                                                                 args)]
+                                      (*READTABLE* (_ ,self MouseReadtable)))
+                                     (LispxSend ,(_ self MessageFormForProcess obj selector args)]
           selector))
 
 (Method ((LatticeBrowser DoSelectedCommand) self command obj objName)
@@ -936,26 +937,26 @@ ungrays it when the command completes."
        then 
 
          (* Take care of being passed in a dummy node from browser in Lattice mode.
-       -
-       Dummy nodes are indicated by having the object in a list)
+         -
+         Dummy nodes are indicated by having the object in a list)
 
-             (LET ((args (if (LISTP command)
-                             then (CDR command)
-                           else NIL))
-                   (command (if (LISTP command)
-                                then (CAR command)
-                              else command))
-                   (obj (if (LISTP obj)
-                            then (CAR obj)
-                          else obj))
-                   (objName (if (LISTP obj)
-                                then (GetObjectName (CAR obj))
-                              else objName)))
-                  (COND
-                     ((AND (NOT (FMEMB command (@ |::LocalCommands|)))
-                           (_ obj Understands command))
-                      (_ self DoCommandInProcess obj command args))
-                     (T (_ self DoCommandInProcess self command `(,obj ,objName ,@args))])
+            (LET ((args (if (LISTP command)
+                            then (CDR command)
+                          else NIL))
+                  (command (if (LISTP command)
+                               then (CAR command)
+                             else command))
+                  (obj (if (LISTP obj)
+                           then (CAR obj)
+                         else obj))
+                  (objName (if (LISTP obj)
+                               then (GetObjectName (CAR obj))
+                             else objName)))
+                 (COND
+                    ((AND (NOT (FMEMB command (@ |::LocalCommands|)))
+                          (_ obj Understands command))
+                     (_ self DoCommandInProcess obj command args))
+                    (T (_ self DoCommandInProcess self command `(,obj ,objName ,@args))])
 
 (Method ((LatticeBrowser EditObject) self object objName args)
                                                              (* ; "dgb:  2-MAR-83 10:58")
@@ -970,53 +971,52 @@ ungrays it when the command completes."
                                  (SETQ node (GetObjectRec node)))
                                 (T node))
                             (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                                'GRAPH]
+                                                        'GRAPH]
         (if nodestruct
             then (for i from 1 to (OR N 3) do (FLIPNODE nodestruct (@ window))
-                                                                 (DISMISS (OR flashTime 300))
-                                                                 (FLIPNODE nodestruct (@ window))
-                                                                 (DISMISS (OR flashTime 300)))
-                  (if leaveFlipped?
-                      then (_ self FlipNode node)])
+                                              (DISMISS (OR flashTime 300))
+                                              (FLIPNODE nodestruct (@ window))
+                                              (DISMISS (OR flashTime 300)))
+                 (if leaveFlipped?
+                     then (_ self FlipNode node)])
 
-(Method ((LatticeBrowser FlipNode) self object)          (* ; "smL 13-Dec-85 15:18")
+(Method ((LatticeBrowser FlipNode) self object)              (* ; "smL 13-Dec-85 15:18")
    "Inverts the video around the node in the graph representing the object"
    [LET [(node (FASSOC (COND
                           ((LITATOM object)
                            (SETQ object (GetObjectRec object)))
                           (T object))
                       (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                          'GRAPH]
+                                                  'GRAPH]
 
          (* For some squirly reason this doesn't work.
-       Need to check if anyone else calls DisplayNodeShading...
-       (AND node (_ self DisplayNodeShading node
-       (INVERTED/SHADE/FOR/GRAPHER (fetch NODELABELSHADE of node)))))
+         Need to check if anyone else calls DisplayNodeShading...
+         (AND node (_ self DisplayNodeShading node
+         (INVERTED/SHADE/FOR/GRAPHER (fetch NODELABELSHADE of node)))))
 
         (AND node (FLIPNODE node (@ window)])
 
-(Method ((LatticeBrowser GetDisplayLabel) self object)   (* ; "smL 15-Oct-85 11:34")
+(Method ((LatticeBrowser GetDisplayLabel) self object)       (* ; "smL 15-Oct-85 11:34")
    "get the display label. use the cache if it provides the answer; if not, and maxLabelWidth is set, use 
 it to compute the appropriate bit map and then cache the result."
    (LET [(cachedLabel (ASSOC object (@ menus%:,objectLabels)]
         (if cachedLabel
             then (CDR cachedLabel)
           else (LET [(newLabel (BoxPrintString (_ self GetLabel object)
-                                          (@ LabelMaxCharsWidth)
-                                          (@ LabelMaxLines)
-                                          (@ browseFont)]
-                        (if (LISTP newLabel)
-                            then                         (* GRAPHER dies if the label is a 
-                                                           list)
-                                  (SETQ newLabel (MKSTRING newLabel)))
-                        (change (@ menus%:,objectLabels)
-                               (CONS (CONS object newLabel)
-                                     (if (NoValueFound DATUM)
-                                         then NIL
-                                       else DATUM)))
-                        newLabel))))
+                                      (@ LabelMaxCharsWidth)
+                                      (@ LabelMaxLines)
+                                      (@ browseFont)]
+                    (if (LISTP newLabel)
+                        then                                 (* GRAPHER dies if the label is a list)
+                             (SETQ newLabel (MKSTRING newLabel)))
+                    (change (@ menus%:,objectLabels)
+                           (CONS (CONS object newLabel)
+                                 (if (NoValueFound DATUM)
+                                     then NIL
+                                   else DATUM)))
+                    newLabel))))
 
-(Method ((LatticeBrowser GetLabel) self object)          (* ; "smL 10-Dec-84 16:11")
+(Method ((LatticeBrowser GetLabel) self object)              (* ; "smL 10-Dec-84 16:11")
    "Get a label for an object to be displayed in the browser."
    (GetObjectName object))
 
@@ -1029,62 +1029,58 @@ include elements of it. If goodList=T make it be browseList."
       ((EQ goodList T)
        (SETQ goodList browseList)))
    (PROG (subs pair node [oldNodes (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                                       'GRAPH]
+                                                               'GRAPH]
                (objList (CONS)))
 
     (* ;; "first make objList which is a list of pairs (object  . objName).  objName will be used as a title for a node in the browser.  This structure will be replaced by a graphNode when it is processed.  The nodeID of the graphNode will be the object, and the label will be the name.")
 
          (for objOrName in browseList do (AND (SETQ pair (_ self ObjNamePair objOrName))
-                                                          (NOT (FASSOC (CAR pair)
-                                                                      (CAR objList)))
-                                                          (TCONC objList pair)))
+                                              (NOT (FASSOC (CAR pair)
+                                                          (CAR objList)))
+                                              (TCONC objList pair)))
 
     (* ;; "Now MAP ON list so pair can be replaced by graphNode")
 
-         (for pair name obj subObjs on (CAR objList) when (NLISTP (SETQ name (CDAR pair))
-                                                                             )
+         (for pair name obj subObjs on (CAR objList) when (NLISTP (SETQ name (CDAR pair)))
             do (SETQ subObjs (CONS))
-                  [for sub objPair obj1 in (_ self GetSubs (SETQ obj (CAAR pair)))
-                     do 
+               [for sub objPair obj1 in (_ self GetSubs (SETQ obj (CAAR pair)))
+                  do 
+                     (* ;; "ObjNamePair returns NIL for destroyed objects.  include only members of goodList in subs if given.  Add to objList only once")
 
-                           (* ;; "ObjNamePair returns NIL for destroyed objects.  include only members of goodList in subs if given.  Add to objList only once")
-
-                           (SETQ obj1 (COND
-                                         ((EQ (CAR sub)
-                                              'Link% Parameters)
-                                          (CADR sub))
-                                         (T sub)))
-                           (COND
-                              ((SETQ objPair (_ self ObjNamePair obj1))
-                               (COND
-                                  ((NOT (FASSOC obj1 (CAR objList)))
-                                   (TCONC objList objPair)))
-                               (TCONC subObjs sub]
-                  [RPLACA pair (SETQ node (OR (FASSOC obj oldNodes)
-                                              (create GRAPHNODE
-                                                     NODEID _ obj
-                                                     NODEBORDER _ (PROGN (LIST (ADD1 (@ 
-                                                                                     |::BoxLineWidth|)
-                                                                                     )
-                                                                               WHITESHADE)
-                                                             (* ; 
-                                                           "This makes graphs too big -- TAL")
-                                                                         NIL]
-                  (replace TONODES of node with (CAR subObjs))
-                  (replace NODELABEL of node with name)
-                  (replace NODEFONT of node with (@ browseFont))
-                  (replace NODEWIDTH of node with NIL)
-                  (replace NODEHEIGHT of node with NIL))
+                     (SETQ obj1 (COND
+                                   ((EQ (CAR sub)
+                                        'Link% Parameters)
+                                    (CADR sub))
+                                   (T sub)))
+                     (COND
+                        ((SETQ objPair (_ self ObjNamePair obj1))
+                         (COND
+                            ((NOT (FASSOC obj1 (CAR objList)))
+                             (TCONC objList objPair)))
+                         (TCONC subObjs sub]
+               [RPLACA pair (SETQ node (OR (FASSOC obj oldNodes)
+                                           (create GRAPHNODE
+                                                  NODEID _ obj
+                                                  NODEBORDER _ (PROGN (LIST (ADD1 (@ |::BoxLineWidth|)
+                                                                                  )
+                                                                            WHITESHADE)
+                                                             (* ; "This makes graphs too big -- TAL")
+                                                                      NIL]
+               (replace TONODES of node with (CAR subObjs))
+               (replace NODELABEL of node with name)
+               (replace NODEFONT of node with (@ browseFont))
+               (replace NODEWIDTH of node with NIL)
+               (replace NODEHEIGHT of node with NIL))
          (RETURN (CAR objList))))
 
-(Method ((LatticeBrowser GetSubs) self object)           (* ; "dgb: 26-SEP-82 17:17")
+(Method ((LatticeBrowser GetSubs) self object)               (* ; "dgb: 26-SEP-82 17:17")
    "Gets a set of subs from an object for browsing"
    (COND
-      ((_ object HasIV 'subs)                                (* If the object has an IV called 
-                                                           subs then use the contents of that)
+      ((_ object HasIV 'subs)                                (* If the object has an IV called subs 
+                                                             then use the contents of that)
        (@ object subs))))
 
-(Method ((LatticeBrowser GraphFits) self snugly?)        (* ; "smL 24-Apr-86 15:00")
+(Method ((LatticeBrowser GraphFits) self snugly?)            (* ; "smL 24-Apr-86 15:00")
    "Tests if graph fits in region"
    [LET ((window (@ window)))
         (LET [(width 0)
@@ -1104,22 +1100,21 @@ include elements of it. If goodList=T make it be browseList."
                   (NOT (IGREATERP height (fetch HEIGHT of region)))
                   (if snugly?
                       then 
+                           (* ;; "and not too big (space left is more than 2 browseFont heights)")
 
-                            (* ;; "and not too big (space left is more than 2 browseFont heights)")
-
-                            (AND (ILESSP (IDIFFERENCE (fetch WIDTH of region)
-                                                width)
-                                        fontheight*2)
-                                 (ILESSP (IDIFFERENCE (fetch HEIGHT of region)
-                                                height)
-                                        fontheight*2))
+                           (AND (ILESSP (IDIFFERENCE (fetch WIDTH of region)
+                                               width)
+                                       fontheight*2)
+                                (ILESSP (IDIFFERENCE (fetch HEIGHT of region)
+                                               height)
+                                       fontheight*2))
                     else T])
 
-(Method ((LatticeBrowser HasObject) self object)         (* ; "dgb: 28-May-84 12:56")
+(Method ((LatticeBrowser HasObject) self object)             (* ; "dgb: 28-May-84 12:56")
    "Check object in grapher nodes, and return if it is one of them"
    (AND [FASSOC (GetObjectRec object)
                (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                   'GRAPH]
+                                           'GRAPH]
         T))
 
 (Method ((LatticeBrowser HighlightNode) self object width shade)
@@ -1130,17 +1125,17 @@ include elements of it. If goodList=T make it be browseList."
                            (SETQ object (GetObjectRec object)))
                           (T object))
                       (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                          'GRAPH]
+                                                  'GRAPH]
         (AND node (_ self DisplayNodeHightlights node shade width))))
 
-(Method ((LatticeBrowser IconTitle) self)                (* ; "edited: 18-Jan-85 15:35")
+(Method ((LatticeBrowser IconTitle) self)                    (* ; "edited: 18-Jan-85 15:35")
    "Compute the icont title for this browser"
    (LET [(item (CAR (@ startingList)]
         (if (NULL item)
             then "Browser"
           else (_ self GetLabel item))))
 
-(Method ((LatticeBrowser LeftSelection) self)            (* ; "smL 14-Jan-87 13:20")
+(Method ((LatticeBrowser LeftSelection) self)                (* ; "smL 14-Jan-87 13:20")
    "Move object if CTRL down. Do LeftShiftSelect if SHIFT down, else choose from LeftButtonItems"
    [LET ((window (@ window)))
         (COND
@@ -1153,11 +1148,10 @@ include elements of it. If goodList=T make it be browseList."
                 (DSPOPERATION 'INVERT window)
                 (EDITMOVENODE window)))
            (T                                                (* Here if left button depressed but 
-                                                           not control.)
+                                                             not control.)
               (LET (objName (latticeBrowser self)
                           (object (FindSelectedNode window)))
-                   (DECLARE (SPECVARS object latticeBrowser))
-                                                             (* SPECVARS for whenHeldFn)
+                   (DECLARE (SPECVARS object latticeBrowser))(* SPECVARS for whenHeldFn)
                    [COND
                       ((LISTP object)
                        (SETQ object (CAR object]
@@ -1190,31 +1184,28 @@ include elements of it. If goodList=T make it be browseList."
    "Create a menu for viewing a parameter of self"
    [replace WHENSELECTEDFN of menu
       with (FUNCTION (LAMBDA (item menu)
-                           (LET
-                            [(self (GETMENUPROP menu 'self))
+                       (LET [(self (GETMENUPROP menu 'self))
                              (test-form (GETMENUPROP menu 'test-form))
                              (change-form (GETMENUPROP menu 'change-form]
                             (if item
                                 then (SHADEITEM item menu BLACKSHADE)
-                                      (APPLY* change-form self (if (LISTP item)
-                                                                   then (CADR item)
-                                                                 else item))
-                                      (for item in (fetch ITEMS of menu)
-                                         do (if (APPLY* test-form self
-                                                               (if (LISTP item)
-                                                                   then (CADR item)
-                                                                 else item))
-                                                    then (SHADEITEM item menu HIGHLIGHTSHADE)
-                                                  else (SHADEITEM item menu WHITESHADE]
+                                     (APPLY* change-form self (if (LISTP item)
+                                                                  then (CADR item)
+                                                                else item))
+                                     (for item in (fetch ITEMS of menu)
+                                        do (if (APPLY* test-form self (if (LISTP item)
+                                                                          then (CADR item)
+                                                                        else item))
+                                               then (SHADEITEM item menu HIGHLIGHTSHADE)
+                                             else (SHADEITEM item menu WHITESHADE]
    (PUTMENUPROP menu 'self self)
    (PUTMENUPROP menu 'test-form test-form)
    (PUTMENUPROP menu 'change-form change-form)
-   (for item in (fetch ITEMS of menu)
-      do (if (APPLY* test-form self (if (LISTP item)
-                                                then (CADR item)
-                                              else item))
-                 then (SHADEITEM item menu HIGHLIGHTSHADE)
-               else (SHADEITEM item menu WHITESHADE)))
+   (for item in (fetch ITEMS of menu) do (if (APPLY* test-form self (if (LISTP item)
+                                                                        then (CADR item)
+                                                                      else item))
+                                             then (SHADEITEM item menu HIGHLIGHTSHADE)
+                                           else (SHADEITEM item menu WHITESHADE)))
    menu)
 
 (Method ((LatticeBrowser MessageFormForProcess) self obj selector args)
@@ -1222,12 +1213,12 @@ include elements of it. If goodList=T make it be browseList."
    "Create a form to evaluate in a new process that will send the obj the selector message with the given 
 args"
    `(_ ,obj ,selector ., [for x in args collect (COND
-                                                               ((OR (NULL x)
-                                                                    (Object? x))
-                                                                x)
-                                                               (T (KWOTE x]))
+                                                   ((OR (NULL x)
+                                                        (Object? x))
+                                                    x)
+                                                   (T (KWOTE x]))
 
-(Method ((LatticeBrowser MiddleSelection) self)          (* ; "smL 15-May-85 19:04")
+(Method ((LatticeBrowser MiddleSelection) self)              (* ; "smL 15-May-85 19:04")
    "This function called from the GRAPHER package when a node is selected with the middle mouse button. If
  no node is selected then just returns."
    [PROG (objName selection object (window (@ window))
@@ -1241,8 +1232,8 @@ args"
          (GETMOUSESTATE)
          (_ self FlipNode object)
          (COND
-            ((MetaDown?)                                     (* Invoke editor if Left Shift Key 
-                                                           is down)
+            ((MetaDown?)                                     (* Invoke editor if Left Shift Key is 
+                                                             down)
              (_ self FlipNode object)
              (_ latticeBrowser MiddleShiftSelect object objName))
             (T (_ self FlipNode object)
@@ -1256,32 +1247,30 @@ args"
  the TTY process"
    (_ self DoCommandInProcess self 'EditObject (LIST object)))
 
-(Method ((LatticeBrowser NewItem) self newItem)          (* ; "smL 23-Jan-85 13:02")
+(Method ((LatticeBrowser NewItem) self newItem)              (* ; "smL 23-Jan-85 13:02")
    "Return Object. Prompt for it if needed."
    ($! (OR newItem (_ self PromptRead "Give name of item to be added"))))
 
-(Method ((LatticeBrowser NodeRegion) self object)        (* ; "smL 10-Dec-84 18:26")
+(Method ((LatticeBrowser NodeRegion) self object)            (* ; "smL 10-Dec-84 18:26")
    "what region does the object occupy in the display stream?"
    [LET [(node (FASSOC (COND
                           ((LITATOM object)
                            (SETQ object (GetObjectRec object)))
                           (T object))
                       (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                          'GRAPH]
+                                                  'GRAPH]
         (if node
             then (create REGION
-                            LEFT _ (IDIFFERENCE (fetch XCOORD of (fetch NODEPOSITION
-                                                                            of node))
-                                          (IQUOTIENT (fetch NODEWIDTH of node)
-                                                 2))
-                            BOTTOM _ (IDIFFERENCE (fetch YCOORD of (fetch NODEPOSITION
-                                                                              of node))
-                                            (IQUOTIENT (fetch NODEHEIGHT of node)
-                                                   2))
-                            WIDTH _ (fetch NODEWIDTH of node)
-                            HEIGHT _ (fetch NODEHEIGHT of node])
+                        LEFT _ (IDIFFERENCE (fetch XCOORD of (fetch NODEPOSITION of node))
+                                      (IQUOTIENT (fetch NODEWIDTH of node)
+                                             2))
+                        BOTTOM _ (IDIFFERENCE (fetch YCOORD of (fetch NODEPOSITION of node))
+                                        (IQUOTIENT (fetch NODEHEIGHT of node)
+                                               2))
+                        WIDTH _ (fetch NODEWIDTH of node)
+                        HEIGHT _ (fetch NODEHEIGHT of node])
 
-(Method ((LatticeBrowser ObjNamePair) self objOrName)    (* ; "smL 15-Aug-86 09:24")
+(Method ((LatticeBrowser ObjNamePair) self objOrName)        (* ; "smL 15-Aug-86 09:24")
    "Make a pair (object . objName) where objName is label to be used in browser"
    [LET [(obj (if (Object? objOrName)
                   then objOrName
@@ -1291,16 +1280,16 @@ args"
           elseif (_ obj InstOf! 'DestroyedObject)
             then NIL
           elseif [AND (@ goodList)
-                          (NOT (FMEMB obj (@ goodList)]
+                      (NOT (FMEMB obj (@ goodList)]
             then NIL
           elseif (FMEMB obj (@ badList))
             then NIL
           else (CONS obj (_ self GetDisplayLabel objOrName)])
 
-(Method ((LatticeBrowser ObjectFromLabel) self label)    (* ; "smL  4-Jan-85 18:20")
+(Method ((LatticeBrowser ObjectFromLabel) self label)        (* ; "smL  4-Jan-85 18:20")
    "What object has this label?"
    (LET [(objectNode (for node in (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                                              'GRAPH))
+                                                              'GRAPH))
                         thereis (EQUAL label (fetch NODELABEL of node]
         (if (NLISTP (CAR objectNode))
             then (CAR objectNode)
@@ -1313,26 +1302,26 @@ args"
    (LET ((region (_ self NodeRegion object)))
         (if region
             then (_ self ScrollWindow (fetch LEFT of region)
-                             (fetch BOTTOM of region)
-                             windowX windowY))))
+                         (fetch BOTTOM of region)
+                         windowX windowY))))
 
-(Method ((LatticeBrowser Recompute) self dontReshapeFlg) (* ; "smL  8-Apr-87 14:42")
+(Method ((LatticeBrowser Recompute) self dontReshapeFlg)     (* ; "smL  8-Apr-87 14:42")
    "Recompute the browseGraph in the same window"
    (for obj in (@ startingList) when (OR (_ obj InstOf! 'DestroyedObject)
-                                                     (_ obj InstOf! 'DestroyedClass))
+                                         (_ obj InstOf! 'DestroyedClass))
       do (change (@ startingList)
-                    (REMOVE obj DATUM)))
+                (REMOVE obj DATUM)))
    [PROG ((graphFits (_ self GraphFits T)))
          (_ self Show (@ startingList))
          (COND
             ((OR dontReshapeFlg graphFits)                   (* Dont Reshape or rescroll.
-                                                           Assume window wants to stay the same 
-                                                           size)
+                                                             Assume window wants to stay the same 
+                                                             size)
              )
             (T (_ self ShapeToHold)]
    self)
 
-(Method ((LatticeBrowser RecomputeInPlace) self)         (* ; "smL 10-Dec-84 18:27")
+(Method ((LatticeBrowser RecomputeInPlace) self)             (* ; "smL 10-Dec-84 18:27")
    "recompute the graph, maintaining the current position"
    (LET* ((visibleRegion (DSPCLIPPINGREGION NIL (@ window)))
           (x (fetch LEFT of visibleRegion))
@@ -1341,16 +1330,16 @@ args"
          (* if we want to RecomputeInPlace, we must want the window to be kept the same)
 
          (_ self Recompute T)                                (* we had to save x and y because 
-                                                           visibleRegion gets clobbered by 
-                                                           Recompute! Suprise!)
+                                                             visibleRegion gets clobbered by 
+                                                             Recompute! Suprise!)
          (_ self ScrollWindow x y)))
 
-(Method ((LatticeBrowser RecomputeLabels) self)          (* ; "smL 27-Feb-85 11:27")
+(Method ((LatticeBrowser RecomputeLabels) self)              (* ; "smL 27-Feb-85 11:27")
    "recompute the graph, including the labels"
    (_ self ClearLabelCache T)
    (_ self Recompute))
 
-(Method ((LatticeBrowser RemoveFromBadList) self)        (* ; "smL 28-Dec-85 10:04")
+(Method ((LatticeBrowser RemoveFromBadList) self)            (* ; "smL 28-Dec-85 10:04")
    "Remove an item from BadList to allow it to be displayed once again"
    [COND
       ((NULL (@ badList))
@@ -1365,50 +1354,47 @@ args"
                   (T (CLRPROMPT)
                      (PROMPTPRINT "Nothing Selected"])
 
-(Method ((LatticeBrowser RemoveHighlights) self)         (* ; "smL 13-Dec-85 15:16")
+(Method ((LatticeBrowser RemoveHighlights) self)             (* ; "smL 13-Dec-85 15:16")
    "gets rid of all highlighting in the lattice"
    (for node in (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                            'GRAPH))
-      do (_ self DisplayNodeHightlights node NIL))
+                                            'GRAPH)) do (_ self DisplayNodeHightlights node NIL))
    (change (@ boxedNode)
           NIL))
 
-(Method ((LatticeBrowser RemoveShading) self)            (* ; "smL 13-Dec-85 15:14")
+(Method ((LatticeBrowser RemoveShading) self)                (* ; "smL 13-Dec-85 15:14")
    "gets rid of all shading in the lattice"
    (for node in (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                            'GRAPH))
-      do (_ self DisplayNodeShading node WHITESHADE)))
+                                            'GRAPH)) do (_ self DisplayNodeShading node WHITESHADE)))
 
-(Method ((LatticeBrowser SaveInIT) self)                 (* ; "smL  5-Sep-86 12:40")
+(Method ((LatticeBrowser SaveInIT) self)                     (* ; "smL  5-Sep-86 12:40")
    "A Browser command to save self in SavedValue"
    (PutSavedValue self))
 
-(Method ((LatticeBrowser ShadeNode) self object shade)   (* ; "smL 15-Jan-87 18:34")
+(Method ((LatticeBrowser ShadeNode) self object shade)       (* ; "smL 15-Jan-87 18:34")
    "shade the background of a node"
    (LET [(node (FASSOC (COND
                           ((LITATOM object)
                            (SETQ object (GetObjectRec object)))
                           (T object))
                       (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                          'GRAPH]
+                                                  'GRAPH]
         (if node
             then [if (BITMAPP (fetch NODELABEL of node))
-                         then 
+                     then 
 
-         (* Need to forget the old bitmap, in case it already has a shade blt'ed into 
-       it. This will fail if the GetDisplayLabel msg returns something different from 
-       the previous value, but what can you do?)
+         (* Need to forget the old bitmap, in case it already has a shade blt'ed into it.
+         This will fail if the GetDisplayLabel msg returns something different from the 
+         previous value, but what can you do?)
 
-                               (_ self ClearLabelCache object)
-                               (LET ((newLabel (_ self GetDisplayLabel object)))
-                                    (replace NODELABEL of node with newLabel)
-                                    (if (AND shade (BITMAPP newLabel))
-                                        then (BITBLT NIL NIL NIL newLabel NIL NIL NIL NIL
-                                                        'TEXTURE
-                                                        'PAINT shade]
-                  (_ self DisplayNodeShading node shade))))
+                          (_ self ClearLabelCache object)
+                          (LET ((newLabel (_ self GetDisplayLabel object)))
+                               (replace NODELABEL of node with newLabel)
+                               (if (AND shade (BITMAPP newLabel))
+                                   then (BITBLT NIL NIL NIL newLabel NIL NIL NIL NIL 'TEXTURE
+                                               'PAINT shade]
+                 (_ self DisplayNodeShading node shade))))
 
-(Method ((LatticeBrowser ShapeToHold) self)              (* ; "smL 13-Jan-87 16:52")
+(Method ((LatticeBrowser ShapeToHold) self)                  (* ; "smL 13-Jan-87 16:52")
    "Shape the browse window to just hold the nodes with BrowserMargin to spare"
    (PROG [left bottom height width right top [minWidth (IPLUS 5 (STRINGWIDTH (@ title)
                                                                        (DSPFONT NIL 
@@ -1418,7 +1404,7 @@ args"
                (region (WINDOWPROP (@ window)
                               'REGION))
                (nodes (fetch GRAPHNODES of (WINDOWPROP (@ window)
-                                                          'GRAPH]
+                                                  'GRAPH]
          [OR nodes (RETURN (_ self SetRegion (CREATEREGION (fetch LEFT of region)
                                                     (fetch BOTTOM of region)
                                                     minWidth minHeight))]
@@ -1458,10 +1444,8 @@ args"
    [COND
       ((AND browseList (NLISTP browseList))
        (SETQ browseList (LIST browseList]
-   (_@ startingList (for C in browseList when (GetObjectRec C) collect (GetObjectRec
-                                                                                        C)))
-   [AND goodList (_@ goodList (for C in goodList when (GetObjectRec C)
-                                 collect (GetObjectRec C)))]
+   (_@ startingList (for C in browseList when (GetObjectRec C) collect (GetObjectRec C)))
+   [AND goodList (_@ goodList (for C in goodList when (GetObjectRec C) collect (GetObjectRec C)))]
    (_ self DisplayBrowser))
 
 (Method ((LatticeBrowser Shrink) self towhat iconPos expandFn)
@@ -1471,34 +1455,34 @@ args"
    (LET ((window (@ window)))
         (WINDOWADDPROP window 'EXPANDFN 'LatticeBrowserExpandFn)
         [if [AND (NULL towhat)
-                     (NULL (WINDOWPROP window 'ICON))
-                     (NULL (WINDOWPROP window 'ICONWINDOW]
+                 (NULL (WINDOWPROP window 'ICON))
+                 (NULL (WINDOWPROP window 'ICONWINDOW]
             then (SETQ towhat (LET ((dsp (DSPCREATE (BITMAPCOPY BrowserIconBM)))
-                                        (iconFont (FONTCREATE 'GACHA 8))
-                                        (title (_ self IconTitle)))
-                                       (DSPFONT iconFont dsp)
-                                       (DSPOPERATION 'INVERT dsp)
-                                       (if (IGREATERP (STRINGWIDTH title iconFont)
-                                                      75)
-                                           then (DSPXPOSITION 2 dsp)
-                                                 (DSPYPOSITION 33 dsp)
-                                                 (PRIN1 title dsp)
-                                         else (CENTERPRINTINREGION title
-                                                         (CONSTANT (CREATEREGION 0 31 77 10))
-                                                         dsp))
-                                       (DSPDESTINATION NIL dsp)))
-                  (SETQ iconPos (OR iconPos (GETBOXPOSITION (BITMAPWIDTH towhat)
-                                                   (BITMAPHEIGHT towhat]
+                                    (iconFont (FONTCREATE 'GACHA 8))
+                                    (title (_ self IconTitle)))
+                                   (DSPFONT iconFont dsp)
+                                   (DSPOPERATION 'INVERT dsp)
+                                   (if (IGREATERP (STRINGWIDTH title iconFont)
+                                              75)
+                                       then (DSPXPOSITION 2 dsp)
+                                            (DSPYPOSITION 33 dsp)
+                                            (PRIN1 title dsp)
+                                     else (CENTERPRINTINREGION title
+                                                 (CONSTANT (CREATEREGION 0 31 77 10))
+                                                 dsp))
+                                   (DSPDESTINATION NIL dsp)))
+                 (SETQ iconPos (OR iconPos (GETBOXPOSITION (BITMAPWIDTH towhat)
+                                                  (BITMAPHEIGHT towhat]
         (LET ((icon (_Super self Shrink towhat iconPos expandFn)))
              (WINDOWPROP icon 'BUTTONEVENTFN (FUNCTION LatticeBrowserIconButtonEventFn))
              icon)))
 
-(Method ((LatticeBrowser SubBrowser) self obj objName)   (* ; "dgb: 13-Sep-84 22:10")
+(Method ((LatticeBrowser SubBrowser) self obj objName)       (* ; "dgb: 13-Sep-84 22:10")
    "Create a subbrowser on selected object"
    (_New (Class self)
          Browse obj))
 
-(Method ((LatticeBrowser TitleSelection) self)           (* ; "smL 17-Sep-86 18:33")
+(Method ((LatticeBrowser TitleSelection) self)               (* ; "smL 17-Sep-86 18:33")
    "Do TitleItems if selected in title area. Replaces TitleSelection in Window because this one does 
 evaluation in TTY process, and saves events on history"
    (LET* [(menu (_ self ChoiceMenu 'TitleItems))
@@ -1506,12 +1490,12 @@ evaluation in TTY process, and saves events on history"
          (if choice
              then (_ self DoCommandInProcess self choice NIL))))
 
-(Method ((LatticeBrowser UnmarkNodes) self)              (* ; "smL 10-Dec-84 12:27")
+(Method ((LatticeBrowser UnmarkNodes) self)                  (* ; "smL 10-Dec-84 12:27")
    "clear the graph nodes, removing all shading and highlighting"
    (_ self RemoveHighlights)
    (_ self RemoveShading))
 
-(Method ((LatticeBrowser Unread) self object objName)    (* ; "smL 15-Aug-86 10:57")
+(Method ((LatticeBrowser Unread) self object objName)        (* ; "smL 15-Aug-86 10:57")
    "Unread name into system buffer - or if no node, unread the entire graph"
    (LET [(imageObj (COND
                       (object objName)
@@ -1522,38 +1506,35 @@ evaluation in TTY process, and saves events on history"
 
                                           (create GRAPH
                                              using graph GRAPHNODES _
-                                                   (for node in (fetch GRAPHNODES
-                                                                           of graph)
+                                                   (for node in (fetch GRAPHNODES of graph)
                                                       collect (create GRAPHNODE
-                                                                     using
-                                                                     node NODEID _
-                                                                     (\PortableGraphNodeID
-                                                                      (fetch NODEID of node))
-                                                                     TONODES _
-                                                                     (for id
-                                                                        in (fetch TONODES
-                                                                                  of node)
-                                                                        collect (
-                                                                               \PortableGraphNodeID
-                                                                                     id))
-                                                                     FROMNODES _
-                                                                     (for id
-                                                                        in (fetch FROMNODES
-                                                                                  of node)
-                                                                        collect (
-                                                                               \PortableGraphNodeID
-                                                                                     id]
+                                                                 using node NODEID _
+                                                                       (\PortableGraphNodeID
+                                                                        (fetch NODEID of node))
+                                                                       TONODES _
+                                                                       (for id
+                                                                          in (fetch TONODES
+                                                                                of node)
+                                                                          collect (
+                                                                                 \PortableGraphNodeID
+                                                                                   id))
+                                                                       FROMNODES _
+                                                                       (for id
+                                                                          in (fetch FROMNODES
+                                                                                of node)
+                                                                          collect (
+                                                                                 \PortableGraphNodeID
+                                                                                   id]
                                                              (* ; 
-                 "Need to check for TEdit target, since TEdit doesn't use the COPYINSERT protocol!")
+                   "Need to check for TEdit target, since TEdit doesn't use the COPYINSERT protocol!")
         (if (AND (NOT (OR (STRINGP imageObj)
-                              (IMAGEOBJP imageObj)))
-                     (WINDOWPROP (PROCESS.TTY (TTY.PROCESS))
-                            'COPYINSERTFN))
+                          (IMAGEOBJP imageObj)))
+                 (WINDOWPROP (PROCESS.TTY (TTY.PROCESS))
+                        'COPYINSERTFN))
             then 
+                 (* ;; "It is expecting something and we don't have an image object or string to give it, so we need to convert it first")
 
-                  (* ;; "It is expecting something and we don't have an image object or string to give it, so we need to convert it first")
-
-                  (COPYINSERT (MKSTRING imageObj))
+                 (COPYINSERT (MKSTRING imageObj))
           else (COPYINSERT imageObj))))
 
 (Method ((LatticeBrowser Update) self) "Make sure the graph gets updated too"
@@ -1587,7 +1568,7 @@ evaluation in TTY process, and saves events on history"
        NIL)
       ((OR (FMEMB object (@ goodList))
            (for c in (@ startingList) thereis (_Try
-                                                           c Subclass object])
+                                               c Subclass object])
 
 (\UnbatchMethodDefs)
 (DEFINEQ
@@ -2224,47 +2205,50 @@ evaluation in TTY process, and saves events on history"
                                                                        (MAX DATUM (CDR size)))
                   finally (RETURN running-size])
 
-(\Place-Menu-Group-In-Window
-  (LAMBDA (menu-group menu-group-size window left bottom width height vertical?)
-                                                             (* ; "Edited 25-Jun-87 14:17 by smL")
+(\Place-Menu-Group-In-Window
+  [LAMBDA (menu-group menu-group-size window left bottom width height vertical?)
+                                                             (* ; "Edited  2-Aug-2022 10:17 by lmm")
+                                                             (* ; "Edited 25-Jun-87 14:17 by smL")
 
-(* ;;; 
-"Place the menu-group in the region of the window given by the left, bottom, width, and height")
+(* ;;; 
+"Place the menu-group in the region of the window given by the left, bottom, width, and height")
 
-    (DECLARE (GLOBALVARS WindowTitleDisplayStream))
-    (LET ((excess-width (DIFFERENCE width (CAR menu-group-size)))
-          (excess-height (DIFFERENCE height (CDR menu-group-size))))
-         (if (type? MENU menu-group)
-             then (ADDMENU menu-group window (create POSITION
+    (DECLARE (GLOBALVARS WindowTitleDisplayStream))
+    (LET [(excess-width (DIFFERENCE width (CAR menu-group-size)))
+          (excess-height (DIFFERENCE height (CDR menu-group-size]
+         (if (type? MENU menu-group)
+             then [ADDMENU menu-group window (create POSITION
                                                     XCOORD _ (PLUS left (QUOTIENT excess-width 2))
-                                                    YCOORD _ (PLUS bottom (QUOTIENT excess-height 2))
-                                                    ))
-           elseif (STRINGP menu-group)
-             then (RESETLST (RESETSAVE NIL `(DSPFONT ,(DSPFONT (DSPFONT NIL WindowTitleDisplayStream)
-                                                             window) ,window))
-                         (CENTERPRINTINREGION menu-group (CREATEREGION left bottom width height)
-                                window))
-           elseif vertical?
-             then (for menu in menu-group bind (space _ (QUOTIENT excess-height (ADD1 (LENGTH 
+                                                    YCOORD _ (PLUS bottom (QUOTIENT excess-height 2]
+           elseif (STRINGP menu-group)
+             then (RESETLST
+                      [RESETSAVE NIL `(DSPFONT ,(DSPFONT (DSPFONT NIL WindowTitleDisplayStream)
+                                                       window)
+                                             ,window]
+                      (CENTERPRINTINREGION menu-group (CREATEREGION left bottom width height)
+                             window))
+           elseif vertical?
+             then (for menu in menu-group bind [spaces _ (QUOTIENT excess-height (ADD1 (LENGTH 
                                                                                            menu-group
-                                                                                             ))))
+                                                                                              ]
                                                (running-bottom _ (PLUS bottom height))
                                                menu-size
-                     do (SETQ menu-size (\Menu-Group-Size menu NIL))
-                        (change running-bottom (DIFFERENCE DATUM (PLUS space (CDR menu-size))))
-                        (\Place-Menu-Group-In-Window menu menu-size window left running-bottom width
+                     do (SETQ menu-size (\Menu-Group-Size menu NIL))
+                        [change running-bottom (DIFFERENCE DATUM (PLUS spaces (CDR menu-size]
+                        (\Place-Menu-Group-In-Window menu menu-size window left running-bottom width
                                (CDR menu-size)
                                NIL))
-           else (for menu in menu-group bind (space _ (QUOTIENT excess-width (ADD1 (LENGTH menu-group
-                                                                                          ))))
+           else (for menu in menu-group bind [spaces _ (QUOTIENT excess-width (ADD1 (LENGTH 
+                                                                                           menu-group
+                                                                                           ]
                                              (running-left _ left)
-                                             menu-size do (SETQ menu-size (\Menu-Group-Size menu T))
-                                                          (add running-left space)
-                                                          (\Place-Menu-Group-In-Window menu menu-size 
+                                             menu-size do (SETQ menu-size (\Menu-Group-Size menu T))
+                                                          (add running-left space)
+                                                          (\Place-Menu-Group-In-Window menu menu-size
                                                                  window running-left bottom
                                                                  (CAR menu-size)
                                                                  height T)
-                                                          (add running-left (CAR menu-size)))))))
+                                                          (add running-left (CAR menu-size])
 
 (\PortableGraphNodeID
   (LAMBDA (id)                                               (* smL "15-Aug-86 11:11")
@@ -2504,7 +2488,7 @@ AddMethod" (category (ClassBrowser)))
 
 
 
-(Method ((ClassBrowser AddCategoryMenu) self)            (* ; "smL  8-Apr-87 19:34")
+(Method ((ClassBrowser AddCategoryMenu) self)                (* ; "smL  8-Apr-87 19:34")
    "Add a menu to the browser for specifying what method categories should be viewed"
    (LET [(oldMenu (WINDOWPROP (@ window)
                          'CategoryMenu]
@@ -2515,34 +2499,30 @@ AddMethod" (category (ClassBrowser)))
                      (SORT (INTERSECTION cats cats]
         (if items
             then (LET [(menuWindow (MENUWINDOW (_ self MakeParameterMenu
-                                                           (create
-                                                            MENU
-                                                            ITEMS _ (APPEND
-                                                                     '(Any Public)
+                                                       (create MENU
+                                                              ITEMS _
+                                                              (APPEND '(Any Public)
                                                                      (DREMOVE 'Any
                                                                             (DREMOVE 'Public items)))
-                                                            TITLE _ "Method Categories")
-                                                           [FUNCTION (LAMBDA (self test-value)
-                                                                       (MEMB test-value (@ 
+                                                              TITLE _ "Method Categories")
+                                                       [FUNCTION (LAMBDA (self test-value)
+                                                                   (MEMB test-value (@ 
                                                                                     viewingCategories)
-                                                                             ]
-                                                           [FUNCTION (LAMBDA (self new-value)
-                                                                       (change
-                                                                        (@ viewingCategories)
-                                                                        (if (MEMB new-value DATUM
-                                                                                      )
-                                                                            then (REMOVE 
-                                                                                            new-value
-                                                                                            DATUM)
-                                                                          else (CONS new-value 
-                                                                                         DATUM])]
-                          (WINDOWPROP (@ window)
-                                 'CategoryMenu menuWindow)
-                          (ATTACHWINDOW menuWindow (@ window)
-                                 'LEFT
-                                 'TOP
-                                 'LOCALCLOSE)
-                          (OPENW menuWindow])
+                                                                         ]
+                                                       [FUNCTION (LAMBDA (self new-value)
+                                                                   (change (@ viewingCategories)
+                                                                          (if (MEMB new-value DATUM)
+                                                                              then (REMOVE new-value
+                                                                                          DATUM)
+                                                                            else (CONS new-value 
+                                                                                       DATUM])]
+                      (WINDOWPROP (@ window)
+                             'CategoryMenu menuWindow)
+                      (ATTACHWINDOW menuWindow (@ window)
+                             'LEFT
+                             'TOP
+                             'LOCALCLOSE)
+                      (OPENW menuWindow])
 
 (Method ((ClassBrowser MessageFormForProcess) self obj selector args)
                                                              (* ; "smL  8-Apr-87 13:39")
@@ -2553,7 +2533,7 @@ AddMethod" (category (ClassBrowser)))
    (LIST 'WithCategories (@ viewingCategories)
          (_Super )))
 
-(Method ((ClassBrowser AddNewCV) self object objName)    (* ; "smL 14-Jan-87 15:16")
+(Method ((ClassBrowser AddNewCV) self object objName)        (* ; "smL 14-Jan-87 15:16")
    "Add a new CV or edit an old one"
    [PROG (cvForm (cvName (_ self PromptRead "Please tell me the name of the CV.")))
          (COND
@@ -2575,12 +2555,11 @@ AddMethod" (category (ClassBrowser)))
               (DECLARE (SPECVARS UpdateClassBrowsers?))
               (_ object AddCV (CAR cvForm)
                        (CADR cvForm))
-              (for P on (CDDR cvForm) by (CDDR P) do (PutClassValue object
-                                                                            (CAR cvForm)
-                                                                            (CADR P)
-                                                                            (CAR P])
+              (for P on (CDDR cvForm) by (CDDR P) do (PutClassValue object (CAR cvForm)
+                                                            (CADR P)
+                                                            (CAR P])
 
-(Method ((ClassBrowser AddNewIV) self object objName)    (* ; "smL 18-Sep-86 11:28")
+(Method ((ClassBrowser AddNewIV) self object objName)        (* ; "smL 18-Sep-86 11:28")
    "Add a new IV or edit an old one"
    (PROG (ivForm (ivName (_ self PromptRead "Please tell me the name of the IV.")))
          (COND
@@ -2598,18 +2577,18 @@ AddMethod" (category (ClassBrowser)))
                                  (CDDR ivForm]
              (GO LP))))
 
-(Method ((ClassBrowser AddNewMethod) self obj objName)   (* ; "smL 18-Sep-86 11:29")
+(Method ((ClassBrowser AddNewMethod) self obj objName)       (* ; "smL 18-Sep-86 11:29")
    "Calls class facility. Allows specialization of Adding Methods in subclasses Used to be called 
 AddMethod"
    (LET ((selector (_ self PromptRead "Type the selector for the new method: ")))
         (if [AND selector (OR [NOT (FMEMB selector (_ obj ListAttribute 'Methods)]
-                                  (MOUSECONFIRM (CONCAT selector 
+                              (MOUSECONFIRM (CONCAT selector 
                                              " already exists as a method. Do you want to overwrite?"
-                                                       )
-                                         NIL
-                                         (_ self GetPromptWindow)]
+                                                   )
+                                     NIL
+                                     (_ self GetPromptWindow)]
             then (LET ((UpdateClassBrowsers NIL))
-                          (_ obj DefMethod selector))
+                      (_ obj DefMethod selector))
           else (_ self PromptPrint "No method defined."))))
 
 (Method ((ClassBrowser AddSpecializedMethod) self obj objName file)
@@ -2618,7 +2597,7 @@ AddMethod"
    (LET ((UpdateClassBrowsers NIL))
         (_ obj SpecializeMethod NIL file)))
 
-(Method ((ClassBrowser AddSuper) self obj objName)       (* ; "smL 17-Apr-86 13:43")
+(Method ((ClassBrowser AddSuper) self obj objName)           (* ; "smL 17-Apr-86 13:43")
    "Add a super as first"
    [LET ((superName (_ self PromptRead "Type in name of new super")))
         (COND
@@ -2632,11 +2611,11 @@ nothing added"))
            (T (InstallSupers obj (CONS superName (GetSourceSupers obj)))
               (ChangedClass obj])
 
-(Method ((ClassBrowser BoxNode) self object objName)     (* ; "dgb: 30-Nov-84 16:50")
+(Method ((ClassBrowser BoxNode) self object objName)         (* ; "dgb: 30-Nov-84 16:50")
    "Box selected node and unbox previous"
    (_Super self BoxNode object objName T))
 
-(Method ((ClassBrowser CVDoc) self class className)      (* ; "smL  9-Apr-87 19:21")
+(Method ((ClassBrowser CVDoc) self class className)          (* ; "smL  9-Apr-87 19:21")
    "Show menu of classVariables and give documentation for each"
    (PROG (choice menu (vbls (_ class ListAttribute! 'CVS))
                 (outFile (PPDefault NIL)))
@@ -2653,7 +2632,7 @@ No Class Variables found for " className)
          (printout outFile T T className "::" choice ": " (GetClassValue class choice 'doc))
          (GO LP)))
 
-(Method ((ClassBrowser ClassDoc) self object objname)    (* ; "smL  9-Apr-87 19:21")
+(Method ((ClassBrowser ClassDoc) self object objname)        (* ; "smL  9-Apr-87 19:21")
    "Print out class documentation if there is any"
    [LET ((doc (GetClassHere object 'doc))
          (outFile (PPDefault NIL)))
@@ -2662,62 +2641,61 @@ No Class Variables found for " className)
             (printout outFile T objname " has no documentation." T))
            (T (printout outFile T objname ": " doc T])
 
-(Method ((ClassBrowser CopyCVTo) self object objName)    (* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser CopyCVTo) self object objName)        (* ; "smL  8-Apr-87 18:35")
    "Selected CV is moved to boxed node"
    (if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (PROG [item (items (ItemsForType self object objName 'CVs]
-                LP  (COND
-                       ((NULL items)
-                        (RETURN NIL)))
-                    (COND
-                       ([NULL (SETQ item (NiceMenu items (CONCAT objName " CVs"]
-                        (RETURN NIL)))
-                    (_ object CopyCV item (@ boxedNode))
-                    (_ self PromptPrint (CONCAT "CV " item " has been copied to " (@ boxedNode)))
-                    (SETQ items (DREMOVE item items))
-                    (GO LP))))
+            LP  (COND
+                   ((NULL items)
+                    (RETURN NIL)))
+                (COND
+                   ([NULL (SETQ item (NiceMenu items (CONCAT objName " CVs"]
+                    (RETURN NIL)))
+                (_ object CopyCV item (@ boxedNode))
+                (_ self PromptPrint (CONCAT "CV " item " has been copied to " (@ boxedNode)))
+                (SETQ items (DREMOVE item items))
+                (GO LP))))
 
-(Method ((ClassBrowser CopyIVTo) self object objName)    (* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser CopyIVTo) self object objName)        (* ; "smL  8-Apr-87 18:35")
    "Copy the selected IV to the boxed node"
    (if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (PROG [item (items (ItemsForType self object objName 'IVs]
-                LP  (COND
-                       ((NULL items)
-                        (RETURN NIL)))
-                    (COND
-                       ([NULL (SETQ item (NiceMenu items (CONCAT objName " IVs"]
-                        (RETURN NIL)))
-                    (_ object CopyIV item (@ boxedNode))
-                    (_ self PromptPrint (CONCAT "IV " item " has been copied to " (@ boxedNode)))
-                    (SETQ items (DREMOVE item items))
-                    (GO LP))))
+            LP  (COND
+                   ((NULL items)
+                    (RETURN NIL)))
+                (COND
+                   ([NULL (SETQ item (NiceMenu items (CONCAT objName " IVs"]
+                    (RETURN NIL)))
+                (_ object CopyIV item (@ boxedNode))
+                (_ self PromptPrint (CONCAT "IV " item " has been copied to " (@ boxedNode)))
+                (SETQ items (DREMOVE item items))
+                (GO LP))))
 
-(Method ((ClassBrowser CopyMethodTo) self object objName)(* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser CopyMethodTo) self object objName)    (* ; "smL  8-Apr-87 18:35")
    "Selected Method is copied to boxedNode"
    (if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (PROG (item)
-                LP  (SETQ item (_ object PickSelector (CONCAT objName " Methods")))
-                    (COND
-                       ((NULL item)
-                        (RETURN NIL)))
-                    (_ object CopyMethod item (@ boxedNode)
-                             (COND
-                                [(EQ object (@ boxedNode))
+            LP  (SETQ item (_ object PickSelector (CONCAT objName " Methods")))
+                (COND
+                   ((NULL item)
+                    (RETURN NIL)))
+                (_ object CopyMethod item (@ boxedNode)
+                         (COND
+                            [(EQ object (@ boxedNode))
 
-                                 (* ;; 
-                              "ask for a new selector item if method is being copied to same class")
+                             (* ;; 
+                             "ask for a new selector item if method is being copied to same class")
 
-                                 (OR (_ self PromptRead "Tell me new selector name")
-                                     (RETURN (PROMPTPRINT "Not copied"]
-                                (T item)))
-                    (_ self PromptPrint (CONCAT "Method " item " has been copied to " (@ boxedNode)))
-                    (GO LP))))
+                             (OR (_ self PromptRead "Tell me new selector name")
+                                 (RETURN (PROMPTPRINT "Not copied"]
+                            (T item)))
+                (_ self PromptPrint (CONCAT "Method " item " has been copied to " (@ boxedNode)))
+                (GO LP))))
 
-(Method ((ClassBrowser DefineSubclass) self object objName)
-                                                             (* ; "smL  5-Mar-85 14:24")
+(Method ((ClassBrowser DefineSubclass) self object objName)  (* ; "smL  5-Mar-85 14:24")
    "Define a new subclass, giving it a name typed in by user"
    [PROG (className)
          (COND
@@ -2738,7 +2716,7 @@ Type T to destroy it:"))
    "Delete selected CV"
    (_ self DeleteClassItem obj objName 'CVs))
 
-(Method ((ClassBrowser DeleteClass) self obj objName)    (* ; "dgb: 15-DEC-83 08:12")
+(Method ((ClassBrowser DeleteClass) self obj objName)        (* ; "dgb: 15-DEC-83 08:12")
    "Delete Class"
    (_ self DeleteClassItem obj objName 'Class))
 
@@ -2794,18 +2772,17 @@ No items for " className " of type " type ".
                (_ self DeleteFromBrowser object)
                T)))
 
-(Method ((ClassBrowser EditCategory) self object objName)(* ; "smL 13-May-86 13:30")
+(Method ((ClassBrowser EditCategory) self object objName)    (* ; "smL 13-May-86 13:30")
    "Let the user select the category of the methods to edit"
    [LET ((cat (NiceMenu (for cat in (_ object AllMethodCategories '(Any Public Internal))
                            collect (LIST cat))
                      "Method category")))
         (if cat
             then (LET ((sel (_ object PickSelector "Edit method: " cat)))
-                          (if sel
-                              then (_ object EditMethod sel)])
+                      (if sel
+                          then (_ object EditMethod sel)])
 
-(Method ((ClassBrowser FindWhere) self object objName type)
-                                                             (* ; "smL  5-Sep-86 12:47")
+(Method ((ClassBrowser FindWhere) self object objName type)  (* ; "smL  5-Sep-86 12:47")
    "Ask user whether CVs IVs or Methods wanted and then find that one"
    [LET* [[type (OR type (MENU (LOADTIMECONSTANT (create MENU
                                                         ITEMS _ '(IVS CVS Methods]
@@ -2814,53 +2791,46 @@ No items for " className " of type " type ".
              then NIL
            elseif (NULL items)
              then (PROMPTPRINT (CONSTANT (CHARACTER 7))
-                             objName " has no " type)
+                         objName " has no " type)
            else (bind (menu _ (_ self ItemMenu (SORT items)
-                                              (CONCAT "Finding " type ": " objName)))
-                           (browsedClasses _ (_ self BrowserObjects))
-                           value name anyWhere while (SETQ name (MENU menu))
-                       do (SETQ value (_ object WhereIs name type))
-                             (SETQ anyWhere
-                              (for class in browsedClasses
-                                 when (SELECTQ type
-                                              (IVS (MEMB name (fetch (class localIVs)
-                                                                 of class)))
-                                              (CVS (MEMB name (APPEND (fetch cvNames of
-                                                                                         class))))
-                                              (Methods (FindLocalMethod class name))
-                                              NIL) collect class))
-                             (for class in anyWhere do (_ self ShadeNode class GRAYSHADE1)
-                                    )
-                             (_ self FlashNode value)
-                             (_ self ClearPromptWindow)
-                             (_ self PromptPrint (CONCAT (SELECTQ type
-                                                             (IVS "IV")
-                                                             (CVS "CV")
-                                                             (Methods 'Method)
-                                                             type)
-                                                        " " name " is in " value))
-                             (for class in anyWhere do (_ self ShadeNode class WHITESHADE)
-                                    ])
+                                      (CONCAT "Finding " type ": " objName)))
+                      (browsedClasses _ (_ self BrowserObjects))
+                      value name anyWhere while (SETQ name (MENU menu))
+                   do (SETQ value (_ object WhereIs name type))
+                      (SETQ anyWhere (for class in browsedClasses
+                                        when (SELECTQ type
+                                                 (IVS (MEMB name (fetch (class localIVs) of class)))
+                                                 (CVS (MEMB name (APPEND (fetch cvNames of class))))
+                                                 (Methods (FindLocalMethod class name))
+                                                 NIL) collect class))
+                      (for class in anyWhere do (_ self ShadeNode class GRAYSHADE1))
+                      (_ self FlashNode value)
+                      (_ self ClearPromptWindow)
+                      (_ self PromptPrint (CONCAT (SELECTQ type
+                                                      (IVS "IV")
+                                                      (CVS "CV")
+                                                      (Methods 'Method)
+                                                      type)
+                                                 " " name " is in " value))
+                      (for class in anyWhere do (_ self ShadeNode class WHITESHADE)])
 
-(Method ((ClassBrowser GetMethodDoc) self object objName)(* ; "smL 31-Oct-86 10:33")
+(Method ((ClassBrowser GetMethodDoc) self object objName)    (* ; "smL 31-Oct-86 10:33")
    "Find the method requested and then ask the class"
 
 (* ;;; "")
 
-   (bind selector eachtime (SETQ selector (_ object PickSelector (CONCAT "GetMethodDoc: " 
-                                                                                objName)))
+   (bind selector eachtime (SETQ selector (_ object PickSelector (CONCAT "GetMethodDoc: " objName)))
       while selector do (_ object MethodDoc selector)))
 
-(Method ((ClassBrowser GetSubs) self obj objName)        (* ; "mjs: 31-Aug-84 16:18")
+(Method ((ClassBrowser GetSubs) self obj objName)            (* ; "mjs: 31-Aug-84 16:18")
    "Returns subclasses of a class on goodlist If goodlist is NIL take everyone you come to who is not bad.
  any"
    (for C in (_ obj SubClasses) when (OR (NULL (@ goodList))
-                                                     (FMEMB C (@ goodList))
-                                                     (FMEMB (GetObjectRec C)
-                                                            (@ goodList))) collect (GetObjectRec
-                                                                                        C)))
+                                         (FMEMB C (@ goodList))
+                                         (FMEMB (GetObjectRec C)
+                                                (@ goodList))) collect (GetObjectRec C)))
 
-(Method ((ClassBrowser IVDoc) self class className)      (* ; "smL  9-Apr-87 19:21")
+(Method ((ClassBrowser IVDoc) self class className)          (* ; "smL  9-Apr-87 19:21")
    "Show menu of classVariables and give documentation for each"
    (PROG (choice menu (vbls (_ class ListAttribute! 'IVS))
                 (outFile (PPDefault NIL)))
@@ -2881,71 +2851,71 @@ No Instance Variables found for " className)
    "Called when item is selected with left key and LSHIFT is down"
    (_ object PP!))
 
-(Method ((ClassBrowser MethodMenu) self object objName)  (* ; "smL  1-Jul-85 17:59")
+(Method ((ClassBrowser MethodMenu) self object objName)      (* ; "smL  1-Jul-85 17:59")
    "make a menu for editing this classes methods"
    (LET ((menuWindow (MakeMethodMenu object)))
         (if (WINDOWP menuWindow)
             then (MOVEW menuWindow)
           else (_ self PromptPrint "No methods defined for class"))))
 
-(Method ((ClassBrowser MoveCVTo) self object objName)    (* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser MoveCVTo) self object objName)        (* ; "smL  8-Apr-87 18:35")
    "Move the selected CV to boxedNode"
    [if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (bind item (items _ (ItemsForType self object objName 'CVs)) while items
-                 do (SETQ item (NiceMenu items (CONCAT objName "CVs")))
-                       (if (NULL item)
-                           then (RETURN NIL))
-                       (MoveClassVariable objName (ClassName (@ boxedNode))
-                              item)
-                       (_ self PromptPrint (CONCAT "CV " item " is now in " (@ boxedNode)))
-                       (SETQ items (DREMOVE item items])
+             do (SETQ item (NiceMenu items (CONCAT objName "CVs")))
+                (if (NULL item)
+                    then (RETURN NIL))
+                (MoveClassVariable objName (ClassName (@ boxedNode))
+                       item)
+                (_ self PromptPrint (CONCAT "CV " item " is now in " (@ boxedNode)))
+                (SETQ items (DREMOVE item items])
 
-(Method ((ClassBrowser MoveIVTo) self object objName)    (* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser MoveIVTo) self object objName)        (* ; "smL  8-Apr-87 18:35")
    "Selected IV is moved to boxedNode"
    (if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (PROG [item (items (ItemsForType self object objName 'IVs]
-                LP  (COND
-                       ((NULL items)
-                        (RETURN NIL)))
-                    (COND
-                       ([NULL (SETQ item (NiceMenu items (CONCAT objName "IVs"]
-                        (RETURN NIL)))
-                    (MoveVariable objName (ClassName (@ boxedNode))
-                           item)
-                    (_ self PromptPrint (CONCAT "IV " item " is now in " (@ boxedNode)))
-                    (SETQ items (DREMOVE item items))
-                    (GO LP))))
+            LP  (COND
+                   ((NULL items)
+                    (RETURN NIL)))
+                (COND
+                   ([NULL (SETQ item (NiceMenu items (CONCAT objName "IVs"]
+                    (RETURN NIL)))
+                (MoveVariable objName (ClassName (@ boxedNode))
+                       item)
+                (_ self PromptPrint (CONCAT "IV " item " is now in " (@ boxedNode)))
+                (SETQ items (DREMOVE item items))
+                (GO LP))))
 
-(Method ((ClassBrowser MoveMethodTo) self object objName)(* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser MoveMethodTo) self object objName)    (* ; "smL  8-Apr-87 18:35")
    "Moves selected method to boxed node"
    (if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (PROG (item)
-                LP  (SETQ item (_ object PickSelector (CONCAT objName " Methods")))
-                    (COND
-                       ((NULL item)
-                        (RETURN NIL)))
-                    (MoveMethod objName (ClassName (@ boxedNode))
-                           item item)
-                    (_ self PromptPrint (CONCAT "Method " item " is now in " (@ boxedNode)))
-                    (GO LP))))
+            LP  (SETQ item (_ object PickSelector (CONCAT objName " Methods")))
+                (COND
+                   ((NULL item)
+                    (RETURN NIL)))
+                (MoveMethod objName (ClassName (@ boxedNode))
+                       item item)
+                (_ self PromptPrint (CONCAT "Method " item " is now in " (@ boxedNode)))
+                (GO LP))))
 
-(Method ((ClassBrowser MoveSuperTo) self object objName) (* ; "smL  8-Apr-87 18:35")
+(Method ((ClassBrowser MoveSuperTo) self object objName)     (* ; "smL  8-Apr-87 18:35")
    "Substitute the boxed node for the selected super in the list of items"
    [if (NOT (Class? (@ boxedNode)))
        then (_ self PromptPrint "Select a target class first")
      else (LET [item (items (ItemsForType self object objName 'Supers]
-                   (COND
-                      ((NULL items)
-                       NIL)
-                      ([NULL (SETQ item (NiceMenu items (CONCAT objName "Supers"]
-                       NIL)
-                      (T (_ object ReplaceSupers (SUBST (ClassName (@ boxedNode))
-                                                        item items))])
+               (COND
+                  ((NULL items)
+                   NIL)
+                  ([NULL (SETQ item (NiceMenu items (CONCAT objName "Supers"]
+                   NIL)
+                  (T (_ object ReplaceSupers (SUBST (ClassName (@ boxedNode))
+                                                    item items))])
 
-(Method ((ClassBrowser NewItem) self name)               (* ; "smL 13-Aug-86 18:31")
+(Method ((ClassBrowser NewItem) self name)                   (* ; "smL 13-Aug-86 18:31")
    "Either add named class, or create a class by that Name"
    [LET ((newItem (_Super self NewItem name)))
         (COND
@@ -2959,8 +2929,7 @@ No Instance Variables found for " className)
             (_ ($ Class)
                New newItem)])
 
-(Method ((ClassBrowser PrintCategories) self object objName)
-                                                             (* ; "smL  9-Apr-87 19:22")
+(Method ((ClassBrowser PrintCategories) self object objName) (* ; "smL  9-Apr-87 19:22")
    "Let the user select the category of the methods to edit"
    [LET ((cats (_ object AllMethodCategories))
          (outFile (PPDefault NIL))
@@ -2972,16 +2941,16 @@ No Instance Variables found for " className)
             (WITH.PP.OUTPUT outFile (printout outFile T T .FONT LAMBDAFONT "   " object T)
                    (for cat in cats when (LITATOM cat)
                       do (printout outFile T .FONT BOLDFONT cat T .FONT DEFAULTFONT .TAB 5)
-                            (for sel in (_ object SelectorsInCategories (LIST cat))
-                               do (printout outFile sel %,))
-                            (printout outFile T))
+                         (for sel in (_ object SelectorsInCategories (LIST cat))
+                            do (printout outFile sel %,))
+                         (printout outFile T))
                    (for cat in cats when (LISTP cat)
                       do (printout outFile T .FONT BOLDFONT cat T .FONT DEFAULTFONT .TAB 5)
-                            (for sel in (_ object SelectorsInCategories (LIST cat))
-                               do (printout outFile sel %,))
-                            (printout outFile T))))])
+                         (for sel in (_ object SelectorsInCategories (LIST cat))
+                            do (printout outFile sel %,))
+                         (printout outFile T))))])
 
-(Method ((ClassBrowser RenameCV) self object objName)    (* ; "smL 11-Apr-86 14:55")
+(Method ((ClassBrowser RenameCV) self object objName)        (* ; "smL 11-Apr-86 14:55")
    "Rename CV if one is given"
    (PROG (name items newName)
          (COND
@@ -2995,7 +2964,7 @@ No Instance Variables found for " className)
          (AND (SETQ newName (_ self PromptRead "New CV name:"))
               (RenameVariable objName name newName T))))
 
-(Method ((ClassBrowser RenameClass) self object objName) (* ; "smL 29-Sep-86 18:33")
+(Method ((ClassBrowser RenameClass) self object objName)     (* ; "smL 29-Sep-86 18:33")
    "Read in a new name for the class, and rename it"
    [LET ((className (_ self PromptRead "Type in the new name for this class,
  or NIL not to change.")))
@@ -3010,7 +2979,7 @@ No Instance Variables found for " className)
                   (UpdateClassBrowsers T)
                   (_ self PromptPrint "Rename completed")])
 
-(Method ((ClassBrowser RenameIV) self object objName)    (* ; "smL 11-Apr-86 14:55")
+(Method ((ClassBrowser RenameIV) self object objName)        (* ; "smL 11-Apr-86 14:55")
    "Rename an IV if one is given"
    (PROG (items name newName)
          (COND
@@ -3024,16 +2993,16 @@ No Instance Variables found for " className)
          (AND (SETQ newName (_ self PromptRead "New IV name:"))
               (RenameVariable objName name newName))))
 
-(Method ((ClassBrowser RenameMeth) self object objName)  (* ; "smL 14-Jan-87 09:32")
+(Method ((ClassBrowser RenameMeth) self object objName)      (* ; "smL 14-Jan-87 09:32")
    "Rename selected method"
    [LET* ((name (_ object PickSelector (CONCAT "Renaming Methods: " objName)))
           (newName (AND name (_ self PromptRead "New Selector Name:")))
           (UpdateClassBrowsers? NIL))
          (if newName
              then (_ object RenameMethod name newName)
-                   (_ self PromptPrint (CONCAT "Method " name " renamed to " newName))])
+                  (_ self PromptPrint (CONCAT "Method " name " renamed to " newName))])
 
-(Method ((ClassBrowser RenamePart) self object objName)  (* ; "smL 11-Apr-86 14:56")
+(Method ((ClassBrowser RenamePart) self object objName)      (* ; "smL 11-Apr-86 14:56")
    "Ask user whether to rename CVs IVs or Methods or class and then find which ones"
    (PROG (name newName type value items flg)
          (OR [SETQ type (MENU (create MENU
@@ -3046,8 +3015,8 @@ No Instance Variables found for " className)
          (COND
             ((NULL (SETQ items (_ object ListAttribute type)))
              (OR flg (_ self PromptPrint (CONCAT objName " has no " type)))
-             (RETURN)))                                      (* So that when last IV is removed, 
-                                                           no comment is made)
+             (RETURN)))                                      (* So that when last IV is removed, no 
+                                                             comment is made)
          (SETQ flg T)
          (OR [SETQ name (MENU (_ self ItemMenu (SORT items)
                                       (CONCAT (ClassName object)
@@ -3063,30 +3032,30 @@ No Instance Variables found for " className)
              NIL)
          (GO LP)))
 
-(Method ((ClassBrowser RetireMethod) self object objName)(* ; "smL 14-Jan-87 09:31")
+(Method ((ClassBrowser RetireMethod) self object objName)    (* ; "smL 14-Jan-87 09:31")
    "Rename selected method to the same name but with Old prefix"
-   (bind name newName eachtime (SETQ name (_ object PickSelector (CONCAT "Renaming Methods: "
-                                                                                objName)))
-      while name do (SETQ newName (PACK* "Old" name))
-                           (_ object RenameMethod name newName)
-                           (_ self PromptPrint (CONCAT "Method " name " renamed to " newName))))
+   (bind name newName eachtime (SETQ name (_ object PickSelector (CONCAT "Renaming Methods: " objName
+                                                                        ))) while name
+      do (SETQ newName (PACK* "Old" name))
+         (_ object RenameMethod name newName)
+         (_ self PromptPrint (CONCAT "Method " name " renamed to " newName))))
 
-(Method ((ClassBrowser SetItNew) self class)             (* ; "smL  5-Aug-86 17:40")
+(Method ((ClassBrowser SetItNew) self class)                 (* ; "smL  5-Aug-86 17:40")
    "Set IT to instance of selected class"
    (LET ((value (_ class New)))
         (PutSavedValue value)
         (PRINT value T)
         value))
 
-(Method ((ClassBrowser WhereIsCV) self obj objName)      (* ; "dgb: 15-DEC-83 07:59")
+(Method ((ClassBrowser WhereIsCV) self obj objName)          (* ; "dgb: 15-DEC-83 07:59")
    "Whereis CV"
    (_ self FindWhere obj objName 'CVS))
 
-(Method ((ClassBrowser WhereIsIV) self obj objName)      (* ; "dgb: 14-Feb-84 13:51")
+(Method ((ClassBrowser WhereIsIV) self obj objName)          (* ; "dgb: 14-Feb-84 13:51")
    "Find class containing IV description"
    (_ self FindWhere obj objName 'IVS))
 
-(Method ((ClassBrowser WhereIsMethod) self obj objName)  (* ; "dgb: 15-DEC-83 08:00")
+(Method ((ClassBrowser WhereIsMethod) self obj objName)      (* ; "dgb: 15-DEC-83 08:00")
    "Where is method"
    (_ self FindWhere obj objName 'Methods))
 
@@ -3299,7 +3268,7 @@ No Instance Variables found for " className)
 
 
 
-(Method ((FileBrowser AddFile) self fileName)            (* ; "smL 20-Aug-86 13:08")
+(Method ((FileBrowser AddFile) self fileName)                (* ; "smL 20-Aug-86 13:08")
    "Add a file to the list of associated files for this FIleBrowser."
    [LET [(fileName (OR fileName (SelectFile]
         (COND
@@ -3309,15 +3278,15 @@ No Instance Variables found for " className)
                      'associatedFiles)
                  (_ self Recompute)])
 
-(Method ((FileBrowser AddNewMethod) self obj objName)    (* ; "smL 13-Aug-86 18:32")
+(Method ((FileBrowser AddNewMethod) self obj objName)        (* ; "smL 13-Aug-86 18:32")
    "Overwrites ClassBrowser AddNewMethod giving file argument to DefMethod."
    (LET ((selector (_ self PromptRead "Type the selector for the new method: ")))
         (if [AND selector (OR [NOT (FMEMB selector (_ obj ListAttribute 'Methods)]
-                                  (MOUSECONFIRM (CONCAT selector 
+                              (MOUSECONFIRM (CONCAT selector 
                                              " already exists as a method. Do you want to overwrite?"
-                                                       )
-                                         NIL
-                                         (_ self GetPromptWindow)]
+                                                   )
+                                     NIL
+                                     (_ self GetPromptWindow)]
             then (_ obj DefMethod selector NIL NIL (@ selectedFile))
           else (_ self PromptPrint "No method defined."))))
 
@@ -3326,23 +3295,23 @@ No Instance Variables found for " className)
    "Specialization"
    (_Super self AddSpecializedMethod obj objName (OR file (@ selectedFile))))
 
-(Method ((FileBrowser AddSubs) self obj objName)         (* ; "smL  5-Aug-86 16:51")
+(Method ((FileBrowser AddSubs) self obj objName)             (* ; "smL  5-Aug-86 16:51")
    "Add the Subs of the class to the nonFileClasses if they are not on the file"
    (for X in (MAPCAR (_ obj ListAttribute 'Subs)
-                            (FUNCTION $!)) when (NOT (MEMB X (@ startingList)))
+                    (FUNCTION $!)) when (NOT (MEMB X (@ startingList)))
       do (pushnew (@ nonFileClasses)
-                    X))
+                X))
    (_ self Recompute))
 
-(Method ((FileBrowser AddSubs!) self obj objName)        (* ; "smL 19-Aug-86 12:43")
+(Method ((FileBrowser AddSubs!) self obj objName)            (* ; "smL 19-Aug-86 12:43")
    "Add all the Subs of the class to the nonFileClasses if they are not on the file"
    (for X in (MAPCAR (_ obj ListAttribute! 'Subs)
-                            (FUNCTION $!)) when (NOT (MEMB X (@ startingList)))
+                    (FUNCTION $!)) when (NOT (MEMB X (@ startingList)))
       do (pushnew (@ nonFileClasses)
-                    X))
+                X))
    (_ self Recompute))
 
-(Method ((FileBrowser BreakFunction) self)               (* ; "smL  9-Oct-85 17:37")
+(Method ((FileBrowser BreakFunction) self)                   (* ; "smL  9-Oct-85 17:37")
    "Choose a function from the file and BREAK it"
    [PROG [choice (fns (SORT (LDIFFERENCE (LDIFFERENCE (FILEFNSLST (@ selectedFile))
                                                 (FILECOMSLST (@ selectedFile)
@@ -3350,11 +3319,11 @@ No Instance Variables found for " className)
                                    BROKENFNS]
          (if (NULL fns)
              then (_ self PromptPrint "No functions to break")
-                   (RETURN))
+                  (RETURN))
          (SETQ choice (MENU (_ self ItemMenu fns "Break function")))
          (RETURN (AND choice (APPLY* 'BREAK choice])
 
-(Method ((FileBrowser BrowseFile) self fileName)         (* ; "dgb:  7-Sep-84 17:14")
+(Method ((FileBrowser BrowseFile) self fileName)             (* ; "dgb:  7-Sep-84 17:14")
    "Browse classes contained on the selectedFile"
    (PROG (classes fileComs)
          (COND
@@ -3367,8 +3336,7 @@ No Instance Variables found for " className)
          (_ self ShapeToHold)
          (RETURN self)))
 
-(Method ((FileBrowser ChangeDisplayMode) self obj objName)
-                                                             (* ; "dgb:  7-Sep-84 17:24")
+(Method ((FileBrowser ChangeDisplayMode) self obj objName)   (* ; "dgb:  7-Sep-84 17:24")
    "New method template"
    [PROG [(mode (MENU (MenuGetOrCreate FileBrowserMenuModes '(selectedFile associatedFiles all]
          (COND
@@ -3376,14 +3344,13 @@ No Instance Variables found for " className)
              (_@ displayMode mode)
              (_ self Recompute)])
 
-(Method ((FileBrowser CollectMethodList) self object)    (* ; "smL 11-Apr-86 14:58")
+(Method ((FileBrowser CollectMethodList) self object)        (* ; "smL 11-Apr-86 14:58")
    "Returns list of functions for file or object"
    [COND
       (object (_ object ListAttribute 'Functions))
       (T (FILEFNSLST (@ selectedFile)])
 
-(Method ((FileBrowser DefineSubclass) self object objName)
-                                                             (* ; "smL  9-Apr-87 18:28")
+(Method ((FileBrowser DefineSubclass) self object objName)   (* ; "smL  9-Apr-87 18:28")
    "Define a new subclass, giving it a name typed in by user"
    [LET ((className (_ self PromptRead "Type in the name of the new class, or NIL for none.")))
         (COND
@@ -3392,39 +3359,38 @@ No Instance Variables found for " className)
            ((NOT (LITATOM className))                        (* ; "Name must be a litatom")
             (_ self PromptPrint (CONCAT className " should be an atom to name a class")))
            (T                                                (* ; "Create the specialization")
-              (_ object Specialize className)                (* ; 
-                                                           "Figure out what file to put it on")
+              (_ object Specialize className)                (* ; "Figure out what file to put it on")
               (LET ((objectFiles (WHEREIS (ClassName object)
                                         'CLASS))
                     outfile)
                    (pushnew objectFiles (@ selectedFile))
                    (if objectFiles
                        then (COND
-                                   ((EQLENGTH objectFiles 1)
-                                    (ADDTOFILE className 'CLASSES (CAR objectFiles)))
-                                   (T 
-                                      (* ;; "Prompt User if more than 1 likely place to file the new class.  If he doesn't pick one, just leave it alone for (FILES?) ")
+                               ((EQLENGTH objectFiles 1)
+                                (ADDTOFILE className 'CLASSES (CAR objectFiles)))
+                               (T 
+                                  (* ;; "Prompt User if more than 1 likely place to file the new class.  If he doesn't pick one, just leave it alone for (FILES?) ")
 
-                                      (SETQ outfile (MENU (create MENU
-                                                                 TITLE _ (CONCAT "Choose a file for "
-                                                                                className)
-                                                                 ITEMS _ objectFiles)))
-                                      (AND outfile (ADDTOFILE className 'CLASSES outfile])
+                                  (SETQ outfile (MENU (create MENU
+                                                             TITLE _ (CONCAT "Choose a file for " 
+                                                                            className)
+                                                             ITEMS _ objectFiles)))
+                                  (AND outfile (ADDTOFILE className 'CLASSES outfile])
 
-(Method ((FileBrowser EditComs) self)                    (* ; "dgb:  7-Sep-84 15:42")
+(Method ((FileBrowser EditComs) self)                        (* ; "dgb:  7-Sep-84 15:42")
    "Edit the coms for file"
    (APPLY* 'DV (FILECOMS (@ selectedFile))))
 
-(Method ((FileBrowser EditFns) self)                     (* ; "smL  2-May-86 16:09")
+(Method ((FileBrowser EditFns) self)                         (* ; "smL  2-May-86 16:09")
    "Choose a Function and Edit it"
    (LET (choice (fns (@ menus%:,fns)))
         (if (NoValueFound fns)
-            then                                         (* not yet cached)
-                  [SETQ fns (SORT (LDIFFERENCE (FILEFNSLST (@ selectedFile))
-                                         (FILECOMSLST (@ selectedFile)
-                                                'METHODS]
-                  (change (@ menus%:,fns)
-                         fns))
+            then                                             (* not yet cached)
+                 [SETQ fns (SORT (LDIFFERENCE (FILEFNSLST (@ selectedFile))
+                                        (FILECOMSLST (@ selectedFile)
+                                               'METHODS]
+                 (change (@ menus%:,fns)
+                        fns))
         [SETQ choice (MENU (_ self ItemMenu (CONS '*NewFunction* fns)
                                    (CONCAT (@ selectedFile)
                                           " Functions"))]
@@ -3436,7 +3402,7 @@ No Instance Variables found for " className)
                  (ADDTOFILE choice 'FNS (@ selectedFile)]
         (AND choice (APPLY* 'DF choice))))
 
-(Method ((FileBrowser EditInstances) self)               (* ; "kmk: 29-Nov-84 09:07")
+(Method ((FileBrowser EditInstances) self)                   (* ; "kmk: 29-Nov-84 09:07")
    "Select from the set of instances"
    (PROG [choice (instances (LDIFFERENCE (FILECOMSLST (@ selectedFile)
                                                 'INSTANCES)
@@ -3448,7 +3414,7 @@ No Instance Variables found for " className)
                                                           " Instances"))]
               (_ choice Edit))))
 
-(Method ((FileBrowser EditMacros) self)                  (* ; "smL  8-Feb-85 17:34")
+(Method ((FileBrowser EditMacros) self)                      (* ; "smL  8-Feb-85 17:34")
    "Edit a selected Macro definition"
    [LET [choice (names (FILECOMSLST (@ selectedFile)
                               'MACROS]
@@ -3456,7 +3422,7 @@ No Instance Variables found for " className)
                                                                     " Macros"))]
              (EDITDEF choice 'MACROS])
 
-(Method ((FileBrowser EditRecords) self)                 (* ; "smL  8-Feb-85 17:34")
+(Method ((FileBrowser EditRecords) self)                     (* ; "smL  8-Feb-85 17:34")
    "Edit a selected Record definition"
    [LET [choice (names (FILECOMSLST (@ selectedFile)
                               'RECORDS]
@@ -3464,7 +3430,7 @@ No Instance Variables found for " className)
                                                                     " Records"))]
              (EDITDEF choice 'RECORDS])
 
-(Method ((FileBrowser EditVars) self)                    (* ; "mjs: 31-Aug-84 12:00")
+(Method ((FileBrowser EditVars) self)                        (* ; "mjs: 31-Aug-84 12:00")
    "Edit a selected variable"
    (PROG [choice (vars (FILECOMSLST (@ selectedFile)
                               'VARS]
@@ -3472,7 +3438,7 @@ No Instance Variables found for " className)
                                                                    " Vars"))]
               (APPLY* 'DV choice))))
 
-(Method ((FileBrowser File) self fileName)               (* ; "smL  5-Dec-85 14:12")
+(Method ((FileBrowser File) self fileName)                   (* ; "smL  5-Dec-85 14:12")
    "Browse classes contained on the file"
    (SETQ fileName (U-CASE fileName))
    (LET ((classes)
@@ -3493,20 +3459,20 @@ No Instance Variables found for " className)
                 'showEvenIfEmpty)
         (COND
            ((NULL (FILECOMSLST fileName 'CLASSES))           (* ; 
-                                                 "Need to move if no classes to intialize movement")
+                                                   "Need to move if no classes to intialize movement")
             (_ self Move)))
         self))
 
-(Method ((FileBrowser IconTitle) self)                   (* ; "edited: 19-Jan-85 17:04")
+(Method ((FileBrowser IconTitle) self)                       (* ; "edited: 19-Jan-85 17:04")
    "compute the label to use in the icon -- in the file browser case, it should just be the selected file"
    (@ selectedFile))
 
-(Method ((FileBrowser ListFile) self file)               (* ; "smL  4-Jan-85 16:57")
+(Method ((FileBrowser ListFile) self file)                   (* ; "smL  4-Jan-85 16:57")
    "Make a hardcopy of the file"
    [LISTFILES1 (CDAR (GETPROP (ROOTFILENAME (OR file (@ selectedFile)))
                             'FILEDATES])
 
-(Method ((FileBrowser LoadPropFile) self file)           (* ; "smL 14-Jan-87 10:38")
+(Method ((FileBrowser LoadPropFile) self file)               (* ; "smL 14-Jan-87 10:38")
    "Load the file with LDFLG = PROP"
    (LET [(pwindow (_ self GetPromptWindow))
          (file (FINDFILE (CDAR (GETPROP (ROOTFILENAME (OR file (@ selectedFile)))
@@ -3514,13 +3480,13 @@ No Instance Variables found for " className)
         (CLEARW pwindow)
         (if file
             then (printout pwindow "Loading " file " PROP...")
-                  (LOAD file 'PROP)
-                  (printout pwindow "done")
-                  file
+                 (LOAD file 'PROP)
+                 (printout pwindow "done")
+                 file
           else (printout pwindow "Can't find file")
-                NIL)))
+               NIL)))
 
-(Method ((FileBrowser LoadAllPropFile) self file)        (* ; "smL 14-Jan-87 10:38")
+(Method ((FileBrowser LoadAllPropFile) self file)            (* ; "smL 14-Jan-87 10:38")
    "Load the file with LDFLG = ALLPROP"
    (LET [(pwindow (_ self GetPromptWindow))
          (file (FINDFILE (CDAR (GETPROP (ROOTFILENAME (OR file (@ selectedFile)))
@@ -3528,13 +3494,13 @@ No Instance Variables found for " className)
         (CLEARW pwindow)
         (if file
             then (printout pwindow "Loading " file " ALLPROP...")
-                  (LOAD file 'ALLPROP)
-                  (printout pwindow "done")
-                  file
+                 (LOAD file 'ALLPROP)
+                 (printout pwindow "done")
+                 file
           else (printout pwindow "Can't find file")
-                NIL)))
+               NIL)))
 
-(Method ((FileBrowser LoadFnsPropFile) self file)        (* ; "smL 14-Jan-87 10:39")
+(Method ((FileBrowser LoadFnsPropFile) self file)            (* ; "smL 14-Jan-87 10:39")
    "Load the fns from the file with LDFLG = PROP"
    (LET [(pwindow (_ self GetPromptWindow))
          (file (FINDFILE (CDAR (GETPROP (ROOTFILENAME (OR file (@ selectedFile)))
@@ -3542,13 +3508,13 @@ No Instance Variables found for " className)
         (CLEARW pwindow)
         (if file
             then (printout pwindow "Loading fns from " file " PROP...")
-                  (LOADFNS T file 'PROP)
-                  (printout pwindow "done")
-                  file
+                 (LOADFNS T file 'PROP)
+                 (printout pwindow "done")
+                 file
           else (printout pwindow "Can't find file")
-                NIL)))
+               NIL)))
 
-(Method ((FileBrowser MakeFunctionMenu) self)            (* ; "dgb:  1-Feb-85 17:03")
+(Method ((FileBrowser MakeFunctionMenu) self)                (* ; "dgb:  1-Feb-85 17:03")
    "Build a standalone edit menu for functions on a file"
    (LET* [window [fns (SORT (LDIFFERENCE (FILEFNSLST (@ selectedFile))
                                    (FILECOMSLST (@ selectedFile)
@@ -3563,7 +3529,7 @@ No Instance Variables found for " className)
          (WINDOWPROP window 'file (@ selectedFile))
          (MOVEW window)))
 
-(Method ((FileBrowser NewItem) self name)                (* ; "smL 13-Aug-86 18:32")
+(Method ((FileBrowser NewItem) self name)                    (* ; "smL 13-Aug-86 18:32")
    "Either add named class, or create a class by that Name"
    (LET* [(name (_ self PromptRead "Give name of item to be added"))
           (alreadyExistsFlg ($! name))
@@ -3577,25 +3543,23 @@ No Instance Variables found for " className)
              then NIL
            elseif alreadyExistsFlg
              then (pushnew (@ nonFileClasses)
-                             new)
+                         new)
            else (ADDTOFILE (ClassName new)
-                           'CLASSES
-                           (@ selectedFile)))
+                       'CLASSES
+                       (@ selectedFile)))
          new))
 
-(Method ((FileBrowser Recompute) self dontReshapeFlg)    (* ; "smL 14-Jan-87 10:14")
+(Method ((FileBrowser Recompute) self dontReshapeFlg)        (* ; "smL 14-Jan-87 10:14")
    "Recompute what the classes are on the file. Operations are different for the different display modes"
    [change (@ startingList)
           (SELECTQ (@ displayMode)
               (selectedFile                                  (* only those in selected file)
                             (APPEND (@ nonFileClasses)
-                                   (for C in (FILECLASSES (@ selectedFile))
-                                      collect ($! C))))
+                                   (for C in (FILECLASSES (@ selectedFile)) collect ($! C))))
               ((associatedFiles all)                         (* all from all files)
                    [APPEND (@ nonFileClasses)
-                          (for file in (@ associatedFiles)
-                             join (for C in (FILECLASSES file)
-                                         collect ($! C])
+                          (for file in (@ associatedFiles) join (for C in (FILECLASSES file)
+                                                                   collect ($! C])
               (ERROR "Illegal displayMode " (@ displayMode)]
    [change (@ goodList)
           (SELECTQ (@ displayMode)
@@ -3607,13 +3571,12 @@ No Instance Variables found for " className)
    (if (@ goodList)
        then (for c in (@ nonFileClasses) do (_ self ShadeNode c GRAYSHADE1))
      else (for c in (_ self BrowserObjects)
-                 bind [fileClasses _ (for file in (@ associatedFiles)
-                                            join (for C in (FILECLASSES file)
-                                                        collect ($! C]
-                 when (NOT (MEMB c fileClasses)) do (_ self ShadeNode c GRAYSHADE1)))
+             bind [fileClasses _ (for file in (@ associatedFiles)
+                                    join (for C in (FILECLASSES file) collect ($! C]
+             when (NOT (MEMB c fileClasses)) do (_ self ShadeNode c GRAYSHADE1)))
    self)
 
-(Method ((FileBrowser SaveFile) self)                    (* ; "mjs: 31-Aug-84 12:08")
+(Method ((FileBrowser SaveFile) self)                        (* ; "mjs: 31-Aug-84 12:08")
    "Save file for file browser"
 
    (* ;; "Do the ADD.PROCESS to open another window for the interaction")
@@ -3626,7 +3589,7 @@ No Instance Variables found for " className)
           'BEFOREEXIT
           'DON'T))
 
-(Method ((FileBrowser SelectFile) self fileName)         (* ; "dgb: 10-Sep-84 15:58")
+(Method ((FileBrowser SelectFile) self fileName)             (* ; "dgb: 10-Sep-84 15:58")
    "Select one of Associated files for focus"
    [OR fileName (SETQ fileName (MENU (create MENU
                                             ITEMS _ (@ associatedFiles)]
@@ -3637,7 +3600,7 @@ No Instance Variables found for " className)
              (_@ title (CONCAT "File browser (selected file " fileName ")"))
              (_ self Recompute))))
 
-(Method ((FileBrowser SetItNew) self obj objName)        (* ; "smL  5-Aug-86 17:39")
+(Method ((FileBrowser SetItNew) self obj objName)            (* ; "smL  5-Aug-86 17:39")
    "Save value in IT and in SavedValue of LoopsIcon. Put UID on list of INSTANCES to be saved"
    (LET ((value (_Super ))
          (name (_ self PromptRead "New Instance name, or NIL for none.")))
@@ -3647,12 +3610,12 @@ No Instance Variables found for " className)
                (@ selectedFile))
         value))
 
-(Method ((FileBrowser SubBrowser) self obj objName)      (* ; "smL  9-Oct-85 13:09")
+(Method ((FileBrowser SubBrowser) self obj objName)          (* ; "smL  9-Oct-85 13:09")
    "Specialization"
    (_New ($ ClassBrowser)
          Browse obj))
 
-(Method ((FileBrowser TraceFunction) self)               (* ; "smL  9-Oct-85 17:36")
+(Method ((FileBrowser TraceFunction) self)                   (* ; "smL  9-Oct-85 17:36")
    "Choose a function from the file and TRACE it"
    [PROG [choice (fns (SORT (LDIFFERENCE (LDIFFERENCE (FILEFNSLST (@ selectedFile))
                                                 (FILECOMSLST (@ selectedFile)
@@ -3660,11 +3623,11 @@ No Instance Variables found for " className)
                                    BROKENFNS]
          (if (NULL fns)
              then (_ self PromptPrint "No functions to trace")
-                   (RETURN))
+                  (RETURN))
          (SETQ choice (MENU (_ self ItemMenu fns "Trace function")))
          (RETURN (AND choice (APPLY* 'TRACE choice])
 
-(Method ((FileBrowser UnbreakFunction) self)             (* ; "smL  9-Oct-85 17:37")
+(Method ((FileBrowser UnbreakFunction) self)                 (* ; "smL  9-Oct-85 17:37")
    "New method template"
    [PROG [choice (fns (SORT (INTERSECTION (LDIFFERENCE (FILEFNSLST (@ selectedFile))
                                                  (FILECOMSLST (@ selectedFile)
@@ -3672,7 +3635,7 @@ No Instance Variables found for " className)
                                    BROKENFNS]
          (if (NULL fns)
              then (_ self PromptPrint "No functions are broken")
-                   (RETURN))
+                  (RETURN))
          (SETQ choice (MENU (_ self ItemMenu fns "Unbreak function")))
          (RETURN (AND choice (APPLY* 'UNBREAK choice])
 
@@ -3805,11 +3768,10 @@ No Instance Variables found for " className)
           (menuColumns (IPLUS 1 (IQUOTIENT numberMenuItems 35]
          [COND
             ((GREATERP numberMenuItems 1)                    (* ; 
-                                           "Add *EditAll*  item if more than one item in the list.")
-             (SETQ menuItems `(,@menuItems ,@(from (ADD1 (IREMAINDER numberMenuItems menuColumns)
-                                                             ) to (SUB1 menuColumns)
-                                                bind (DUMMYITEM _ (LIST "" NIL)) collect
-                                                                                     DUMMYITEM)
+                                             "Add *EditAll*  item if more than one item in the list.")
+             (SETQ menuItems `(,@menuItems ,@(from (ADD1 (IREMAINDER numberMenuItems menuColumns))
+                                                to (SUB1 menuColumns)
+                                                bind (DUMMYITEM _ (LIST "" NIL)) collect DUMMYITEM)
                                      (*EditAll* NIL NIL (SUBITEMS *EditAll* *SubstituteAll*]
          (COND
             (menuItems (LET ((menu (create MENU
@@ -3827,17 +3789,16 @@ No Instance Variables found for " className)
                                                                           SCREENWIDTH
                                                                           (WIDTHIFWINDOW (fetch
                                                                                           IMAGEWIDTH
-                                                                                            of
-                                                                                            menu]
+                                                                                            of menu]
                                                            (MAX (@ bottom)
                                                                 0]
                                                              (* ; 
-    "Make pointer to self so that menu edit commands can access promptwindow and file information.")
+      "Make pointer to self so that menu edit commands can access promptwindow and file information.")
                             (WINDOWPROP menuWindow 'LoopsFileBrowser self)
                             (MOVEW menuWindow)
                             menuWindow])
 
-(Method ((FileBrowser AnalyzeFile) self)                 (* ; "mjs:  3-Dec-85 10:26")
+(Method ((FileBrowser AnalyzeFile) self)                     (* ; "mjs:  3-Dec-85 10:26")
    "Analyze all the functions on the selected file"
    [AND (_ self LoadMasterscope?)
         (PROGN (_ self PromptPrint (CONCAT "Analyzing " (@ selectedFile)
@@ -3850,8 +3811,7 @@ Done analyzing."))
                 'NAME
                 'MASTERSCOPE])
 
-(Method ((FileBrowser CallsFunction) self object objectName)
-                                                             (* ; "mjs: 10-Dec-85 09:35")
+(Method ((FileBrowser CallsFunction) self object objectName) (* ; "mjs: 10-Dec-85 09:35")
    "Analyze file for methods that send a given message"
    [LET* ((itemType 'FUNCTION)
           (itemName (_ self SelectItemName object itemType)))
@@ -3884,12 +3844,12 @@ Done analyzing."))
                                         MSCheck)))
                       (if (NULL check-result)
                           then (_ self PromptPrint (CONCAT "Method " item " is OK"))
-                        else                             (* MSCheck already printed out the 
-                                                           results)
-                              NIL)))
+                        else                                 (* MSCheck already printed out the 
+                                                             results)
+                             NIL)))
        (_ self PromptPrint (CONCAT "Check is not implemented for type " itemType))))
 
-(Method ((FileBrowser CheckFile) self)                   (* ; "smL 11-Jun-86 16:28")
+(Method ((FileBrowser CheckFile) self)                       (* ; "smL 11-Jun-86 16:28")
    "Do a MasterScope CHECK command on this file"
    (AND (_ self LoadMasterscope?)
         (EVAL.IN.TTY.CONTEXT `(PROGN (_ ,self ClearPromptWindow)
@@ -3898,26 +3858,25 @@ Done analyzing."))
                                      (_ ,self PromptPrint "done checking."))
                "Check file")))
 
-(Method ((FileBrowser ComputeMenuItems) self reportList) (* ; "smL 12-Dec-86 13:17")
+(Method ((FileBrowser ComputeMenuItems) self reportList)     (* ; "smL 12-Dec-86 13:17")
    "Creates list of items with appropriate subitems for use in the analysis menu."
    [for item in reportList collect (COND
-                                                  [(AND (FNTYP item)
-                                                        ($! item)
-                                                        (NEQ NotSetValue (@ ($! item)
-                                                                            className)))
+                                      [(AND (FNTYP item)
+                                            ($! item)
+                                            (NEQ NotSetValue (@ ($! item)
+                                                                className)))
                                                              (* Here for a method.)
-                                                   `(,item NIL NIL (SUBITEMS (Edit ,item)
-                                                                          (Substitute ,item)
-                                                                          (Check ,item]
-                                                  [(FNTYP item)
-                                                             (* Here for a function)
-                                                   `(,item NIL NIL (SUBITEMS (Edit ,item)
-                                                                          (Substitute ,item]
-                                                  (T         (* Here for a class.)
-                                                     `(,item NIL NIL (SUBITEMS (Edit ,item)
-                                                                            (Substitute ,item])
+                                       `(,item NIL NIL (SUBITEMS (Edit ,item)
+                                                              (Substitute ,item)
+                                                              (Check ,item]
+                                      [(FNTYP item)          (* Here for a function)
+                                       `(,item NIL NIL (SUBITEMS (Edit ,item)
+                                                              (Substitute ,item]
+                                      (T                     (* Here for a class.)
+                                         `(,item NIL NIL (SUBITEMS (Edit ,item)
+                                                                (Substitute ,item])
 
-(Method ((FileBrowser EditMenuItem) self item wait?)     (* ; "smL 30-Oct-86 19:03")
+(Method ((FileBrowser EditMenuItem) self item wait?)         (* ; "smL 30-Oct-86 19:03")
    "New method template"
    [LET ((itemObject ($! item)))
         (COND
@@ -3929,11 +3888,11 @@ Done analyzing."))
 
             (if wait?
                 then (_ ($! (@ itemObject className))
-                            EditMethod
-                            (@ itemObject selector))
+                        EditMethod
+                        (@ itemObject selector))
               else (ApplyMethodInTtyProcess ($! (@ itemObject className))
-                              'EditMethod
-                              (LIST (@ itemObject selector)]
+                          'EditMethod
+                          (LIST (@ itemObject selector)]
            ((FNTYP item)
 
             (* ;; "Here for editing a function")
@@ -3941,15 +3900,15 @@ Done analyzing."))
             (if wait?
                 then (APPLY* 'DF item)
               else (EVAL.IN.TTY.CONTEXT `(DF ,item)
-                              "Edit item")))
+                          "Edit item")))
            (T 
               (* ;; "Here for editing a class.")
 
               (if wait?
                   then (_ ($! item)
-                              Edit)
+                          Edit)
                 else (ApplyMethodInTtyProcess ($! item)
-                                'Edit])
+                            'Edit])
 
 (Method ((FileBrowser ImplementsMethod) self object objectName)
                                                              (* ; "smL 29-May-86 18:28")
@@ -3958,33 +3917,30 @@ Done analyzing."))
     [(itemName (_ self SelectItemName object 'METHOD)]
     (COND
        (itemName                                             (* ; 
-                              "Handle ANY special - user wants all methods on a file or in a class")
+                                "Handle ANY special - user wants all methods on a file or in a class")
         (LET*
          [[methods (if (EQ itemName 'ANY)
                        then (if (AND object (type? class ($! object)))
-                                    then (for S in (_ ($! object)
-                                                                  ListAttribute
-                                                                  'METHODS)
-                                                collect (GetMethodOnly ($! object)
-                                                                   S))
-                                  else (FILECOMSLST (@ selectedFile)
-                                                  'METHODS))
-                     else                                (* ; 
-                                     "if it's a class and a specific itemname, it's max one method")
-                           (if (AND object (type? class ($! object)))
-                               then (LIST (FetchMethod ($! object)
-                                                     itemName))
-                             else (MASTERSCOPE `(WHO IN (FILECOMSLST ',(@ selectedFile)
-                                                                   'METHODS)
-                                                         IMPLEMENTS
-                                                         ',itemName]
+                                then (for S in (_ ($! object)
+                                                  ListAttribute
+                                                  'METHODS) collect (GetMethodOnly ($! object)
+                                                                           S))
+                              else (FILECOMSLST (@ selectedFile)
+                                          'METHODS))
+                     else                                    (* ; 
+                                       "if it's a class and a specific itemname, it's max one method")
+                          (if (AND object (type? class ($! object)))
+                              then (LIST (FetchMethod ($! object)
+                                                itemName))
+                            else (MASTERSCOPE `(WHO IN (FILECOMSLST ',(@ selectedFile)
+                                                              'METHODS)
+                                                    IMPLEMENTS
+                                                    ',itemName]
           (classes (for class in (OR (FILECOMSLST (@ selectedFile)
-                                                    'CLASSES)
-                                             (MKLIST object)) when (MEMB (FetchMethod
-                                                                              ($! class)
-                                                                              itemName)
-                                                                             methods)
-                      collect ($! class]
+                                            'CLASSES)
+                                     (MKLIST object)) when (MEMB (FetchMethod ($! class)
+                                                                        itemName)
+                                                                 methods) collect ($! class]
 
 (* ;;; "Add an active menu for further interaction with the analysis.")
 
@@ -4005,16 +3961,16 @@ Done analyzing."))
         (COND
            (itemName (LET* [[methods (INTERSECTION [if (AND object (type? class ($! object)))
                                                        then (MKLIST (FetchMethod ($! object)
-                                                                               itemName))
+                                                                           itemName))
                                                      else '(FILECOMSLST (@ selectedFile)
-                                                                      'METHODS]
+                                                                  'METHODS]
                                             (MASTERSCOPE `(WHO OVERRIDES ',itemName]
                             (classes (for class in (OR (FILECOMSLST (@ selectedFile)
-                                                                      'CLASSES)
-                                                               (MKLIST object))
+                                                              'CLASSES)
+                                                       (MKLIST object))
                                         when (MEMB (FetchMethod ($! class)
-                                                              itemName)
-                                                       methods) collect ($! class]
+                                                          itemName)
+                                                   methods) collect ($! class]
 
          (* * Add an active menu for further interaction with the analysis.)
 
@@ -4028,8 +3984,7 @@ Done analyzing."))
                               (T (_ self PromptPrint (CONCAT "
 " itemName " is never overridden"))])
 
-(Method ((FileBrowser SelectItemName) self object itemType)
-                                                             (* ; "smL 11-Apr-86 15:07")
+(Method ((FileBrowser SelectItemName) self object itemType)  (* ; "smL 11-Apr-86 15:07")
    "Prompt user for the name of an item (IV, CV, selector, etc.) -- either from the selected class or from
  any class in the browser."
    (AND
@@ -4038,32 +3993,29 @@ Done analyzing."))
             (SELECTQ itemType
                 (FUNCTION (SORT (for fn
                                    in [MASTERSCOPE `(WHO IS CALLED BY ANY IN
-                                                             ',(_ self CollectMethodList object)]
+                                                         ',(_ self CollectMethodList object)]
                                    bind [knownFns _ (for file in FILELST
-                                                           join (FILECOMSLST file 'FNS]
-                                   collect fn when (MEMB fn knownFns))))
+                                                       join (FILECOMSLST file 'FNS] collect fn
+                                   when (MEMB fn knownFns))))
                 (LISPVAR (SORT (for var
                                   in [MASTERSCOPE `(WHO IS USED BY ANY IN
-                                                            ',(_ self CollectMethodList object)]
+                                                        ',(_ self CollectMethodList object)]
                                   collect var)))
                 (OBJECT (SORT (for obj
-                                 in [MASTERSCOPE `(WHAT OBJECT IN (UNION (FILECOMSLST
-                                                                              (@ selectedFile)
-                                                                              'CLASSES)
-                                                                             (FILECOMSLST
-                                                                              (@ selectedFile)
-                                                                              'INSTANCES))
-                                                            IS USED BY ANY IN
-                                                            ',(_ self CollectMethodList object)]
+                                 in [MASTERSCOPE `(WHAT OBJECT IN (UNION (FILECOMSLST (@ selectedFile)
+                                                                                'CLASSES)
+                                                                         (FILECOMSLST (@ selectedFile)
+                                                                                'INSTANCES))
+                                                        IS USED BY ANY IN
+                                                        ',(_ self CollectMethodList object)]
                                  collect obj)))
                 ((IV CV METHOD SELECTOR) 
                      [COND
                         [object (_ object ListAttribute! (PACK* itemType 'S))]
                         (T (for class in (FILECOMSLST (@ selectedFile)
-                                                        'CLASSES)
-                              join (_ ($! class)
-                                          ListAttribute!
-                                          (PACK* itemType 'S))])
+                                                'CLASSES) join (_ ($! class)
+                                                                  ListAttribute!
+                                                                  (PACK* itemType 'S))])
                 NIL))
            (chosenName (MENU (create MENU
                                     TITLE _ (CONCAT "Which " itemType " ?")
@@ -4074,8 +4026,7 @@ Done analyzing."))
               (*any* 'ANY)
               chosenName))))
 
-(Method ((FileBrowser SendsMessage) self object objectName)
-                                                             (* ; "FBF  9-Apr-86 15:06")
+(Method ((FileBrowser SendsMessage) self object objectName)  (* ; "FBF  9-Apr-86 15:06")
    "Analyze file for methods that send a given message"
    [LET* ((itemType 'SELECTOR)
           (itemName (_ self SelectItemName object itemType)))
@@ -4099,16 +4050,16 @@ Done analyzing."))
         (COND
            (itemName (LET* [[methods (INTERSECTION [if (AND object (type? class ($! object)))
                                                        then (MKLIST (FetchMethod ($! object)
-                                                                               itemName))
+                                                                           itemName))
                                                      else '(FILECOMSLST (@ selectedFile)
-                                                                      'METHODS]
+                                                                  'METHODS]
                                             (MASTERSCOPE `(WHO SPECIALIZES ',itemName]
                             (classes (for class in (OR (FILECOMSLST (@ selectedFile)
-                                                                      'CLASSES)
-                                                               (MKLIST object))
+                                                              'CLASSES)
+                                                       (MKLIST object))
                                         when (MEMB (FetchMethod ($! class)
-                                                              itemName)
-                                                       methods) collect ($! class]
+                                                          itemName)
+                                                   methods) collect ($! class]
 
          (* * Add an active menu for further interaction with the analysis.)
 
@@ -4131,37 +4082,36 @@ Done analyzing."))
    (OR oldAtom (SETQ oldAtom (_ self PromptForWord "(Substitute) oldAtom: ")))
    (if (GETD item)
        then [MASTERSCOPE `(EDIT WHERE ',item ,@(SELECTQ itemType
-                                                       (IV '(USES THE IV))
-                                                       (CV '(USES THE CV))
-                                                       (OBJECT '(USES THE OBJECT))
-                                                       (FUNCTION '(CALLS))
-                                                       ((SELECTOR METHOD) 
-                                                            '(SENDS))
-                                                       (LISPVAR '(USES THE VAR))
-                                                       (LoopsHelp itemType 
-                                                             " not understood in SubstituteMenuItem "
-                                                              ))
-                                    ,oldAtom - (R ,oldAtom ,(OR newAtom (_ self PromptForWord 
-                                                                             "(Substitute) newAtom: ")
-                                                                    ]
+                                                   (IV '(USES THE IV))
+                                                   (CV '(USES THE CV))
+                                                   (OBJECT '(USES THE OBJECT))
+                                                   (FUNCTION '(CALLS))
+                                                   ((SELECTOR METHOD) 
+                                                        '(SENDS))
+                                                   (LISPVAR '(USES THE VAR))
+                                                   (LoopsHelp itemType 
+                                                          " not understood in SubstituteMenuItem "))
+                                ,oldAtom - (R ,oldAtom ,(OR newAtom (_ self PromptForWord 
+                                                                            "(Substitute) newAtom: ")
+                                                            ]
      elseif (type? class item)
        then (SELECTQ itemType
-                    (IV (RenameVariable (_ item ClassName)
-                               oldAtom newAtom))
-                    (CV (RenameVariable (_ item ClassName)
-                               oldAtom newAtom T))
-                    ((SELECTOR METHOD) 
-                         (_ item RenameMethod oldAtom newAtom))
-                    ((OBJECT FUNCTION LISPVAR) 
-                         NIL)
-                    (LoopsHelp itemType " not understood in SubstituteMenuItem ")))
+                (IV (RenameVariable (_ item ClassName)
+                           oldAtom newAtom))
+                (CV (RenameVariable (_ item ClassName)
+                           oldAtom newAtom T))
+                ((SELECTOR METHOD) 
+                     (_ item RenameMethod oldAtom newAtom))
+                ((OBJECT FUNCTION LISPVAR) 
+                     NIL)
+                (LoopsHelp itemType " not understood in SubstituteMenuItem ")))
    (_ self EditMenuItem item T))
 
-(Method ((FileBrowser UsesCV) self object objectName)    (* ; "mjs:  4-Dec-85 09:52")
+(Method ((FileBrowser UsesCV) self object objectName)        (* ; "mjs:  4-Dec-85 09:52")
    "Analyze file for methods and classes that use a given CV"
    (_ self UsesItem object objectName 'CV))
 
-(Method ((FileBrowser UsesIV) self object objectName)    (* ; "mjs:  4-Dec-85 09:13")
+(Method ((FileBrowser UsesIV) self object objectName)        (* ; "mjs:  4-Dec-85 09:13")
    "Analyze file for methods and classes that use a given IV."
    (_ self UsesItem object objectName 'IV))
 
@@ -4181,10 +4131,10 @@ Done analyzing."))
                                ((EQ itemType 'OBJECT)
                                 NIL)
                                (T (SORT (for class in (FILECOMSLST (@ selectedFile)
-                                                                     'CLASSES)
+                                                             'CLASSES)
                                            when [MEMB itemName (_ ($! class)
-                                                                      ListAttribute
-                                                                      (PACK* itemType 'S))]
+                                                                  ListAttribute
+                                                                  (PACK* itemType 'S))]
                                            collect ($! class]
                    (reportList (COND
                                   ((OR methods classes)
@@ -4201,8 +4151,7 @@ Done analyzing."))
                      (T (_ self PromptPrint (CONCAT "
 " itemName " not used as a " itemType))])
 
-(Method ((FileBrowser UsesLispVar) self object objectName)
-                                                             (* ; "mjs: 10-Dec-85 09:47")
+(Method ((FileBrowser UsesLispVar) self object objectName)   (* ; "mjs: 10-Dec-85 09:47")
    "Analyze file for methods that and functions use a given lisp variable"
    [LET* ((itemType 'LISPVAR)
           (itemName (_ self SelectItemName object itemType)))
@@ -4225,7 +4174,7 @@ Done analyzing."))
                                               (CONCAT "Uses Lisp Var " itemName)))
                                (T (_ self PromptPrint (CONCAT itemType " " itemName " not used."))])
 
-(Method ((FileBrowser UsesObject) self object objectName)(* ; "smL 16-Dec-85 17:30")
+(Method ((FileBrowser UsesObject) self object objectName)    (* ; "smL 16-Dec-85 17:30")
    "Analyze file for methods and classes that use a given Object."
    (_ self UsesItem object objectName 'OBJECT))
 
@@ -4285,18 +4234,18 @@ graph" (category (InstanceBrowser)))
 
 
 
-(Method ((InstanceBrowser GetSubs) self object)          (* ; "dgb: 19-SEP-83 17:12")
+(Method ((InstanceBrowser GetSubs) self object)              (* ; "dgb: 19-SEP-83 17:12")
    "Gets a set of subs from an object for browsing."
    [COND
       ((AND (@ subIV)
             (_ object HasIV (@ subIV)))
 
          (* If the object has an IV named in (@ subIV) and that is an IV of object, then 
-       use that for following links)
+         use that for following links)
 
        (GetValue object (@ subIV)])
 
-(Method ((InstanceBrowser NewPath) self subName)         (* ; "dgb: 19-SEP-83 17:31")
+(Method ((InstanceBrowser NewPath) self subName)             (* ; "dgb: 19-SEP-83 17:31")
    "Changes the name of the sub by which the lattice is computed, changes the title, and recomputes the 
 graph"
    (PROG NIL
@@ -4322,7 +4271,7 @@ graph"
 
 
 
-(Method ((SupersBrowser GetSubs) self object objName)    (* ; "smL  2-Jan-86 16:36")
+(Method ((SupersBrowser GetSubs) self object objName)        (* ; "smL  2-Jan-86 16:36")
    "Returns local supers"
    (fetch localSupers of object))
 
@@ -4339,7 +4288,7 @@ graph"
 
 
 
-(Method ((MetaBrowser GetSubs) self elt)                 (* ; "smL 11-Apr-86 14:59")
+(Method ((MetaBrowser GetSubs) self elt)                     (* ; "smL 11-Apr-86 14:59")
    "Subs for meta browser is the meta class of the class."
    [PROG [(meta (GetObjectRec (CAR (_ (GetObjectRec elt)
                                       ListAttribute
@@ -4358,20 +4307,22 @@ graph"
 
 (ADDTOVAR LAMA )
 )
-(PUTPROPS LOOPSBROWSE COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991))
+(PUTPROPS LOOPSBROWSE COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
+2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (88149 124824 (AddMenuWindow 88159 . 89984) (BoxPrintString 89986 . 97633) (
-BoxWindowNode 97635 . 98353) (BreakStringForBoxing 98355 . 101752) (Browse 101754 . 102259) (
-ClearCache 102261 . 102970) (DoMenuMethod 102972 . 103187) (DualMenu 103189 . 103644) (DualSelection 
-103646 . 104854) (DualSubItems 104856 . 106143) (FILECLASSES 106145 . 106280) (FileBrowse 106282 . 
-106441) (FindSelectedNode 106443 . 108204) (FunctionMenuWhenSelectedFn 108206 . 108732) (ItemsForType 
-108734 . 109222) (LatticeBrowser.ButtonFn 109224 . 110048) (LatticeBrowser.WhenHeldFn 110050 . 111160)
- (LatticeBrowserExpandFn 111162 . 111482) (LatticeBrowserIconButtonEventFn 111484 . 111944) (LispxSend
- 111946 . 112368) (Menu-Group-Size 112370 . 112584) (Repaint-Menu-Window 112586 . 113094) (
-SubItemSelection 113096 . 114106) (TreeRoots 114108 . 117284) (ReachableNodes! 117286 . 117998) (
-ChildNodes 118000 . 118324) (\DeleteSubtree 118326 . 118871) (\Menu-Group-Size 118873 . 120941) (
-\Place-Menu-Group-In-Window 120943 . 123872) (\PortableGraphNodeID 123874 . 124364) (
-\Remove-Menu-Group-From-Window 124366 . 124822)) (163227 165369 (ClassBrowserMarkChanged 163237 . 
-164502) (UpdateClassBrowsers 164504 . 165367)) (189941 191048 (FileBrowserMarkChanged 189951 . 191046)
-) (220960 223006 (UsesMenuWhenSelectedFn 220970 . 223004)))))
+  (FILEMAP (NIL (86929 123910 (AddMenuWindow 86939 . 88764) (BoxPrintString 88766 . 96413) (
+BoxWindowNode 96415 . 97133) (BreakStringForBoxing 97135 . 100532) (Browse 100534 . 101039) (
+ClearCache 101041 . 101750) (DoMenuMethod 101752 . 101967) (DualMenu 101969 . 102424) (DualSelection 
+102426 . 103634) (DualSubItems 103636 . 104923) (FILECLASSES 104925 . 105060) (FileBrowse 105062 . 
+105221) (FindSelectedNode 105223 . 106984) (FunctionMenuWhenSelectedFn 106986 . 107512) (ItemsForType 
+107514 . 108002) (LatticeBrowser.ButtonFn 108004 . 108828) (LatticeBrowser.WhenHeldFn 108830 . 109940)
+ (LatticeBrowserExpandFn 109942 . 110262) (LatticeBrowserIconButtonEventFn 110264 . 110724) (LispxSend
+ 110726 . 111148) (Menu-Group-Size 111150 . 111364) (Repaint-Menu-Window 111366 . 111874) (
+SubItemSelection 111876 . 112886) (TreeRoots 112888 . 116064) (ReachableNodes! 116066 . 116778) (
+ChildNodes 116780 . 117104) (\DeleteSubtree 117106 . 117651) (\Menu-Group-Size 117653 . 119721) (
+\Place-Menu-Group-In-Window 119723 . 122958) (\PortableGraphNodeID 122960 . 123450) (
+\Remove-Menu-Group-From-Window 123452 . 123908)) (160869 163011 (ClassBrowserMarkChanged 160879 . 
+162144) (UpdateClassBrowsers 162146 . 163009)) (163096 163225 (UpdateClassBrowsers? 163096 . 163225)) 
+(163227 163342 (WithCategories 163227 . 163342)) (187299 188406 (FileBrowserMarkChanged 187309 . 
+188404)) (217070 219116 (UsesMenuWhenSelectedFn 217080 . 219114)))))
 STOP
