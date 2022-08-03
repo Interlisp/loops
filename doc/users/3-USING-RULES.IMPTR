@@ -1,0 +1,42 @@
+(RULES NIL rules NIL (NIL) 45 SUBNAME USING SUBTEXT using)
+(USING% RULES NIL using% rules NIL (NIL) 45)
+(CREATING% RULESETS NIL creating% RuleSets NIL (NIL) 45)
+(RULESETS NIL RuleSets NIL (NIL) 45 SUBNAME CREATING SUBTEXT creating)
+(EDITING% RULESETS NIL editing% RuleSets NIL (NIL) 45)
+(RULESETS NIL RuleSets NIL (NIL) 45 SUBNAME EDITING SUBTEXT editing)
+(EDITRULES (Message) EditRules NIL (NIL) 45)
+(ER (Message) NIL NIL (NIL) 45)
+(EDITMETHOD (Message) EditMethod NIL (NIL) 45)
+(EDITALLDECLS NIL EditAllDecls NfficLight) S
+1000 /Helvetica-Acnt F
+( object.  If the value of) S
+8400 44120 M (a variable was set by a RuleSet running with auditing, then a ) S
+1000 /Helvetica-Bold-Acnt F
+(why) S
+1000 /Helvetica-Acnt F
+( question can be typed to the rule) S
+8400 42920 M (executive as follows:) S
+1000 /Helvetica-Bold-Acnt F
+8400 40720 M (re: why trafficLight:color) S
+8400 38520 M (IF highLight:color = 'Green  farmRoadSensor:cars timer.TL) S
+8400 37320 M (THEN highLight:color _ 'Yellow  timer.Start;) S
+8400 35120 M (Rule 3 	RULES23.	USING RULES IN LOOPS6The LOOPS rules language is supported by an integrated programming environment for creating, editing, compiling, and debugging RuleSets.  This section describes how to use(RULES NIL rules NIL NIL 45 SUBNAME USING SUBTEXT using)(USING% RULES NIL using% rules NIL NIL 45) that environment.23.1  Creating RuleSets(CREATING% RULESETS NIL creating% RuleSets NIL NIL 45)1RuleSets(RULESETS NIL RuleSets NIL NIL 45 SUBNAME CREATING SUBTEXT creating) are named LOOPS objects aTHODS SUBTEXT as% methods)
+(RULESETS NIL RuleSets NIL (NIL) 48 SUBNAME INSTALLING% AS% METHODS SUBTEXT installing% as% methods)
+(DEFRSM (Function) DefRSM NIL (NIL) 48)
+(RULESETS NIL RuleSets NIL (NIL) 49 SUBNAME INSTALLING% IN% ACTIVEVALUES SUBTEXT installing% in% active% values SUBSUBTEXT)
+(INSTALLING% RULESETS NIL NIL NIL (NIL) 49 SUBNAME IN% ACTIVE% VALUES SUBTEXT in% active% values)
+(RSGETFN (Function) RSGetFn NIL (NIL) 49)
+(RSGET (Property) RSGet NIL (NIL) 49)
+(RSPUTFN (Function) RSPutFn NIL (NIL) 49)
+(RSPUT (Property) RSPut NIL (NIL) 49)
+(BREAKING% AND% TRACING% RULESETS NIL breaking% and% tracing% RuleSets NIL (NIL) 50)
+(RULESETS NIL RuleSets NIL (NIL) 50 SUBNAME BREAKING% AND% TRACING SUBTEXT breaking% and% tracing)
+(COMPILER% OPTIONS% FOR% BREAKING% AND% TRACING NIL compiler% options% for% breaking% and% tracing NIL (NIL) 50)
+(RULE% EXEC NIL rule% Exec NIL (NIL) 51)
+(RE NIL NIL NIL (NIL) 51)
+(RULESETS NIL RuleSets NIL (NIL) 51 SUBNAME AUDITING SUBTEXT auditing)
+(AUDITING% RULESETS NIL auditing% RuleSs have not been tested without loading TEdit in order to edit RuleSets.) S
+grestore savepage restore showpage
+
+%%Page: 9 9
+%%Begin

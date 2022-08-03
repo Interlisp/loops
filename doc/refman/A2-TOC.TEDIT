@@ -1,0 +1,237 @@
+1XEROX LOOPS REFERENCE MANUAL, LYRIC/MEDLEY RELEASE1XEROX LOOPS REFERENCE MANUAL, LYRIC/MEDLEY RELEASETABLE OF CONTENTS1TABLE OF CONTENTS1TABLE OF CONTENTS6PREFACE	xv	11.  INTRODUCTION	11.1  Introduction to Objects	1-111.1.1  Object	1-211.1.2  Message	1-311.1.3  Method	1-311.1.4  Selector	1-311.1.5  Class	1-311.1.6  Instance	1-411.2  Storage of Data in Objects 	1-411.2.1  Class Variables and Instance Variables	1-411.2.2  Properties	1-511.3  Metaclasses	1-611.4  Introduction to Inheritance	1-611.4.1  Single Superclasses	1-711.4.2  Multiple Superclasses	1-811.5  Introduction to Access-Oriented Programming:  Using Active Values	1-911.6  Introduction to the Xerox LOOPS User Interface	1-1011.6.1  SEdit	1-1011.6.2  Inspector	1-1011.6.3  Masterscope	1-1011.6.4  File Manager	1-1111.6.5  Grapher Module	1-1112.  INSTANCES	12.1  Instance  Naming Conventions	2-112.2  Creating Instances	2-412.3  Data Storage in Instances at Creation Time	2-812.4  Changing the Number of Instance Variables in an Instance	2-1012.5  Moving Variables	2-1312.6  Destroying Instances	2-1512.7  Methods Concerning the Class of an Object	2-1612.8  Copying Instances	2-1912.9  Querying Structure of Instances	2-2112.10  Other Instance Items	2-2413.  CLASSES	13.1  Creating Classes	3-113.1.1  Function Calling and Message Sending	3-213.1.2  Dynamic Mixins	3-413.2  Destroying Classes	3-513.3  Inheritance	3-713.4  Editing Classes	3-1013.5  Modifying Classes	3-1113.6  Methods for Manipulating Class Names	3-1613.7  Querying the Structure of a Class	3-1713.8  Copying Classes and Their Contents	3-2313.9  Enumerating Instances of Classes	3-2413.10 Dealing with Inheritance	3-2714.  METACLASSES	14.1  Specific Metaclasses	4-114.1.1  The Metaclass Class	4-114.1.2  The Metaclass Metaclass	4-214.1.3  The Metaclass AbstractClass	4-214.1.4  The Metaclass DestroyedClass	4-214.2  Pseudoclasses 	4-214.3  Defining New Metaclasses 	4-514.4  Tofu	4-615.  ACCESSING DATA	15.1  Generalized Get and Put Functions	5-115.2  Accessing Data in Instances	5-415.2.1  Compact Accessing Forms	5-1015.2.2  Support for Changetran	5-1315.3  Accessing Data in Classes	5-1315.3.1  Metaclasses and Property Access	5-1315.3.2  Class Variable Access	5-1615.3.3  Instance Variable Access	5-1916.  METHODS	16.1  Categories	6-116.2  Structure of Method Functions	6-316.3  Creating, Editing, and Destroying Methods	6-416.4  Escaping from Message Syntax	6-616.5  Movement between Classes	6-816.5.1  Movement of Methods	6-816.5.2  Stack Method Macros	6-1017.  MESSAGE SENDING FORMS	18.  ACTIVE VALUES	18.1  Using Active Values	8-218.2  Specializations of the Class ActiveValue	8-218.2.1  IndirectVariable	8-318.2.2  LocalStateActiveValue	8-618.2.2.1  ExplicitFnActiveValue	8-818.2.2.2  NoUpdatePermittedAV	8-918.2.2.3  LispWindowAV	8-1018.2.2.4  Breaking and Tracing Active Values	8-1018.2.2.5  AppendSuperValue	8-1118.2.2.6  FirstFetchAV	8-1218.2.3  InheritingAV	8-1418.2.4  ReplaceMeAV	8-1518.2.5 NotSetValue 	8-1518.2.5.1  NestedNotSetValue	8-1618.2.6  User Specializations of Active Values	8-1618.3  Active Value Methods 	8-1618.3.1  Adding and Deleting Active Values	8-1718.3.2  Fetching and Replacing Wrapped Values	8-1918.3.3  Get and Put Functions Bypassing the ActiveValue Mechanism	8-2218.3.4  Shared Active Values in Variable Inheritance	8-2218.3.5  Creating Your Own Active Values 	8-2318.4  Annotated Values 	8-2418.4.1  Explicit Control over Annotated Values	8-2518.4.2  Saving and Restoring Annotated Values	8-2618.5  Active Values in Class Structures 	8-2719.  DATA TYPE PREDICATES AND ITERATIVE OPERATORS	19.1  Data Type Predicates	9-119.2  Iterative Operators 	9-3110.  BROWSERS	110.1  Types of Built-in Browsers	10-1110.1.1  Lattice Browsers	10-2110.1.2  Class Browsers	10-2110.1.3  File Browsers	10-2110.1.4  Supers Browsers	10-2110.1.5  Metaclass Browsers	10-2110.1.6  Instance Browsers	10-3110.2  Opening Browsers	10-3110.2.1  Using Menu Options to Open Browsers	10-3110.2.1.1  Overview of Background Menu and LOOPS Icon	10-3110.2.1.2  Command Summary	10-4110.2.2  Using Commands to Open Browsers	10-5110.3  Using Class Browsers, Meta Browsers, and Supers Browsers	10-7110.3.1  Selecting Options in the Title Bar Menu 	10-8110.3.1.1  Recompute and its Suboptions	10-8110.3.1.2  AddRoot and its Suboptions	10-10110.3.1.3  Add Category Menu	10-10110.3.2  Selecting Options in the Left Menu 	10-11110.3.2.1  PrintSummary and its Suboptions	10-12110.3.2.2  Doc (ClassDoc) and its Suboptions	10-13110.3.2.3  WhereIs and its Suboptions	10-14110.3.2.4  DeleteFromBrowser and its Suboptions	10-16110.3.2.5  SubBrowser	10-16110.3.2.6  TypeInName	10-16110.3.2.7  Extending Functionality with the Left Mouse Button	10-16110.3.3  Selecting Options in the Middle Menu 	10-17110.3.3.1  Box/UnBoxNode	10-17110.3.3.2  Methods (EditMethod) and its Suboptions	10-18110.3.3.3  Add (AddMethod) and its Suboptions	10-20110.3.3.4  Delete (DeleteMethod) and its Suboptions	10-21110.3.3.5  Move (MoveMethodTo) and its Suboptions 	10-22110.3.3.6  Copy (CopyMethodTo) and its Suboptions 	10-23110.3.3.7  Rename (RenameMethod) and its Suboptions	10-23110.3.3.8  Edit (EditClass) and its Suboptions	10-24110.4  Using File Browsers	10-24110.4.1  Selecting Options in the Title Bar Menu 	10-25110.4.1.1  Recompute and its Suboptions	10-25110.4.1.2  AddRoot and its Suboptions	10-25110.4.1.3  Add Category Menu	10-25110.4.1.4  Change display mode and its Suboptions	10-25110.4.1.5  Uses IV? and its Suboptions	10-26110.4.1.6  Edit FileComs and its Suboptions	10-28110.4.1.7  CLEANUP file and its Suboptions	10-30110.4.2  Selecting Options in the Left Menu 	10-30110.4.2.1  PrintSummary and its Suboptions	10-30110.4.2.2  Doc (ClassDoc) and its Suboptions	10-30110.4.2.3  WhereIs (WhereIsMethod) and its Suboptions	10-30110.4.2.4  DeleteFromBrowser and its Suboptions	10-31110.4.2.5  SubBrowser	10-31110.4.2.6  TypeInName	10-31110.4.2.7  AddSubs and its Suboptions	10-31110.4.3  Selecting Options in the Middle Menu 	10-31110.4.3.1  BoxNode	10-32110.4.3.2  Methods (EditMethod) and its Suboptions	10-32110.4.3.3  Add (AddMethod) and its Suboptions	10-32110.4.3.4  Delete (DeleteMethod) and its Suboptions	10-32110.4.3.5  Move (MoveMethodTo) and its Suboptions 	10-32110.4.3.6  Copy (CopyMethodTo) and its Suboptions 	10-32110.4.3.7  Rename (RenameMethod) and its Suboptions	10-32110.4.3.8  Edit (EditClass) and its Suboptions	10-32110.4.3.9  UsesIV and its Suboptions	10-33110.5  Programmer's Interface to Lattice Browsers	10-33110.5.1  Instance Variables for the Class LatticeBrowser	10-33110.5.2  Class Variables for the Class LatticeBrowser	10-34110.5.3  Methods for the Class LatticeBrowser	10-35110.6  Instance Browsers	10-50110.6.1  Instance Variables for the Class InstanceBrowser	10-50110.6.2  Methods for the Class InstanceBrowser	10-50110.6.3  Selecting Options in the Title Bar Menu 	10-51110.6.4  Selecting Options in the Left Menu 	10-51110.6.5  Selecting Options in the Middle Menu 	10-52110.7  Automatic Updates of Class Browsers	10-52111.  ERRORS AND BREAKS	111.1  Error Handling Functions and Methods	11-1111.2  Error Messages	11-5111.1.1  Classes and Instances	11-6111.1.2  Methods and Messages	11-7111.1.3  Naming Objects	11-8111.1.4  Annotated and Active Values	11-9111.1.5  Miscellaneous	11-9112.  BREAKING AND TRACING	112.1  Breaking and Tracing Methods	12-1112.2  Breaking and Tracing Data	12-3113.  EDITING	113.1  Editing Classes	13-1113.2  Editing Instances	13-5114.  FILE MANAGER	114.1  Manipulating Files	14-1114.2  Loading Files	14-2114.3  Xerox LOOPS File Manager Commands	14-3114.4  Saving Xerox LOOPS Objects on Files	14-6114.5  Storing Files	14-10114.6  Compiling Files	14-12115.  PERFORMANCE ISSUES	115.1  Garbage Collection  	15-1115.2  Instance Variable Access	15-1115.3  Method Lookup	15-3115.4  Cache Clearing	15-3116.  PROCESSES	117.  READING AND PRINTING117.1  Reading Objects  	17-1117.2  Print Flags  	17-2117.3  Printing Classes  	17-4117.4  Printing Objects  	17-8117.5  Printing Active Values  	17-11117.6  Printing Methods  	17-12117.7  Unique Identifiers (UIDs)  	17-14118.  USER  INPUT/OUTPUT MODULES118.1  Inspector  	18-1118.1.1  Overview of the User Interface	18-1118.1.2  Using Instance Inspectors	18-2118.1.2.1  Titles of Instance Inspector Windows	18-2118.1.2.2  Menu for the Title Bar	18-3118.1.2.3  Menu for the Left Column	18-4118.1.2.4  Menu for the Right Column	18-6118.1.3  Using Class Inspectors	18-7118.1.3.1  Titles of Class Inspector Windows	18-7118.1.3.2  Menu for the Title Bar	18-8118.1.3.3  Menu for the Left Column	18-8118.1.3.4  Menu for the Right Column	18-8118.1.4  Using Class IVs Inspectors 	18-9118.1.4.1  Titles of Class IVs Inspector Windows	18-9118.1.4.2  Menu for the Title Bar	18-9118.1.4.3  Menu for the Left Column	18-10118.1.4.4  Menu for the Right Column	18-10118.1.5  Functional Interface for Instance Inspectors	18-11118.1.6  Customizing the Inspector	18-15118.2  Extensions to ?=  	18-16118.2.1  Message Sending	18-16118.2.2  Record Creation	18-17119.  WINDOWS119.1  The Class Window   	19-1119.2  Basic Window Methods  	19-2119.3  Prompt Windows  	19-9119.4  Mouse and Menu Functionality  	19-14119.4.1  Menu Item Structure	19-17119.4.2  Caching Menus	19-18119.5  Subclasses of a Window  	19-18119.6  Lisp Windows  	19-22120.  SYSTEM VARIABLES AND FUNCTIONS	1INDEX	INDEX-11GLOSSARY	GLOSSARY-11     (LIST ((PAGE NIL (PAPERSIZE Letter FOLIOINFO (LOWERROMAN "" "") STARTINGPAGE# 3) (0 0 612 792) ((FOLIO NIL (PARALOOKS (QUAD RIGHT) CHARLOOKS (SUPERSCRIPT 0 INVISIBLE OFF SELECTPOINT OFF PROTECTED OFF SIZE 10 FAMILY MODERN OVERLINE OFF STRIKEOUT OFF UNDERLINE OFF EXPANSION REGULAR SLOPE REGULAR WEIGHT MEDIUM INVERTED OFF USERINFO NIL STYLE NIL) FORMATINFO (LOWERROMAN "" "")) (270 15 288 36) NIL) (HEADING NIL (HEADINGTYPE FOOTINGR) (54 27 558 36) NIL) (TEXT NIL NIL (54 54 504 723) NIL))) (PAGE NIL (PAPERSIZE Letter FOLIOINFO (LOWERROMAN)) (0 0 612 792) ((FOLIO NIL (PARALOOKS (QUAD LEFT) CHARLOOKS (SUPERSCRIPT 0 INVISIBLE OFF SELECTPOINT OFF PROTECTED OFF SIZE 10 FAMILY MODERN OVERLINE OFF STRIKEOUT OFF UNDERLINE OFF EXPANSION REGULAR SLOPE REGULAR WEIGHT MEDIUM INVERTED OFF USERINFO NIL STYLE NIL) FORMATINFO (LOWERROMAN)) (54 15 288 36) NIL) (HEADING NIL (HEADINGTYPE FOOTINGV) (54 27 558 36) NIL) (HEADING NIL (HEADINGTYPE VERSOHEAD) (54 762 558 36) NIL) (TEXT NIL NIL (54 54 504 684) NIL))) (PAGE NIL (PAPERSIZE Letter FOLIOINFO (LOWERROMAN)) (0 0 612 792) ((FOLIO NIL (PARALOOKS (QUAD RIGHT) CHARLOOKS (SUPERSCRIPT 0 INVISIBLE OFF SELECTPOINT OFF PROTECTED OFF SIZE 10 FAMILY MODERN OVERLINE OFF STRIKEOUT OFF UNDERLINE OFF EXPANSION REGULAR SLOPE REGULAR WEIGHT MEDIUM INVERTED OFF USERINFO NIL STYLE NIL) FORMATINFO (LOWERROMAN)) (270 15 288 36) NIL) (HEADING NIL (HEADINGTYPE FOOTINGR) (54 27 558 36) NIL) (HEADING NIL (HEADINGTYPE RECTOHEAD) (54 762 558 36) NIL) (TEXT NIL NIL (54 54 504 684) NIL)))))       /    ø 
+      ø               T         1 ¨ ¨ø 
+       ¨ ø                         2 T Tø         T ø                   T     2 T Tø 
+       T ø                   T     1 T Tø 
+       T ø                         2 Ì Ìø         ¨ ø                   T     B    ø        ø       PAGEHEADING 	VERSOHEAD               B    ø        ø       PAGEHEADING 	RECTOHEAD               A    ø      ø       PAGEHEADING FOOTINGV               A    ø      ø       PAGEHEADING FOOTINGR               1 ¨ ¨ø         ¨ ø                         1 ¨ ¨ø         ¨ ø                         1 ¨ ¨ø        ¨ ø                         / T Tø         T                    T     . T Tø         T                          1 T Tø         T ø                         /    ø 
+      ø                   T     .    ø        ø                         .    ø 
+      ø                                MODERN 
+          MODERN          MODERN          MODERN               
+     HRULE.GETFN  MODERN 
+                     
+   3          	     HRULE.GETFN  MODERN 
+                     	   3                            HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN                                                                                           HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                     !               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        !               HRULE.GETFN  MODERN 
+                        K               HRULE.GETFN  MODERN 
+                        9               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                     &               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                        C               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        *               HRULE.GETFN  MODERN 
+                                        HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                        0               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        /               HRULE.GETFN  MODERN 
+                        ,               HRULE.GETFN  MODERN 
+                        -               HRULE.GETFN  MODERN 
+                        +               HRULE.GETFN  MODERN 
+                        #               HRULE.GETFN  MODERN 
+                                                           HRULE.GETFN                                             HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        #               HRULE.GETFN  MODERN 
+                        '               HRULE.GETFN  MODERN 
+                        (               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        #               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                     +               HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                        $               HRULE.GETFN  MODERN 
+                        #               HRULE.GETFN  MODERN 
+                        $               HRULE.GETFN  MODERN 
+                        ,               HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                        '               HRULE.GETFN  MODERN 
+                        3               HRULE.GETFN  MODERN 
+                        &               HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                        HRULE.GETFN  MODERN 
+                                                           HRULE.GETFN                                                          HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        !               HRULE.GETFN  MODERN 
+                        #               HRULE.GETFN  MODERN 
+                        !               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        1               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                        HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                                        HRULE.GETFN  MODERN 
+                        .               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        F         HRULE.GETFN                 9               HRULE.GETFN  MODERN 
+                        -               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        3               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        -               HRULE.GETFN  MODERN 
+                                                  2         HRULE.GETFN                                             HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                     &               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                        HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        1               HRULE.GETFN  MODERN 
+                        :               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        -               HRULE.GETFN  MODERN 
+                        D               HRULE.GETFN  MODERN 
+                        6               HRULE.GETFN  MODERN 
+                        ,               HRULE.GETFN  MODERN 
+                        +               HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        0               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        +               HRULE.GETFN  MODERN 
+                        5               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        C               HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        8               HRULE.GETFN  MODERN 
+                        3               HRULE.GETFN  MODERN 
+                        9               HRULE.GETFN  MODERN 
+                        8               HRULE.GETFN  MODERN 
+                        8               HRULE.GETFN  MODERN 
+                        9               HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                                        HRULE.GETFN  MODERN 
+                        7               HRULE.GETFN  MODERN 
+                        -               HRULE.GETFN  MODERN 
+                        +               HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                        7               HRULE.GETFN  MODERN 
+                        ,               HRULE.GETFN  MODERN 
+                        1               HRULE.GETFN  MODERN 
+                        0               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        0               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        ;               HRULE.GETFN  MODERN 
+                        5               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        +               HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        8               HRULE.GETFN  MODERN 
+                        3               HRULE.GETFN  MODERN 
+                        9               HRULE.GETFN  MODERN 
+                        8               HRULE.GETFN  MODERN 
+                        8               HRULE.GETFN  MODERN 
+                        9               HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                        *               HRULE.GETFN  MODERN 
+                        7               HRULE.GETFN  MODERN 
+                        >               HRULE.GETFN  MODERN 
+                        ;               HRULE.GETFN  MODERN 
+                        3               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        ?               HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                        7               HRULE.GETFN  MODERN 
+                        2               HRULE.GETFN  MODERN 
+                        4               HRULE.GETFN  MODERN 
+                        0               HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                     0               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        #               HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        )               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                                 HRULE.GETFN  MODERN 
+                                     (               HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                                                           HRULE.GETFN                                             HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        -               HRULE.GETFN  MODERN 
+                        /               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                           HRULE.GETFN                                              HRULE.GETFN  MODERN 
+                        $               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                           HRULE.GETFN                                                    HRULE.GETFN                                             HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        (               HRULE.GETFN  MODERN 
+                                                                  HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                        ,               HRULE.GETFN  MODERN 
+                        '               HRULE.GETFN  MODERN 
+                        4         HRULE.GETFN                 &         HRULE.GETFN                 (         HRULE.GETFN                 )         HRULE.GETFN                 $               HRULE.GETFN  MODERN 
+                        1         HRULE.GETFN                 &         HRULE.GETFN                 (         HRULE.GETFN                 )         HRULE.GETFN                 )               HRULE.GETFN  MODERN 
+                        5         HRULE.GETFN                 &         HRULE.GETFN                 )         HRULE.GETFN                 *         HRULE.GETFN                 ;               HRULE.GETFN  MODERN 
+                        (               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                                              HRULE.GETFN  MODERN 
+                                                    HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        +               HRULE.GETFN  MODERN 
+                        "               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                        %               HRULE.GETFN  MODERN 
+                                       HRULE.GETFN  MODERN 
+                                                  %         HRULE.GETFN                                                    HRULE.GETFN                                                    HRULE.GETFN                '“Vzº

@@ -1,0 +1,31 @@
+(KNOWN% PROBLEMS NIL known% problems NIL (NIL) 13)
+(ACTION% REQUESTS NIL Action% Requests NIL (NIL) 13)
+(INSTALLATION,% KNOWN% PROBLEMS% WITH NIL installation,% known% problems% with NIL (NIL) 13)
+(INSTANCES,% KNOWN% PROBLEMS% WITH NIL instances,% known% problems% with NIL (NIL) 14)
+(CLASSES,% KNOWN% PROBLEMS% WITH NIL classes,% known% problems% with NIL (NIL) 14)
+(METACLASSES,% KNOWN% PROBLEMS% WITH NIL metaclasses,% known% problems% with NIL (NIL) 14)
+(% ACTIVE% VALUES,% KNOWN% PROBLEMS% WITH%
+ NIL % acti: 6 6
+%%BeginPageSetup
+/savepage save def
+0.01 imagesizefactor mul dup scale
+%%EndPageSetup
+gsave
+ 0 rotate 
+ 79200 61200 0 0 CLP
+/Helvetica /Helvetica-Acnt encodefont
+1000 /Helvetica-Acnt F
+5400 1500 M (\0001\0008) S
+55801 2750 5401 2750 100 L
+48965 1821 M (ica-Bold-Acnt F) S
+40572 721 M (\(Meter\) 165 0 32 4 -1 roll widthsho) S
+5400 76200 M ( F) S
+5400 74577 M (\( with the \) 165) S
+55801 74627 12015 74627 100 L
+1000 /Helvetica-Acnt F
+22800 49621 M ([This page intentionally left blank]) S
+grestore savepagknown% problems% with NIL (NIL) 16)
+(WINDOWS,% KNOWN% PROBLEMS% WITH NIL Windows,% known% problems% with NIL (NIL) 16)
+(SYSTEM% VARIABLES% AND% FUNCTIONS,% KNOWN% PROBLEMS% WITH NIL system% variables% and% functions,% known% problems% with NIL (NIL) 17)
+(% XEROX% LOOPS% LIBRARY% MODULES,% KNOWN% PROBLEMS% WITH NIL % Xerox% LOOPS% Library% Modules,% known% problems% with NIL (NIL) 17)
+(CONVERSION% TO% NEWER% RELEASES,% KNOWN% PROBLEMS% WITH NIL conversion% to% newer% releases,% known% problems% with NIL (NIL) 17)

@@ -1,0 +1,84 @@
+(INSPECTOR NIL Inspector NIL (NIL) 1)
+(USER% INTERFACE% TO% INSPECTOR NIL user% interface% to% inspector NIL (NIL) 2)
+(INSPECT (Method of Object) Inspect NIL (NIL) 2)
+(INSTANCE% INSPECTOR NIL instance% inspector NIL (NIL) 2)
+(TITLE NIL title NIL (NIL) 2 SUBNAME INSTANCE% INSPECTOR SUBTEXT instance% inspector)
+(TITLE% BAR% MENU NIL title% bar% menu NIL (NIL) 3 SUBNAME INSTANCE% INSPECTOR SUBTEXT instance% inspector)
+(CLASS (Inspector Menu Option) Class NIL (NIL) 3)
+(ALLVALUES (Inspector Menu Option) AllValues NIL (NIL) 3)
+(LOCALVALUES (Inspector Menu Option) LocalValues NIL (NIL) 4)
+(ADD/DELETE (Inspector Menu Option) Add/Delete NIL (NIL) 4)
+(ADD (Inspector Submenu Option) Add NIL (NIL) 4)
+(DELETE (Inspector Submenu Option) Delete NIL (NIL) 4)
+(IVS (Inspector Menu Option) IVs NIL (NIL) 4)
+(SAVE% VALUE (Inspector Menu Option) Save% Value NIL (NIL) 4)
+(REFETCH (Inspector Menu Option) Refetch NIL (NIL) 4)
+(EDIT (Inspector Menu Option) Edit NIL (NIL) 4)
+(LEFT% COLUMN% MENU NIL left% column% menu NIL (NIL) 4 SUBNAME INSTANCE% INSPECTOR SUBTEXT instance% inspector)
+(PUTVALUE (Inspector Menu Option) PutValue NIL (NIL) 5)
+(PUTVALUEONLY (Inspector Submenu Option) PutValueOnly NIL (NIL) 5)
+(USE% SAVED% VALUE (Inspector Submenu Option) Use% saved% value NIL (NIL) 5)
+(PROPERTIES (Inspector Menu Option) Properties NIL (NIL) 5)
+(BREAKIT (Inspector Menu Option) BreakIt NIL (NIL) 6)
+(BREAK% ON% ACCESS (Inspector Submenu Option) Break% on% Access NIL (NIL) 6)
+(BREAK% ON% PUT (Inspector Submenu Option) Break% on% Put NIL (NIL) 6)0 43274 M (names.) S
+1000 /Helvetica-Bold-Acnt F
+17699 41274 M (IVs) S
+1000 /Helvetica-Acnt F
+21000 41274 M (Returns the view to show the instance variables and their values, not the) S
+21000 40274 M (properties.  ) S
+21000 38274 M (It is possible to change the view a ClassIVs inspector has on the instance) S
+21000 37274 M (variables of a class to show only the properties of a given instance variable.) S
+21000 36274 M (This is described in Section 18.1.4.4, "Menu for the Right Column.") S
+1000 /Helvetica-Bo class% inspector NIL (NIL) 7)
+(TITLE NIL title NIL (NIL) 7 SUBNAME CLASS% INSPECTOR SUBTEXT class% inspector)
+(TITLE% BAR% MENU NIL title% bar% menu NIL (NIL) 7 SUBNAME CLASS% INSPECTOR SUBTEXT class% inspector)
+(BROWSE (Inspector Menu Option) Browse NIL (NIL) 8)
+(BROWSESUPERS (Inspector Submenu Option) BrowseSupers NIL (NIL) 8)
+(EDIT (Inspector Menu Option) Edit NIL (NIL) 8)
+(ALL (Inspector Menu Option) All NIL (NIL) 8)
+(LOCAL (Inspector Menu Option) Local NIL (NIL) 8)
+(REFETCH (Inspector Menu Option) Refetch NIL (NIL) 8)
+(LEFT% COLUMN% MENU NIL left% column% menu NIL (NIL) 8 SUBNAME CLASS% INSPECTOR SUBTEXT class% inspector)
+(RIGHT% COLUMN% MENU NIL right% column% menu NIL (NIL) 8 SUBNAME CLASS% INSPECTOR SUBTEXT class% inspector)
+(RIGHT% COLUMN% MENU NIL right% column% menu NIL (NIL) 8 SUBNAME CLASS% INSPECTOR SUBTEXT class% inspector)
+(CLASSIV% INSPECTOR NIL ClassIV% inspector NIL (NIL) 9)
+(TITLE NIL title NIL (NIL) 9 SUBNAME CLASSIV% INSPECTOR SUBTEXT ClassIV% inspector)
+(TITLE% BAR% MENU NIL title% bar% menu NIL (NIL) 9 SUBNAME CLASSIV% INSPECTOR SUBTEXT ClassIV% inspector)
+(ALLVALUES (Inspector Menu Option) AllValues NIL (NIL) 9)
+(LOCALVALUES (Inspector Menu Option) LocalValues NIL (NIL) 10)
+(ADD/DELETE (Inspector Menu Option) Add/Delete NIL (NIL) 10)
+(ADD (Inspector Submenu Option) Add NIL (NIL) 10)
+(DELETE (Inspector Submenu Option) Delete NIL (NIL) 10)
+(IVS (Inspector Menu Option) IVs NIL (NIL) 10)
+(REFETCH (Inspector Menu Option) Refetch NIL (NIL) 10)
+(LEFT% COLUMN% MENU NIL left% column% menu NIL (Acnt F
+( 123 ?=) S
+1000 /Helvetica-Acnt F
+(<CR>) S
+1000 /Helvetica-Acnt F
+21000 70891 M (the response is) S
+1000 /Courier-Acnt F
+21000 69020 M (\(XCOORD YCOORD\)) S
+1000 /Helvetica-Acnt F
+21000 66891 M (on the next line.  The caret moves to the position of the ?= in the original line,) S
+21000 65891 M (and waits for you to enter a value.) S
+grestore savepage restore showpage
+
+%%Page: 19 19
+%%BeginPageSetup
+/savepage save def
+0.01 imagesizefactor mul dup scale
+%%EndPageSetup
+gsave
+ 0 rotate 
+ 79200 61200 0 0) InspectPropCommand NIL (NIL) 13)
+(INSPECTPROPERTIES (Method of Object) InspectProperties NIL (NIL) 13)
+(INSPECTTITLE (Method of Object) InspectTitle NIL (NIL) 14)
+(INSPECTVALUECOMMAND (Method of Object) InspectValueCommand NIL (NIL) 14)
+(TITLECOMMAND (Method of Object) TitleCommand NIL (NIL) 15)
+(INSPECTOR NIL inspector NIL (NIL) 15 SUBNAME CUSTOMIZING SUBTEXT customizing)
+(?= NIL NIL NIL (NIL) 16)
+(MESSAGE-SENDING% FORM NIL message-sending% form NIL (NIL) 16)
+(CREATING NIL creating NIL (NIL) 17 SUBNAME RECORD SUBTEXT record)
+(RECORD NIL record NIL (NIL) 17 SUBNAME CREATING SUBTEXT creating)

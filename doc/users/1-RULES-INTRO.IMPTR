@@ -1,0 +1,27 @@
+(RULES NIL rules NIL (NIL) 15)
+(PRODUCTION% RULES NIL production% rules NIL (NIL) 15)
+(IF-THEN% RULES NIL if-then% rules NIL (NIL) 15)
+(RULES NIL rules NIL (NIL) 15 SUBNAME MAJOR% FEATURES SUBTEXT major% features)
+(RULE-ORIENTED% PROGRAMMING NIL rule-oriented% programming NIL (NIL) 15)
+(RULESETS NIL RuleSets NIL (NIL) 15)
+(RULES NIL rules NIL (NIL) 15 SUBNAME WORK% SPACE SUBTEXT work% space)
+(WORK% SPACE% FOR% RULES NIL work% space% for% rules NIL (NIL) 15)
+(RULESETS NIL RuleSets NIL (NIL) 15 SUBNAME INVOKING SUBTEXT invoking)
+(RULES NIL rules NIL (NIL) 16 SUBNAME BASIC% CONCEPTS SUBTEXT basic% concepts)
+(RULESETS NIL RuleSets NIL (NIL) 17 SUBNAME APPROACHES% TO% ORGANIZING SUBTEXT approaches% to% organizing)
+(CONTROL% STRUCTURES% FOR% SELECTING% RULES NIL control% structures% for% selecting% rules NIL (NIL) 18)
+(DO1 (RuleSet Control Structure) Do1 NIL (NIL) 18)
+(DOALL (RuleSet Control Structure) DoAll NIL (NIL) 19)
+(WHILE1 (RuleSet Control Structure) While1 NIL (NIL) 19)
+(WHILEALL (RuleSet Control Structure)ne of Small, Medium, Large, ExtraLarge\)\)...\)) S
+15600 60949 M (  \(Methods) S
+15600 59949 M (    \(Fill WashingMachine.Fill doc \(* Fill \(INTEGRATED%) S
+15600 58949 M (PROGRAMMING% ENVIRONMENT NIL integrated% programming%) S
+15600 57949 M (environment NIL \(NIL\) 29 SUBNAME\)) S
+15600 56949 M (eRuleSet RuleSet SimulateWashingMachineRules\)) S
+15600 55949 M (    .) S
+15600 54949 M (    .) S
+15600 53949 M (    .) S
+15600 52949 M (]) S
+/Helvetica-Oblique /Helvetica-Oblique-Acnt encodefont
+1000 /Helvetica-Oe  (MetaClass Class Edited (* "rtk: 12-Jun-87 07:57")    doc (* Home appliance for wachine cloothes.))  (Supers ElectricalDevice PlumbedDevice CleaningDevice)  (ClassVariables)  (InstanceVariables    (controlSetting Meduim      doc (* One of Small, Medium, Large, ExtraLarge))...)  (Methods    (Fill WashingMachine.Fill doc (* Fill (INTEGRATED% PROGRAMMING% ENVIRONMENT NIL integrated% programming% environment NIL (NIL) 29 SUBNAME)

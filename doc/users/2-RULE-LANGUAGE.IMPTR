@@ -1,0 +1,78 @@
+Acnt F
+( is referenced indirectly through the ) S
+1000 /Helvetica-Bold-Acnt F
+(tile) S
+1000 /Helvetica-Acnt F
+8400 67620 M (instance variable in the work space.  The left literal is the variable ) S
+1000 /Helvetica-Bold-Acnt F
+(tile) S
+1000 /Helvetica-Acnt F
+( and its value must be a LOOPS) S
+8400 66420 M (object at execution time.  The right literal must be a method selector for that object.) S
+8400 64220 M (The dot notation can be combined with the dollar notation to send unary messages to named LOOPS) S
+ NIL (NIL) 33)
+(REASONS (Variable) reasons NIL (NIL) 34)
+(AUDITOBJECT (Variable) auditObject NIL (NIL) 34)
+(AUDITVARNAME (Variable) auditVarName NIL (NIL) 34)
+(RULES NIL rules NIL (NIL) 34 SUBNAME FORMS SUBTEXT forms)
+(QUOTED% CONSTANTS NIL quoted% constants NIL (NIL) 34)
+(STRINGS NIL strings NIL (NIL) 34)
+(INTERLISP NIL Interlisp NIL (NIL) 35 SUBNAME CONSTANTS SUBTEXT constants)
+(INFIX% OPERATORS NIL infix% operators NIL (NIL) 35)
+(+ (Rule Infix Operator) NIL NIL (NIL) 35)
+(++ (Rule Infix Operator) NIL NIL (NIL) 35)
+(- (Rule Infix Operator) NIL NIL (NIL) 35)
+(-- (Rule Infix Operator) NIL NIL (NIL) 35)
+(* (Rule Infix Operator) NIL NIL (NIL) 35)
+(/ (Rule Infix Operator) NIL NIL (NIL) 35)
+(> (Rule Infix Operator) NIL NIL (NIL) 35)
+(< (Rule Infix Operator) NIL NIL (NIL) 35)
+(>= (Rule Infix Operator) NIL NIL (NIL) 35)
+(<= (Rule Infix Operator) NIL NIL (NIL) 36)
+(= (Rule Infix Operator) NIL NIL (NIL) 36)
+(~= (Rule Infix Operator) NIL NIL (NIL) 36)
+(== (Rule Infix Operator) NIL NIL (NIL) 36)
+(<< (Rule Infix Operator) NIL NIL (NIL) 36)
+(- (Rule Unary Operator) NIL NIL (NIL) 36)
+(~ (Rule Unary Operator) NIL NIL (NIL) 36)
+(MESSAGE% SENDING NIL message% sending NIL (NIL) 37)
+(INTERLISP NIL Interlisp NIL (NIL) 37 SUBNAME FUNCTIONS SUBTEXT functions)
+(UNARY% MESSAGE% SENDING NIL unary% message% sending NIL (NIL) 37)
+(VARIABLES NIL variables NIL (NIL) 38)
+(PROPERTIES NIL properties NIL (NIL) 38)
+(:% IN% A% LITERAL NIL :% in% a% literal NIL (NIL) 38)
+(SINGLE% COLON% IN% A% LITERAL NIL single% colon% in% a% literal NIL (NIL) tica-Bold-Acnt F
+(RS) S
+1000 /Helvetica-Acnt F
+( is invoked on the work space ) S
+1000 /Helvetica-Bold-Acnt F
+(ws) S
+1000 /Helvetica-Acnt F
+(.  With transfer calls, RuleSet invocations can be) S
+8400 45320 M (arbitrarily deep without using proportional stack space.) S
+54001 39799 8401 39799 200 L
+1400 /Helvetica-Bold-Acnt F
+8400 38608 M (2.14  Stop Statements) S
+54001 38249 8401 38249 100 L
+1000 /Helvetica-Acnt F
+8400 36420 M (To provide premature terminations in the execution of a RuleSet, the Stop statemeE% NAMES NIL exclamation% sign% to% compute% names NIL (NIL) 39)
+(RECURSIVE% COMPOUND% LITERALS NIL recursive% compound% literals NIL (NIL) 40)
+(MULTIPLE% COLONS% IN% A% LITERAL NIL multiple% colons% in% a% literal NIL (NIL) 40)
+(ASSIGNMENT% STATEMENTS NIL assignment% statements NIL (NIL) 40)
+(META-ASSIGNMENT% STATEMENTS NIL meta-assignment% statements NIL (NIL) 41)
+(PUSH% STATEMENT NIL push% statement NIL (NIL) 42)
+(_+% PUSH% STATEMENT NIL _+% push% statement NIL (NIL) 42)
+(POP% STATEMENT NIL pop% statement NIL (NIL) 42)
+(_-% POP% STATEMENT NIL _-% pop% statement NIL (NIL) 42)
+(RULESETS NIL RuleSets NIL (NIL) 42 SUBNAME INVOKING SUBTEXT invoking)
+(INVOKING% RULESETS NIL invoking% RuleSets NIL (NIL) 42)
+(DOUBLE-DOT% SYNTAX% TO% INVOKE% RULESETS NIL double-dot% syntax% to% invoke% RuleSets NIL (NIL) 42)
+(..% TO% INVOKE% RULESETS NIL ..% to% invoke% RuleSets NIL (NIL) 42)
+(DOLLAR% NOTATION% TO% INVOKE% RULESETS NIL dollar% notation% to% invoke% RuleSets NIL (NIL) 42)
+($% TO% INVOKE% RULESETS NIL $% to% invoke% RuleSets NIL (NIL) 42)
+(RULESETS NIL RuleSets NIL (NIL) 42 SUBNAME META-CONTROL SUBTEXT meta-control)
+(META-CONTROL% OF% RULESETS NIL meta-control% of% RuleSets NIL (NIL) 42)
+(TRANSFER% CALLS NIL transfer% calls NIL (NIL) 43)
+(DOUBLE-DOT-STAR% SYNTAX% TO% INVOKE% RULESETS NIL double-dot-star% syntax% to% invoke% RuleSets NIL (NIL) 43)
+(..*% TO% INVOKE% RULESETS NIL ..*% to% invoke% RuleSets NIL (NIL) 43)
+(STOP (RuleSet Statement) Stop NIL (NIL) 43)

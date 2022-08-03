@@ -1,0 +1,5 @@
+(MetaClass Class Edited%: (* nbm  " 5-May-87 17:53") doc "This is the default metaClass for all classes")  (Supers BreakOnPut)  (ClassVariables)  (CVsInherited)  (InstanceVariables)  (IVsInherited    (localState NIL doc (* The local state of the active value))))13.1  EDITING INSTANCES113.1  EDITING INSTANCES1213.2  Editing Instances1LOOPS instances can also be edited by the standard Medley code editor.  From this editor, you can change the values of instance variables and properties, and ss) MakeFullEditSource NIL (NIL) 4)
+(INSTANCE NIL instance NIL (NIL) 5 SUBNAME EDITING SUBTEXT editing)
+(EDIT (Method of Object) Edit NIL (NIL) 5)
+(MAKEEDITSOURCE (Method of Object) MakeEditSource NIL (NIL) 5)
+(INSTALLEDITSOURCE (Method of Object) InstallEditSource NIL (NIL) 6)

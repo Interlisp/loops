@@ -1,0 +1,41 @@
+(Method\)\)) S
+1200 /Helvetica-Bold-Acnt F
+5400 51864 M (6.5.2  Stack Method Macros) S
+55801 51549 5401 51549 100 L
+1000 /Helvetica-Acnt F
+21000 49720 M (This section describes macros that access methods on the stack.) S
+1000 /Helvetica-Acnt F
+5400 46720 M (\() S
+1000 /Helvetica-Bold-Acnt F
+(ClassNameOfMethodOwner) S
+1000 /Helvetica-Acnt F
+18911 46720 M (\)  ) S
+52466 46720 M ([Macro]) S
+55801 46449 5401 46449 100 L
+15198 44620 M (Purpose:) S
+21000 44620 M (Uses the stack to perform a help check.  Returns tof Class) ChangeMethodCategory NIL (NIL) 3)
+(METHOD (Definer) method NIL (NIL) 3 SUBNAME STRUCTURE SUBTEXT structure)
+(CREATING NIL creating NIL (NIL) 4 SUBNAME METHOD SUBTEXT method)
+(EDITING NIL editing NIL (NIL) 4 SUBNAME METHOD SUBTEXT method)
+(DESTROYING NIL destroying NIL (NIL) 4 SUBNAME METHOD SUBTEXT method)
+(METHOD NIL method NIL (NIL) 4 SUBNAME CREATING SUBTEXT creating)
+(METHOD NIL method NIL (NIL) 4 SUBNAME EDITING SUBTEXT editing)
+(METHOD NIL method NIL (NIL) 4 SUBNAME DESTROYING SUBTEXT destroying)
+(DEFINEMETHOD (Function) DefineMethod NIL (NIL) 4)
+(DELETEMETHOD (Function) DeleteMethod NIL (NIL) 5)
+(EDITMETHOD (Method of Class) EditMethod NIL (NIL) 5)
+(SUBCLASSRESPONSIBILITY (Macro) SubclassResponsibility NIL (NIL) 6)
+(MESSAGE% SYNTAX,% ESCAPING% FROM NIL message% syntax,% escaping% from NIL (NIL) 6)
+(ESCAPING% FROM% MESSAGE% SYNTAX NIL escaping% from% message% syntax NIL (NIL) 6)
+(DOMETHOD (Function) DoMethod NIL (NIL) 7)
+(APPLYMETHOD (Function) ApplyMethod NIL (NIL) 7)
+(DOFRINGEMETHODS (Function) DoFringeMethods NIL (NIL) 7)
+(RENAMEMETHOD (Function) RenameMethod NIL (NIL) 8)
+(MOVEMETHOD (Function) MoveMethod NIL (NIL) 9)
+(MOVEMETHOD (Method of Class) MoveMethod NIL (NIL) 9)
+(MOVEMETHODSTOFILE (Function) MoveMethodsToFile NIL (NIL) 9)
+(CALLEDFNS (Function) CalledFns NIL (NIL) 9)
+(STACK% METHOD% MACROS NIL stack% method% macros NIL (NIL) 10)
+(CLASSNAMEOFMETHODOWNER (Macro) ClassNameOfMethodOwner NIL (NIL) 10)
+(SELECTOROFMETHODBEINGCOMPILED (Macro) SelectorOfMethodBeingCompiled NIL (NIL) 10)
+(ARGSOFMETHODBEINGCOMPILED (Macro) ArgsOfMethodBeingCompiled NIL (NIL) 10)
