@@ -1,8 +1,0 @@
-(DATA% TYPE% PREDICATE NIL data% type% predicate NIL (NIL) 1)
-(OBJECT? (Macro) Object? NIL (NIL) 1)
-(CLASS? (Macro) Class? NIL (NIL) 2)
-(INSTANCE? (Macro) Instance? NIL (NIL) 2)
-(ANNOTATEDVALUE? (Macro) AnnotatedValue? NIL (NIL) 2)
-(UNDERSTANDS (Method of Object) Understands NIL (NIL) 3)
-(ITERATIVE% OPERATOR NIL iterative% operator NIL (NIL) 3)
-(IN-SUPERS-OF (Iterative Statement Operator) in-supers-of NIL (NIL) 3)

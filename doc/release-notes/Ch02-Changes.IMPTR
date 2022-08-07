@@ -1,8 +1,0 @@
-(MEDLEY% PATCH% FILE NIL Medley% patch% file NIL (NIL) 3)
-(% PACKAGES NIL % Packages NIL (NIL) 3)
-(SEDIT NIL SEdit NIL (NIL) 3)
-(SOURCE% FILE% MANAGEMENT NIL source% file% management NIL (NIL) 3)
-(MASTERSCOPE NIL Masterscope NIL (NIL) 4)
-(ICONW NIL NIL NIL (NIL) 4)
-(LYRIC% COMPILER NIL Lyric% compiler,% new NIL (NIL) 4)
-(LOOPS% LIBRARY% MODULES NIL LOOPS% Library% Modules NIL (NIL) 4)

@@ -1,8 +1,0 @@
-(VIRTUAL% COPIES NIL virtual% copies NIL (NIL) 27)
-(VIRTUALIVS (Class Variable) VirtualIVs NIL (NIL) 28)
-(MAKEVIRTUALMIXIN (Function) MakeVirtualMixin NIL (NIL) 28)
-(%%% COPYMAP%% (Instance Variable of VirtualCopyMixin) %%% copyMap%% NIL (NIL) 29)
-(%%% COPYOF%% (Instance Variable of VirtualCopyMixin) %%% copyOf%% NIL (NIL) 29)
-(VIRTUALCOPY? (Method of VirtualCopyMixin) VirtualCopy? NIL (NIL) 29)
-(COPYMAP (Instance Variable of VirtualCopyContext) copyMap NIL (NIL) 29)
-(ULTIMATEORIGINAL (Function) UltimateOriginal NIL (NIL) 29)
