@@ -1,25 +1,11 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 3-Aug-2022 11:36:04" {DSK}<home>larry>git-loops>truckin>TRUCKIN.;5 96129  
+(FILECREATED "14-Aug-2022 10:36:07" {DSK}<home>larry>loops>truckin>TRUCKIN.;2 94977  
 
-      :CHANGES-TO (VARS TRUCKINCOMS TRUCKINFNS)
-                  (CLASSES TruckinParameters TruckinDMParameters TDMTParameters GameParameters 
-                         GameObject GameMetaClass GameClass GameBoard GameAbstractClass CommodityMeta
-                         CommodityClassMeta)
-                  (FNS AuxBuyMade AuxMoveMade AuxSellMade BanditGotYou? BrokenRules ChangeValue 
-                       CheckVictim CommodityClassMeta.New CreateNewPlayer CreatePlayers DrawRoadMarks
-                       Drive DriveLeft DriveRight ELIMINATE FindFirstNIL FindLocIndex FindRandomNIL 
-                       GameControlMenu GenConsumerPr GenConsumerQty GetRuleSetMethods InCopyCV? 
-                       InformBandit&WS InitializeTruckin IntervalToEvent InvertIcon KillGame MailOut
-                       MakeDriveBitMaps MakePlayerFile NormalizeValue PlayerInterruptMenu RunPlayerRE
-                       RunPlayerRE1 RandomRoomAvailable ReceiveIn ReflectIcon STRINGNUM SendOut 
-                       SetMachineDepPara SetUpGame SettifyCopyCV SetupGameBrowsers 
-                       SmashCreateCommodity SmashRandomPerishable SubstituteStop SuspendGame 
-                       SwitchMenu TalkinBuyMade TalkinMoveMade TalkinSellMade TruckinError TruckinRE
-                       UpdateConsumerDisplay UpdatePrDisplay UpdateProducerSoldout UpdateQtyDisplay 
-                       WSRuleViolated? WaitIfControlKey WakeGame WriteGameStatus)
+      :CHANGES-TO (FNS GameClass.New GameMasterMeta.New GameObject.NewInstance)
+                  (VARS TRUCKINCOMS)
 
-      :PREVIOUS-DATE " 2-Aug-2022 11:26:55" {DSK}<home>larry>git-loops>truckin>TRUCKIN.;4)
+      :PREVIOUS-DATE " 3-Aug-2022 11:36:04" {DSK}<home>larry>loops>truckin>TRUCKIN.;1)
 
 
 (* ; "
@@ -49,8 +35,6 @@ Copyright (c) 1985, 1987, 2022 by Xerox Corporation.
         (CLASSES * TRUCKINCLASSES)
         (GLOBALVARS * TRUCKINVARS)
         (FNS * TRUCKINFNS)
-        (DECLARE%: EVAL@COMPILE DONTCOPY (APPENDVARS (DONTCOMPILEFNS GameClass.New GameMasterMeta.New
-                                                            GameObject.NewInstance)))
         (GLOBALVARS PlayerProcRestFlg GameProcRestFlg)
         (VARS GameCommandX GameCommandY GameParamRegion HandicapRatio aliceCount banditCount 
               banditMoveFrequency banditMoveRange debugMode debugTimeTrace defaultGaugesFlg 
@@ -789,13 +773,16 @@ Higher delay means slower motion")))
                      (T index])
 
 (GameClass.New
-  [LAMBDA (self a1 a2 a3 a4 a5)                              (* sm%: "21-SEP-83 09:26")
-                                                             (* New method -
-                                                             sends NewInstance to newly created 
-                                                             instance)
-    (PROG (inst)
-          (SETQ inst (_Super self New))                      (* (_ inst NewInstance a1 a2 a3 a4 a5))
-          (RETURN inst])
+  [LAMBDA (self a1 a2 a3 a4 a5)                              (* ; "Edited 14-Aug-2022 10:28 by lmm")
+                                                             (* sm%: "21-SEP-83 09:26")
+                                                             (* ; 
+                                         "New method --- sends NewInstance to newly created instance")
+    (CL:COMPILER-LET ((*SelectorOfMethodBeingCompiled* 'New)
+                      (*SelfOfMethodBeingCompiled* 'self))
+           (PROG (inst)
+                 (SETQ inst (_Super self New))               (* ; 
+                                                             "(_ inst NewInstance a1 a2 a3 a4 a5)")
+                 (RETURN inst])
 
 (GameControlMenu
   [LAMBDA NIL                                                (* sm%: "16-SEP-83 17:32")
@@ -813,38 +800,45 @@ Higher delay means slower motion")))
            NIL])
 
 (GameMasterMeta.New
-  [LAMBDA (self gameBoardType)                               (* sm%: "14-JUN-83 11:32")
-                                                             (* Creates and initializes a new 
-                                                             GameMaster.)
-                                                             (* if gameBoardType is not specified, 
-                                                             uses default gameBoard)
-    (PROG (gbClass)
-          (SETQ gameMaster (_Super self New))                (* Close Game Parameters Window)
-          (AND GameParamW (CLOSEW GameParamW))
-          (AND GameCommandW (CLOSEW GameCommandW))
+  [LAMBDA (self gameBoardType)                               (* ; "Edited 14-Aug-2022 10:31 by lmm")
+                                                             (* sm%: "14-JUN-83 11:32")
+                                                             (* ; 
+                                                          "Creates and initializes a new GameMaster.")
+                                                             (* ; 
+                                          "if gameBoardType is not specified, uses default gameBoard")
+    (CL:COMPILER-LET ((*SelectorOfMethodBeingCompiled* 'New)
+                      (*SelfOfMethodBeingCompiled* 'self))
+           (PROG (gbClass)
+                 (SETQ gameMaster (_Super self New))         (* ; "Close Game Parameters Window")
+                 (AND GameParamW (CLOSEW GameParamW))
+                 (AND GameCommandW (CLOSEW GameCommandW))
 
-         (* * Create a GameBoard.)
+(* ;;; "Create a GameBoard.")
 
-          [COND
-             ((AND (GetObjectRec gameBoardType)
-                   (_ (GetObjectRec gameBoardType)
-                      InstOf
-                      'GameBoard))
-              (SETQ gbClass gameBoardType))
-             (T (SETQ gbClass (@ gameMaster gameBoard)]
-          (SETQ gameBoard (_ (GetObjectRec gbClass)
-                             New))
-          (_ gameBoard NewBoard)
-          (_ gameMaster AttachBoard gameBoard)
-          (_ gameMaster SetUpGauges)
-          (RETURN gameMaster])
+                 [COND
+                    ((AND (GetObjectRec gameBoardType)
+                          (_ (GetObjectRec gameBoardType)
+                             InstOf
+                             'GameBoard))
+                     (SETQ gbClass gameBoardType))
+                    (T (SETQ gbClass (@ gameMaster gameBoard)]
+                 (SETQ gameBoard (_ (GetObjectRec gbClass)
+                                    New))
+                 (_ gameBoard NewBoard)
+                 (_ gameMaster AttachBoard gameBoard)
+                 (_ gameMaster SetUpGauges)
+                 (RETURN gameMaster])
 
 (GameObject.NewInstance
-  [LAMBDA (self name a1 a2 a3 a4)                            (* dgb%: "22-SEP-83 15:03")
-                                                             (* Received when new instance is 
-                                                             created)
-                                                             (* Any specialization must return self)
-    (_Super self NewInstance name a1 a2 a3 a4)])
+  [LAMBDA (self name a1 a2 a3 a4)                            (* ; "Edited 14-Aug-2022 10:34 by lmm")
+                                                             (* dgb%: "22-SEP-83 15:03")
+                                                             (* ; 
+                                                             "Received when new instance is created")
+                                                             (* ; 
+                                                             "Any specialization must return self")
+    (CL:COMPILER-LET ((*SelectorOfMethodBeingCompiled* 'NewInstance)
+                      (*SelfOfMethodBeingCompiled* 'self))
+           (_Super self NewInstance name a1 a2 a3 a4)])
 
 (GenConsumerPr
   [LAMBDA (self)                                             (* sm%: "25-JAN-83 13:54")
@@ -1582,10 +1576,6 @@ Higher delay means slower motion")))
                                                              unchargedTime) (IDIFFERENCE endT begT))))
           (RETURN T])
 )
-(DECLARE%: EVAL@COMPILE DONTCOPY 
-
-(APPENDTOVAR DONTCOMPILEFNS GameClass.New GameMasterMeta.New GameObject.NewInstance)
-)
 (DECLARE%: DOEVAL@COMPILE DONTCOPY
 
 (GLOBALVARS PlayerProcRestFlg GameProcRestFlg)
@@ -1627,8 +1617,7 @@ Higher delay means slower motion")))
 
 (\BatchMethodDefs)
 (METH CommodityMeta  New (pr qty owner)
-      "if qty is NIL, interprets pr as the name of the instance. This allows the instances to be used for demos"
-      (category (Class)))
+      "create a new instance of a commodity with qty, pr, and owner specified" (category (Class)))
 
 
 (METH CommodityMeta  Subs! NIL
@@ -1640,12 +1629,11 @@ Higher delay means slower motion")))
 
 
 (METH GameBoard  NewInstance (simulator)
-      "Any specialization must return self" (category (Object)))
+      "Received when new instance is created" (category (Object)))
 
 
 (METH GameClass  AddCV! (name value copyValue)
-      "copyValue determines the value copied over. If not given, NotSetValue is used. Otherwise copyValue is copied to Subs"
-      (category (GameClass)))
+      "Adds CV to self, its subs, and CopyCV list" (category (GameClass)))
 
 
 (METH GameClass  DeleteCV! (name)
@@ -1661,17 +1649,17 @@ Higher delay means slower motion")))
 
 
 (METH GameMetaClass  New (name supers)
-      "(E1 E2 ..En) , where if Ei is an atom then creates a CV with name Ei and NotSetValue as value. If Ei is a list of one item then creates CV with first item as CV and value as obtained by inheritance at CREATION TIME. Otherwise creates CV with second element as the value"
-      (category (Class)))
+      "New method for creating new Game classes" (category (Class)))
 
 
 (METH GameObject  AddGauges (ivs default titleForm)
-      NIL (category (GameObject)))
+      
+    "Adds a collection of gauges to the ivs of some game object under interactive control of a user."
+      (category (GameObject)))
 
 
 (METH GameObject  Initialize NIL
-      "Per smL suggestion - smashing #,NotSetValue to initialize (used to be (GetInitialValue self x)) (the class will fill it in later...)"
-      (category (GameObject)))
+      "Initializes" (category (GameObject)))
 
 
 (METH GameParameters  LoadPara NIL
@@ -1931,25 +1919,25 @@ Higher delay means slower motion")))
 (\UnbatchMethodDefs)
 (PUTPROPS TRUCKIN COPYRIGHT ("Xerox Corporation" 1985 1987 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (13056 79487 (AuxBuyMade 13066 . 13760) (AuxMoveMade 13762 . 14365) (AuxSellMade 14367
- . 15032) (BanditGotYou? 15034 . 15574) (BrokenRules 15576 . 18683) (ChangeValue 18685 . 20106) (
-CheckVictim 20108 . 21862) (CommodityClassMeta.New 21864 . 22264) (CreateNewPlayer 22266 . 23357) (
-CreatePlayers 23359 . 27553) (DrawRoadMarks 27555 . 28927) (Drive 28929 . 32725) (DriveLeft 32727 . 
-34895) (DriveRight 34897 . 37060) (ELIMINATE 37062 . 37629) (FindFirstNIL 37631 . 37850) (FindLocIndex
- 37852 . 38224) (FindRandomNIL 38226 . 39153) (GameClass.New 39155 . 39669) (GameControlMenu 39671 . 
-40574) (GameMasterMeta.New 40576 . 41832) (GameObject.NewInstance 41834 . 42281) (GenConsumerPr 42283
- . 43025) (GenConsumerQty 43027 . 43585) (GetRuleSetMethods 43587 . 44084) (InCopyCV? 44086 . 44888) (
-InformBandit&WS 44890 . 48235) (InitializeTruckin 48237 . 53731) (IntervalToEvent 53733 . 54900) (
-InvertIcon 54902 . 55290) (KillGame 55292 . 55535) (MailOut 55537 . 55857) (MakeDriveBitMaps 55859 . 
-56497) (MakePlayerFile 56499 . 58735) (NormalizeValue 58737 . 59145) (PlayerInterruptMenu 59147 . 
-59516) (RunPlayerRE 59518 . 60344) (RunPlayerRE1 60346 . 60979) (RandomRoomAvailable 60981 . 61936) (
-ReceiveIn 61938 . 62457) (ReflectIcon 62459 . 63017) (STRINGNUM 63019 . 63353) (SendOut 63355 . 63502)
- (SetMachineDepPara 63504 . 64059) (SetUpGame 64061 . 64271) (SettifyCopyCV 64273 . 64710) (
-SetupGameBrowsers 64712 . 65708) (SmashCreateCommodity 65710 . 67198) (SmashRandomPerishable 67200 . 
-67752) (SubstituteStop 67754 . 68382) (SuspendGame 68384 . 69502) (SwitchMenu 69504 . 69671) (
-TalkinBuyMade 69673 . 69972) (TalkinMoveMade 69974 . 70197) (TalkinSellMade 70199 . 70494) (
-TruckinError 70496 . 70624) (TruckinRE 70626 . 71655) (UpdateConsumerDisplay 71657 . 72166) (
-UpdatePrDisplay 72168 . 72800) (UpdateProducerSoldout 72802 . 73344) (UpdateQtyDisplay 73346 . 74000) 
-(WSRuleViolated? 74002 . 75120) (WaitIfControlKey 75122 . 76276) (WakeGame 76278 . 76899) (
-WriteGameStatus 76901 . 79485)))))
+  (FILEMAP (NIL (11527 78836 (AuxBuyMade 11537 . 12231) (AuxMoveMade 12233 . 12836) (AuxSellMade 12838
+ . 13503) (BanditGotYou? 13505 . 14045) (BrokenRules 14047 . 17154) (ChangeValue 17156 . 18577) (
+CheckVictim 18579 . 20333) (CommodityClassMeta.New 20335 . 20735) (CreateNewPlayer 20737 . 21828) (
+CreatePlayers 21830 . 26024) (DrawRoadMarks 26026 . 27398) (Drive 27400 . 31196) (DriveLeft 31198 . 
+33366) (DriveRight 33368 . 35531) (ELIMINATE 35533 . 36100) (FindFirstNIL 36102 . 36321) (FindLocIndex
+ 36323 . 36695) (FindRandomNIL 36697 . 37624) (GameClass.New 37626 . 38374) (GameControlMenu 38376 . 
+39279) (GameMasterMeta.New 39281 . 40863) (GameObject.NewInstance 40865 . 41630) (GenConsumerPr 41632
+ . 42374) (GenConsumerQty 42376 . 42934) (GetRuleSetMethods 42936 . 43433) (InCopyCV? 43435 . 44237) (
+InformBandit&WS 44239 . 47584) (InitializeTruckin 47586 . 53080) (IntervalToEvent 53082 . 54249) (
+InvertIcon 54251 . 54639) (KillGame 54641 . 54884) (MailOut 54886 . 55206) (MakeDriveBitMaps 55208 . 
+55846) (MakePlayerFile 55848 . 58084) (NormalizeValue 58086 . 58494) (PlayerInterruptMenu 58496 . 
+58865) (RunPlayerRE 58867 . 59693) (RunPlayerRE1 59695 . 60328) (RandomRoomAvailable 60330 . 61285) (
+ReceiveIn 61287 . 61806) (ReflectIcon 61808 . 62366) (STRINGNUM 62368 . 62702) (SendOut 62704 . 62851)
+ (SetMachineDepPara 62853 . 63408) (SetUpGame 63410 . 63620) (SettifyCopyCV 63622 . 64059) (
+SetupGameBrowsers 64061 . 65057) (SmashCreateCommodity 65059 . 66547) (SmashRandomPerishable 66549 . 
+67101) (SubstituteStop 67103 . 67731) (SuspendGame 67733 . 68851) (SwitchMenu 68853 . 69020) (
+TalkinBuyMade 69022 . 69321) (TalkinMoveMade 69323 . 69546) (TalkinSellMade 69548 . 69843) (
+TruckinError 69845 . 69973) (TruckinRE 69975 . 71004) (UpdateConsumerDisplay 71006 . 71515) (
+UpdatePrDisplay 71517 . 72149) (UpdateProducerSoldout 72151 . 72693) (UpdateQtyDisplay 72695 . 73349) 
+(WSRuleViolated? 73351 . 74469) (WaitIfControlKey 74471 . 75625) (WakeGame 75627 . 76248) (
+WriteGameStatus 76250 . 78834)))))
 STOP
