@@ -1,0 +1,100 @@
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
+
+(FILECREATED " 1-Aug-2022 11:26:47" {DSK}<home>larry>git-loops>TRUCKIN>TRUCKINLOAD.;5 3848   
+
+      :CHANGES-TO (VARS TRUCKINLOADCOMS)
+
+      :PREVIOUS-DATE " 9-Jul-2022 17:40:46" {DSK}<home>larry>git-loops>TRUCKIN>TRUCKINLOAD.;4)
+
+
+(* ; "
+Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
+")
+
+(PRETTYCOMPRINT TRUCKINLOADCOMS)
+
+(RPAQQ TRUCKINLOADCOMS
+       (
+        (* ;; "Random patches to make Truckin work")
+
+        (VARS [TruckinDirectory (OR (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T
+                                                                 NIL UPPERCASEARRAY T)
+                                                          (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T
+                                                                 NIL UPPERCASEARRAY T]
+                                         (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING 
+                                                                                    LOOPSDIRECTORY 1
+                                                                                    (SUB1 POSSOURCES)
+                                                                                    )
+                                                                            "truckin>"))
+                                             ELSE LOOPSDIRECTORY]
+              (TruckinPlayersDirectory (CONCAT TruckinDirectory "players>")))
+        (FUNCTIONS INMENU)
+        (P (MOVD? 'PROMPTPRINT 'PROMPT)
+           (MOVD? 'DISMISS 'WAITMS)
+           (MOVD? 'RS.INTTY 'INTTY))
+        (FNS LoadTruckin)))
+
+
+
+(* ;; "Random patches to make Truckin work")
+
+
+(RPAQ TruckinDirectory
+      (OR (LET [(POSSOURCES (OR (STRPOS "SOURCES>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T)
+                                (STRPOS "SYSTEM>" LOOPSDIRECTORY NIL NIL T NIL UPPERCASEARRAY T]
+               (IF POSSOURCES THEN (MKATOM (CONCAT (SUBSTRING LOOPSDIRECTORY 1 (SUB1 POSSOURCES))
+                                                  "truckin>"))
+                   ELSE LOOPSDIRECTORY))))
+
+(RPAQ TruckinPlayersDirectory (CONCAT TruckinDirectory "players>"))
+
+(CL:DEFUN INMENU (TITLE ITEMS &OPTIONAL (PROMPTSTRING "Choose one")
+                        FLG)
+   (MENU (create MENU
+                TITLE _ TITLE
+                ITEMS _ ITEMS)))
+
+(MOVD? 'PROMPTPRINT 'PROMPT)
+
+(MOVD? 'DISMISS 'WAITMS)
+
+(MOVD? 'RS.INTTY 'INTTY)
+(DEFINEQ
+
+(LoadTruckin
+  [LAMBDA NIL                                              (* ; "Edited  9-Jul-2022 13:04 by larry")
+                                                             (* ; "Edited  7-Jul-2022 21:52 by lmm")
+                                                             (* ; "Edited 18-Jul-88 20:01 by Bane")
+    (CL:UNLESS (GETD 'LOADLOOPS)
+           (CL:ERROR "Please load LOOPS so I can find everything else"))
+
+    (* ;; "Then the gauges")
+
+    (CL:UNLESS (GETD 'LOADGAUGES)
+        (FILESLOAD (FROM LOOPSLIBRARY)
+               GAUGELOADER)
+        (LOADGAUGES))
+
+    (* ;; "Then the rules")
+
+    (FILESLOAD (FROM LOOPSUSERSRULES)
+           RULES-ROOT)
+
+    (* ;; "Finally load Truckin")
+
+    (CNDIR TruckinDirectory)
+    (FILESLOAD (FROM VALUEOF TruckinDirectory)
+           TRUCKIN TRUCKINR TRUCKINDB TRUCKINP TRUCKINI LOOPSGATEWAY TRUCKINM TRUCKINV)
+    (InitializeTruckin)
+    (AND (CL:Y-OR-N-P "Shall I load all the players?")
+         (FILESLOAD (FROM VALUEOF TruckinPlayersDirectory)
+                TRAVELER PEDDLER PLANNER BADAPPLES HIGHROLLER HOUSEPLAYER TEAMSTER))
+    "Load any other players, then say
+(_ ($ Truckin) New)
+(_ PlayerInterface BeginGame)
+ to start."])
+)
+(PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991 2022))
+(DECLARE%: DONTCOPY
+  (FILEMAP (NIL (2220 2409 (INMENU 2220 . 2409)) (2492 3750 (LoadTruckin 2502 . 3748)))))
+STOP
