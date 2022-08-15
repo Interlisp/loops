@@ -54,7 +54,7 @@ It will ask if you want to load Players. Say yes.
 This ends with a note to load any other players and
 ```
    (_ ($ Truckin) New)
-   (_ PlaerInterface BeginGame)
+   (_ PlayerInterface BeginGame)
 ```
 
 The first returns 
