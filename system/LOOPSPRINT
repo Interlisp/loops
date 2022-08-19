@@ -1,26 +1,14 @@
-(DEFINE-FILE-INFO PACKAGE "IL" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "28-Jun-93 22:43:05" {DSK}<python>RELEASE>loops>2.0>src>LOOPSPRINT.;4 18868  
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-      changes to%:  (ALISTS (PRETTYPRINTMACROS @)
-                           (PRETTYPRINTMACROS _@)
-                           (PRETTYPRINTMACROS _)
-                           (PRETTYPRINTMACROS SEND)
-                           (PRETTYPRINTMACROS _IV)
-                           (PRETTYPRINTMACROS _Proto)
-                           (PRETTYPRINTMACROS _New)
-                           (PRETTYPRINTMACROS _Super)
-                           (PRETTYPRINTMACROS _!)
-                           (PRETTYPRINTMACROS _Process)
-                           (PRETTYPRINTMACROS _Process!)
-                           (PRETTYPRINTMACROS \LOOPS-PRINT-EVAL-MARKER))
-                    (FNS PrintLoopsEvalAtLoad)
-                    (VARS LOOPSPRINTCOMS)
+(FILECREATED "19-Aug-2022 14:47:13" {DSK}<home>larry>loops>system>LOOPSPRINT.;2 18068  
 
-      previous date%: "14-Jun-93 23:50:45" {DSK}<python>RELEASE>loops>2.0>src>LOOPSPRINT.;3)
+      :CHANGES-TO (VARS LOOPSPRINTCOMS)
+
+      :PREVIOUS-DATE "28-Jun-93 22:43:05" {DSK}<home>larry>loops>system>LOOPSPRINT.;1)
 
 
 (* ; "
-Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1983-1988, 1990-1991, 1993 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSPRINTCOMS)
@@ -45,6 +33,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 
         (FNS PrintClass PrintInstance)
         (DECLARE%: EVAL@COMPILE DONTCOPY (EXPORT (FUNCTIONS TTYStream?))
+               DONTEVAL@LOAD
                (FILES (LOADCOMP)
                       LOOPSDATATYPES))
         (P (DEFPRINT 'class 'PrintClass)
@@ -267,7 +256,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
 
 (* "END EXPORTED DEFINITIONS")
 
-
+DONTEVAL@LOAD 
 
 (FILESLOAD (LOADCOMP)
        LOOPSDATATYPES)
@@ -300,12 +289,12 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1991, 1993 by Venue & Xe
           `(RESETLST
                [if (WINDOWP ,stream)
                    then [RESETSAVE NIL (LIST (FUNCTION WINDOWPROP)
-                                                 ,stream
-                                                 'PROCESS
-                                                 (WINDOWPROP ,stream 'PROCESS]
-                         (RESETSAVE (TTYDISPLAYSTREAM ,stream))
-                         (if (NOT (TTY.PROCESSP))
-                             then (RESETSAVE (TTY.PROCESS (THIS.PROCESS]
+                                             ,stream
+                                             'PROCESS
+                                             (WINDOWPROP ,stream 'PROCESS]
+                        (RESETSAVE (TTYDISPLAYSTREAM ,stream))
+                        (if (NOT (TTY.PROCESSP))
+                            then (RESETSAVE (TTY.PROCESS (THIS.PROCESS]
                ,@forms)])
 (DECLARE%: DOEVAL@COMPILE DONTCOPY
 
@@ -449,17 +438,16 @@ Type OK to ignore and go on."))))))))
 (ADDTOVAR PRETTYPRINTYPEMACROS (instance . PPObj))
 
 (ADDTOVAR PRETTYPRINTMACROS (@  . PrettyPrintLoopsForm)
-                                (_@  . PrettyPrintLoopsForm)
-                                (_  . PrettyPrintLoopsForm)
-                                (SEND  . PrettyPrintLoopsForm)
-                                (_IV  . PrettyPrintLoopsForm)
-                                (_Proto  . PrettyPrintLoopsForm)
-                                (_New  . PrettyPrintLoopsForm)
-                                (_Super  . PrettyPrintLoopsForm)
-                                (_!  . PrettyPrintLoopsForm)
-                                (_Process  . PrettyPrintLoopsForm)
-                                (_Process!  . PrettyPrintLoopsForm)
-                                #,NIL)
+                            (_@  . PrettyPrintLoopsForm)
+                            (_  . PrettyPrintLoopsForm)
+                            (SEND  . PrettyPrintLoopsForm)
+                            (_IV  . PrettyPrintLoopsForm)
+                            (_Proto  . PrettyPrintLoopsForm)
+                            (_New  . PrettyPrintLoopsForm)
+                            (_Super  . PrettyPrintLoopsForm)
+                            (_!  . PrettyPrintLoopsForm)
+                            (_Process  . PrettyPrintLoopsForm)
+                            (_Process!  . PrettyPrintLoopsForm))
 
 
 
@@ -497,7 +485,7 @@ Type OK to ignore and go on."))))))))
 )
 
 (ADDTOVAR HPRINTMACROS (class . HPRINTCLASS)
-                           (instance . HPRINTINSTANCE))
+                       (instance . HPRINTINSTANCE))
 (DECLARE%: DONTEVAL@LOAD DOEVAL@COMPILE DONTCOPY COMPILERVARS 
 
 (ADDTOVAR NLAMA $&)
@@ -509,11 +497,12 @@ Type OK to ignore and go on."))))))))
 (PUTPROPS LOOPSPRINT COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
 1993))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (4094 7234 (HashMacro 4104 . 5310) (PPDefault 5312 . 5556) (SETALLSYNTAX 5558 . 6098) (
-$& 6100 . 6677) ($ 6679 . 6844) ($C 6846 . 7232)) (7427 10319 (PrintClass 7437 . 8157) (PrintInstance 
-8159 . 10317)) (11885 16596 (EntityAddress 11895 . 12012) (PrettyPrintLoopsForm 12014 . 12321) (
-PrettyPrintClass 12323 . 12874) (PrintDefInstances 12876 . 13513) (PrettyPrintInstance 13515 . 13978) 
-(PrttyClasses 13980 . 14332) (PrttyInstances 14334 . 15191) (PrintLoopsEvalAtLoad 15193 . 15428) (PPC 
-15430 . 15718) (PPObj 15720 . 16594)) (17617 18492 (HPRINTCLASS 17627 . 17907) (HPRINTINSTANCE 17909
- . 18215) (HREADCLASS 18217 . 18351) (HREADINSTANCE 18353 . 18490)))))
+  (FILEMAP (NIL (3377 6517 (HashMacro 3387 . 4593) (PPDefault 4595 . 4839) (SETALLSYNTAX 4841 . 5381) (
+$& 5383 . 5960) ($ 5962 . 6127) ($C 6129 . 6515)) (6710 9602 (PrintClass 6720 . 7440) (PrintInstance 
+7442 . 9600)) (9674 9765 (TTYStream? 9674 . 9765)) (10458 11063 (WITH.PP.OUTPUT 10458 . 11063)) (11167
+ 15878 (EntityAddress 11177 . 11294) (PrettyPrintLoopsForm 11296 . 11603) (PrettyPrintClass 11605 . 
+12156) (PrintDefInstances 12158 . 12795) (PrettyPrintInstance 12797 . 13260) (PrttyClasses 13262 . 
+13614) (PrttyInstances 13616 . 14473) (PrintLoopsEvalAtLoad 14475 . 14710) (PPC 14712 . 15000) (PPObj 
+15002 . 15876)) (16821 17696 (HPRINTCLASS 16831 . 17111) (HPRINTINSTANCE 17113 . 17419) (HREADCLASS 
+17421 . 17555) (HREADINSTANCE 17557 . 17694)))))
 STOP

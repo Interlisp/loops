@@ -1,10 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 2-Jun-2022 13:44:04" {DSK}<var>tmp>loops>sources>LOOPSUID.;2 17549  
+(FILECREATED "19-Aug-2022 14:47:13" {DSK}<home>larry>loops>system>LOOPSUID.;2 17366  
 
-      :CHANGES-TO (FNS InitializeUIDs)
+      :CHANGES-TO (VARS LOOPSUIDCOMS)
 
-      :PREVIOUS-DATE "17-Mar-2022 16:22:46" {DSK}<var>tmp>loops>sources>LOOPSUID.;1)
+      :PREVIOUS-DATE " 2-Jun-2022 13:44:04" {DSK}<home>larry>loops>system>LOOPSUID.;1)
 
 
 (* ; "
@@ -41,8 +41,6 @@ Copyright (c) 1984-1988, 1990, 2022 by Venue & Xerox Corporation.
 (* ;;; "Unpacking UIDs for human consumption")
 
         (FNS Unpack-UID ConvertFromRadix64)
-        (DECLARE%: EVAL@COMPILE DONTCOPY (FILES (SYSLOAD)
-                                                MATCH))
         
 
 (* ;;; "Access UID/instance relation")
@@ -327,11 +325,6 @@ DONTEVAL@COMPILE DOCOPY
                                                c)
                                       48))) finally (RETURN number])
 )
-(DECLARE%: EVAL@COMPILE DONTCOPY 
-
-(FILESLOAD (SYSLOAD)
-       MATCH)
-)
 
 
 
@@ -427,9 +420,9 @@ DONTEVAL@COMPILE DOCOPY
 (ADDTOVAR AROUNDEXITFNS \Loops.AroundExit)
 (PUTPROPS LOOPSUID COPYRIGHT ("Venue & Xerox Corporation" 1984 1985 1986 1987 1988 1990 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2510 4036 (HasUID? 2520 . 2843) (Make-UID 2845 . 3394) (UID 3396 . 3799) (UIDP 3801 . 
-4034)) (4471 9445 (InitializeUIDs 4481 . 8685) (RADIX64NUM 8687 . 9443)) (9501 14483 (Unpack-UID 9511
- . 13912) (ConvertFromRadix64 13914 . 14481)) (14603 16692 (GetObjFromUID 14613 . 14894) (PutObjectUID
- 14896 . 15308) (DeleteObjectUID 15310 . 15697) (MapObjectUID 15699 . 15915) (UIDHashBits 15917 . 
-16292) (UIDEqual 16294 . 16690)) (16969 17383 (\Loops.AroundExit 16979 . 17381)))))
+  (FILEMAP (NIL (2399 3925 (HasUID? 2409 . 2732) (Make-UID 2734 . 3283) (UID 3285 . 3688) (UIDP 3690 . 
+3923)) (4360 9334 (InitializeUIDs 4370 . 8574) (RADIX64NUM 8576 . 9332)) (9390 14372 (Unpack-UID 9400
+ . 13801) (ConvertFromRadix64 13803 . 14370)) (14420 16509 (GetObjFromUID 14430 . 14711) (PutObjectUID
+ 14713 . 15125) (DeleteObjectUID 15127 . 15514) (MapObjectUID 15516 . 15732) (UIDHashBits 15734 . 
+16109) (UIDEqual 16111 . 16507)) (16786 17200 (\Loops.AroundExit 16796 . 17198)))))
 STOP

@@ -1,10 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "11-Mar-2022 19:19:08" {DSK}<Users>briggs>Projects>loops>src>LOOPSSPEEDUP.;2 13756  
+(FILECREATED "19-Aug-2022 14:47:13" {DSK}<home>larry>loops>system>LOOPSSPEEDUP.;2 13729  
 
-      :CHANGES-TO (MACROS \GETDTD)
+      :CHANGES-TO (VARS LOOPSSPEEDUPCOMS)
 
-      :PREVIOUS-DATE " 6-Nov-91 16:43:37" {DSK}<Users>briggs>Projects>loops>src>LOOPSSPEEDUP.;1)
+      :PREVIOUS-DATE "11-Mar-2022 19:19:08" {DSK}<home>larry>loops>system>LOOPSSPEEDUP.;1)
 
 
 (* ; "
@@ -19,8 +19,8 @@ Copyright (c) 1986-1987, 1990-1991, 2022 by Venue & Xerox Corporation.
 (* ;;; "Need the following low-level stuff to make a datatype non-garbage-collectable.  This saves us the effort of maintaining reference counts")
 
         (FNS Make-Not-Reference-Counted)
-        (DECLARE%: EVAL@COMPILE DONTCOPY (FILES (LOADCOMP)
-                                                LLGC LLDATATYPE)
+        (DECLARE%: EVAL@COMPILE DONTCOPY (FILES (SOURCE)
+                                                SYSEDIT)
                (EXPORT (MACROS \GETDTD)))
         
 
@@ -88,8 +88,8 @@ Copyright (c) 1986-1987, 1990-1991, 2022 by Venue & Xerox Corporation.
 )
 (DECLARE%: EVAL@COMPILE DONTCOPY 
 
-(FILESLOAD (LOADCOMP)
-       LLGC LLDATATYPE)
+(FILESLOAD (SOURCE)
+       SYSEDIT)
 
 (* "FOLLOWING DEFINITIONS EXPORTED")(DECLARE%: EVAL@COMPILE 
 
@@ -342,7 +342,7 @@ Copyright (c) 1986-1987, 1990-1991, 2022 by Venue & Xerox Corporation.
 (ADDTOVAR GLOBALVARS *Global-Method-Cache*)
 (PUTPROPS LOOPSSPEEDUP COPYRIGHT ("Venue & Xerox Corporation" 1986 1987 1990 1991 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2216 3423 (Make-Not-Reference-Counted 2226 . 3421)) (9871 11360 (FlushIVIndexCache 9881
- . 10625) (\Make-IV-Cache-Entry 10627 . 11358)) (11804 13225 (FlushMethodCache 11814 . 12466) (
-\Make-Method-Cache-Entry 12468 . 13223)))))
+  (FILEMAP (NIL (2199 3406 (Make-Not-Reference-Counted 2209 . 3404)) (9844 11333 (FlushIVIndexCache 9854
+ . 10598) (\Make-IV-Cache-Entry 10600 . 11331)) (11777 13198 (FlushMethodCache 11787 . 12439) (
+\Make-Method-Cache-Entry 12441 . 13196)))))
 STOP
