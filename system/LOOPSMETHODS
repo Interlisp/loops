@@ -1,15 +1,14 @@
-(DEFINE-FILE-INFO PACKAGE "IL" READTABLE "INTERLISP" BASE 10)
-(FILECREATED " 6-Nov-91 16:29:23" {DSK}<python>RELEASE>loops>2.0>src>LOOPSMETHODS.;3 65027  
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-      changes to%:  (FUNCTIONS SubclassResponsibility)
-                    (OPTIMIZERS _ SEND)
-                    (FNS Cached-FetchMethodOrHelp)
+(FILECREATED "19-Aug-2022 14:47:13" {DSK}<home>larry>loops>system>LOOPSMETHODS.;2 59350  
 
-      previous date%: "15-Aug-91 12:38:42" {DSK}<python>RELEASE>loops>2.0>src>LOOPSMETHODS.;2)
+      :CHANGES-TO (VARS LOOPSMETHODSCOMS)
+
+      :PREVIOUS-DATE " 6-Nov-91 16:29:23" {DSK}<home>larry>loops>system>LOOPSMETHODS.;1)
 
 
 (* ; "
-Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1984-1988, 1990-1991 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSMETHODSCOMS)
@@ -18,8 +17,9 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporat
        [
         (* ;; " WARNING:  YOU MUST SET *Compile-Local-Message-Cache* TO NIL BEFORE COMPILING THIS FILE.  Failing to do so, you'll get a Cached-FetchMethodOrHelp that calls itself recursively forever.")
 
-        (DECLARE%: EVAL@COMPILE DONTCOPY (FILES (LOADCOMP)
-                                                LOOPSSTRUC))
+        (DECLARE%: EVAL@COMPILE DONTCOPY DONTEVAL@LOAD (P (SETQ *Compile-Local-Message-Cache* NIL)))
+        (DECLARE%: DONTEVAL@LOAD EVAL@COMPILE DONTCOPY (FILES (LOADCOMP)
+                                                              LOOPSSTRUC))
         
 
 (* ;;; "Translation of METHOD forms to LAMBDA forms")
@@ -68,7 +68,11 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporat
 " WARNING:  YOU MUST SET *Compile-Local-Message-Cache* TO NIL BEFORE COMPILING THIS FILE.  Failing to do so, you'll get a Cached-FetchMethodOrHelp that calls itself recursively forever."
 )
 
-(DECLARE%: EVAL@COMPILE DONTCOPY 
+(DECLARE%: EVAL@COMPILE DONTCOPY DONTEVAL@LOAD 
+
+(SETQ *Compile-Local-Message-Cache* NIL)
+)
+(DECLARE%: DONTEVAL@LOAD EVAL@COMPILE DONTCOPY 
 
 (FILESLOAD (LOADCOMP)
        LOOPSSTRUC)
@@ -100,13 +104,13 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporat
    `(_ ,self ,selector ,@(for x in args collect (KWOTE x))))
 
 (DEFMACRO _New (class &OPTIONAL (selector NIL selector-supplied-p)
-                          &REST args)
+                      &REST args)
    (if selector-supplied-p
        then [LET ((self (GENSYM)))
-                     `(LET ((,self (_ ,class New)))
-                           (DECLARE (LOCALVARS ,self))
-                           (_ ,self ,selector ,@args)
-                           ,self]
+                 `(LET ((,self (_ ,class New)))
+                       (DECLARE (LOCALVARS ,self))
+                       (_ ,self ,selector ,@args)
+                       ,self]
      else `(_ ,class New)))
 
 (DEFMACRO _IV (self IVName &REST args)
@@ -117,35 +121,35 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporat
 (DECLARE%: EVAL@COMPILE 
 
 (PUTPROPS _Proto MACRO ((obj . args)
-                                (_ (_ obj Prototype) . args)))
+                        (_ (_ obj Prototype) . args)))
 
 (PUTPROPS _Try MACRO [(obj action . args)
-                              (PROG ((obj%  obj))
-                                    (RETURN (DOAPPLY* (OR (FetchMethod (Class obj% )
-                                                                 'action)
-                                                          (RETURN 'NotSent))
-                                                   obj%  . args])
+                      (PROG ((obj%  obj))
+                            (RETURN (DOAPPLY* (OR (FetchMethod (Class obj% )
+                                                         'action)
+                                                  (RETURN 'NotSent))
+                                           obj%  . args])
 
 (PUTPROPS _Process MACRO [X (LET [(obj (CAR X))
-                                          (selector (CADR X))
-                                          (args (CONS 'LIST (CDDR X]
-                                         `(ADD.PROCESS (LIST 'ApplyMethod (KWOTE ,obj)
-                                                             (KWOTE ',selector)
-                                                             (KWOTE ,args))
-                                                 'NAME
-                                                 ',selector])
+                                  (selector (CADR X))
+                                  (args (CONS 'LIST (CDDR X]
+                                 `(ADD.PROCESS (LIST 'ApplyMethod (KWOTE ,obj)
+                                                     (KWOTE ',selector)
+                                                     (KWOTE ,args))
+                                         'NAME
+                                         ',selector])
 
 (PUTPROPS _Process! MACRO [X (LET [(obj (CAR X))
-                                           (selector (CADR X))
-                                           (args (CONS 'LIST (CDDR X]
-                                          `(ADD.PROCESS (LIST 'ApplyMethod (KWOTE ,obj)
-                                                              (KWOTE ,selector)
-                                                              (KWOTE ,args))
-                                                  'NAME
-                                                  ',selector])
+                                   (selector (CADR X))
+                                   (args (CONS 'LIST (CDDR X]
+                                  `(ADD.PROCESS (LIST 'ApplyMethod (KWOTE ,obj)
+                                                      (KWOTE ,selector)
+                                                      (KWOTE ,args))
+                                          'NAME
+                                          ',selector])
 
 (PUTPROPS SENDSUPER MACRO ((obj action . args)
-                                   (_Super obj action . args)))
+                           (_Super obj action . args)))
 )
 (DEFINEQ
 
@@ -172,99 +176,72 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporat
 
 (PUTPROPS DOAPPLY* MACRO (arg (CONS 'CL:FUNCALL arg)))
 
-(PUTPROPS DoMethod MACRO
-          [(obj action class . args)
-           (LET ((obj%  obj)
-                 (class%  class))
-                (if (Class? (OR class%  (fetch (OBJECT CLASS) of obj% )))
-                    then (DOAPPLY* (OR (FetchMethod (OR class%  (fetch (OBJECT CLASS)
-                                                                           of obj% ))
-                                                  action)
-                                           (ERROR action "not found for DoMethod"))
-                                    obj%  . args)
-                  else (ERROR (OR class%  (fetch (OBJECT CLASS) of obj% ))
-                                  "not a class"])
+(PUTPROPS DoMethod MACRO [(obj action class . args)
+                          (LET ((obj%  obj)
+                                (class%  class))
+                               (if (Class? (OR class%  (fetch (OBJECT CLASS) of obj% )))
+                                   then (DOAPPLY* (OR (FetchMethod (OR class%  (fetch (OBJECT CLASS)
+                                                                                  of obj% ))
+                                                             action)
+                                                      (ERROR action "not found for DoMethod"))
+                                               obj%  . args)
+                                 else (ERROR (OR class%  (fetch (OBJECT CLASS) of obj% ))
+                                             "not a class"])
 
-(PUTPROPS FetchMethod MACRO [OPENLAMBDA (classRec selector)
-                                                             (* smL "17-Sep-85 17:45")
-                                                             (* Returns the function for selector 
-                                                           or NIL)
-                                           (PROG ((pos (LLSH (LOGAND 1023 (LOGXOR (\LOLOC classRec)
-                                                                                 (\LOLOC selector)))
-                                                             3))
-                                                  (class classRec)
-                                                  meth index supers)
-                                                 (DECLARE (LOCALVARS . T))
-                                                 [COND
-                                                    ((AND (EQ class (\GETBASEPTR 
-                                                                           *Global-Method-Cache* pos)
-                                                              )
-                                                          (EQ selector (\GETBASEPTR (\ADDBASE 
-                                                                                *Global-Method-Cache*
-                                                                                           2)
-                                                                              pos)))
-                                                     (RETURN (\GETBASEPTR (\ADDBASE 
-                                                                                *Global-Method-Cache*
-                                                                                 4)
-                                                                    pos]
-                                                 (SETQ supers (fetch (class supers) of 
-                                                                                             classRec
-                                                                     ))
-                                             LP  (COND
-                                                    ((SETQ index (FindSelectorIndex class 
-                                                                        selector))
-                                                     (SETQ meth (GetNthMethod class index))
-                                                     (\PUTBASEPTR *Global-Method-Cache* pos classRec)
-                                                     (\PUTBASEPTR (\ADDBASE *Global-Method-Cache* 2)
-                                                            pos selector)
-                                                     (\PUTBASEPTR (\ADDBASE *Global-Method-Cache* 4)
-                                                            pos meth)
-                                                     (RETURN meth))
-                                                    ((SETQ class (pop supers))
-                                                     (GO LP))
-                                                    (T (RETURN NIL])
+(PUTPROPS FetchMethod MACRO [OPENLAMBDA (classRec selector)
+                              (PROG ((pos (LLSH (LOGAND 1023 (LOGXOR (\LOLOC classRec)
+                                                                    (\LOLOC selector)))
+                                                3))
+                                     (class classRec)
+                                     meth index supers)
+                                    (DECLARE (LOCALVARS . T))
+                                    [COND
+                                       ((AND (EQ class (\GETBASEPTR *Global-Method-Cache* pos))
+                                             (EQ selector (\GETBASEPTR (\ADDBASE 
+                                                                              *Global-Method-Cache* 2
+                                                                              )
+                                                                 pos)))
+                                        (RETURN (\GETBASEPTR (\ADDBASE *Global-Method-Cache* 4)
+                                                       pos]
+                                    (SETQ supers (fetch (class supers) of classRec))
+                                LP  (COND
+                                       ((SETQ index (FindSelectorIndex class selector))
+                                        (SETQ meth (GetNthMethod class index))
+                                        (\PUTBASEPTR *Global-Method-Cache* pos classRec)
+                                        (\PUTBASEPTR (\ADDBASE *Global-Method-Cache* 2)
+                                               pos selector)
+                                        (\PUTBASEPTR (\ADDBASE *Global-Method-Cache* 4)
+                                               pos meth)
+                                        (RETURN meth))
+                                       ((SETQ class (pop supers))
+                                        (GO LP))
+                                       (T (RETURN NIL])
 
 (PUTPROPS FindSelectorIndex MACRO [OPENLAMBDA (classrec selector)
-                                                 (PROG NIL
-
-         (* Prog is only so one can bomb out in case of NIL selectors of class)
-
-                                                       (RETURN (\FindEntryIndex
-                                                                selector
-                                                                (OR (fetch (class selectors)
-                                                                       of classrec)
-                                                                    (RETURN])
+                                    (PROG NIL
+                                          (RETURN (\FindEntryIndex selector
+                                                         (OR (fetch (class selectors) of classrec)
+                                                             (RETURN])
 
 (PUTPROPS GetNthMethod MACRO [OPENLAMBDA (classrec n)
-                                            (LET ((meths (fetch (class methods) of classrec))
-                                                  )
-                                                 (COND
-                                                    ((LISTP meths)
-                                                     (GetNth meths n))
-                                                    (T (\GetNthEntry meths n])
+                               (LET ((meths (fetch (class methods) of classrec)))
+                                    (COND
+                                       ((LISTP meths)
+                                        (GetNth meths n))
+                                       (T (\GetNthEntry meths n])
 
-(PUTPROPS MapSupersForm? MACRO ((mappingForm classRec . progArgs)
-                                                             (* dgb%: "12-JAN-82 14:55")
-
-         (* Maps through a class and its supers in order.
-       Returns if form has return statement, or NIL when finished %.
-       form can use class as free variable)
-
-                                        (PROG (supers (class classRec) . progArgs)
-                                              (COND
-                                                 ((NULL class)
-                                                  (RETURN NIL)))
-                                              (SETQ supers (Supers class))
-                                          LP
-                                          mappingForm
-                                                             (* this is where the substitution 
-                                                           goes)
-                                          ON  (COND
-                                                 ((SETQ class (pop supers))
-                                                             (* If there is a Super, iterate 
-                                                           around the Loop)
-                                                  (GO LP)))  (* Returns NotSetValue if not found)
-                                              (RETURN NotSetValue))))
+(PUTPROPS MapSupersForm? MACRO ((mappingForm classRec . progArgs)
+                                (PROG (supers (class classRec) . progArgs)
+                                      (COND
+                                         ((NULL class)
+                                          (RETURN NIL)))
+                                      (SETQ supers (Supers class))
+                                  LP
+                                  mappingForm
+                                  ON  (COND
+                                         ((SETQ class (pop supers))
+                                          (GO LP)))
+                                      (RETURN NotSetValue))))
 )
 
 
@@ -275,184 +252,167 @@ Copyright (c) 1984, 1985, 1986, 1987, 1988, 1990, 1991 by Venue & Xerox Corporat
 (RPAQ? *Compile-Local-Message-Cache* T)
 
 (DEFOPTIMIZER _ (object selector &REST args)
-                    [if (AND *Compile-Local-Message-Cache* *BYTECOMPILER-IS-EXPANDING*)
-                        then `(LET [(/\obj/\ ,object)
-                                        (*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT (
+                [if (AND *Compile-Local-Message-Cache* *BYTECOMPILER-IS-EXPANDING*)
+                    then `(LET [(/\obj/\ ,object)
+                                (*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT (
                                                                              \Make-Method-Cache-Entry
-                                                                                        ]
-                                       (DECLARE (LOCALVARS /\obj/\ *LOOPS-INLINE-METHOD-CACHE*))
-                                       (LOOPS-FUNCALL (COND
-                                                         ((AND (Object? /\obj/\)
-                                                               (EQ (\GETBASEPTR 
-                                                                          *LOOPS-INLINE-METHOD-CACHE*
-                                                                          0)
-                                                                   (fetch (OBJECT CLASS)
-                                                                      of /\obj/\)))
-                                                             (* ; "A cache hit")
-                                                          (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2)
-                                                          )
-                                                         (T  (* ; "A cache miss")
-                                                            (Cached-FetchMethodOrHelp
-                                                             /\obj/\
-                                                             ',selector *LOOPS-INLINE-METHOD-CACHE*))
-                                                         )
-                                              /\obj/\
-                                              ,@args)) 
-
-                              (* ;; "`((OPENLAMBDA (/\obj/\ *LOOPS-INLINE-METHOD-CACHE*) (DECLARE (LOCALVARS . T)) (CL:FUNCALL (if (AND (Object? /\obj/\) (EQ (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 0) (fetch (OBJECT CLASS) of /\obj/\))) then ; A cache hit (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2) else ; A cache miss (Cached-FetchMethodOrHelp /\obj/\ ',selector *LOOPS-INLINE-METHOD-CACHE*)) /\obj/\ ,@args)) ,object (LOADTIMECONSTANT (\Make-Method-Cache-Entry)))")
-
-                      elseif *BYTECOMPILER-IS-EXPANDING*
-                        then `(LET ((/\obj/\ ,object))
-                                       (DECLARE (LOCALVARS /\obj/\))
-                                       (LOOPS-FUNCALL (FetchMethodOrHelp /\obj/\
-                                                             ',selector)
-                                              /\obj/\
-                                              ,@args))
-                      else
-                      (LET*
-                       [(obj (if (LITATOM object)
-                                 then object
-                               else (GENSYM)))
-                        [bindings (if (EQ obj object)
-                                      then NIL
-                                    else `((,obj ,object]
-                        (localVars (for binding in bindings collect (CAR binding]
-                       (if *Compile-Local-Message-Cache*
-                           then
-                           `(LET (,@bindings)
-
-                                 (* ;; 
-                              ",@(if localVars then `((DECLARE (LOCALVARS ,@localVars))) else NIL)")
-
-                                 (DECLARE (LOCALVARS . T))
-                                 (LOOPS-FUNCALL (LET [(*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT
-                                                                                    (
-                                                                             \Make-Method-Cache-Entry
-                                                                                     ]
-
-                                 (* ;; "This bogus SPECVARS stuff is here to prevent the compiler from thinking that the in-line cache is a quoted constant.  Note that (almost) no user code gets called within this binding, so it is pretty safe.  (The potential exception is when the user has redefined the FetchMethodOrHelp method).")
-
-                                                     (* ;; 
-                                                 "(DECLARE (SPECVARS *LOOPS-INLINE-METHOD-CACHE*))")
-
-                                                     (if [AND (Object? ,obj)
-                                                                  (EQ (\GETBASEPTR 
-                                                                          *LOOPS-INLINE-METHOD-CACHE*
-                                                                             0)
-                                                                      (fetch (OBJECT CLASS)
-                                                                         of ,obj]
-                                                         then 
-                                                             (* ; "A cache hit")
-                                                               (\GETBASEPTR 
-                                                                      *LOOPS-INLINE-METHOD-CACHE* 2)
-                                                       else 
-                                                             (* ; "A cache miss")
-                                                             (Cached-FetchMethodOrHelp
-                                                              ,obj
-                                                              ',selector *LOOPS-INLINE-METHOD-CACHE*)
-                                                            ))
-                                        ,obj
-                                        ,@args))
-                         elseif bindings
-                           then `(LET (,@bindings)
-                                          (DECLARE (LOCALVARS ,@localVars))
-                                          (LOOPS-FUNCALL (FetchMethodOrHelp ,obj
-                                                                ',selector)
-                                                 ,obj
-                                                 ,@args))
-                         else `(LOOPS-FUNCALL (FetchMethodOrHelp ,obj ',selector)
-                                          ,obj
-                                          ,@args])
-
-(DEFOPTIMIZER SEND (object selector &REST args)
-                       [if (AND *Compile-Local-Message-Cache* *BYTECOMPILER-IS-EXPANDING*)
-                           then `(LET [(/\obj/\ ,object)
-                                           (*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT (
-                                                                             \Make-Method-Cache-Entry
-                                                                                           ]
-                                          (DECLARE (LOCALVARS /\obj/\ *LOOPS-INLINE-METHOD-CACHE*
-                                                              ))
-                                          (LOOPS-FUNCALL (COND
-                                                            ((AND (Object? /\obj/\)
-                                                                  (EQ (\GETBASEPTR 
-                                                                          *LOOPS-INLINE-METHOD-CACHE*
-                                                                             0)
-                                                                      (fetch (OBJECT CLASS)
-                                                                         of /\obj/\)))
-                                                             (* ; "A cache hit")
-                                                             (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE*
-                                                                    2))
-                                                            (T 
-                                                             (* ; "A cache miss")
-                                                               (Cached-FetchMethodOrHelp
-                                                                /\obj/\
-                                                                ',selector 
-                                                                *LOOPS-INLINE-METHOD-CACHE*)))
-                                                 /\obj/\
-                                                 ,@args)) 
-
-                                 (* ;; "`((OPENLAMBDA (/\obj/\ *LOOPS-INLINE-METHOD-CACHE*) (DECLARE (LOCALVARS . T)) (CL:FUNCALL (if (AND (Object? /\obj/\) (EQ (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 0) (fetch (OBJECT CLASS) of /\obj/\))) then ; A cache hit (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2) else ; A cache miss (Cached-FetchMethodOrHelp /\obj/\ ',selector *LOOPS-INLINE-METHOD-CACHE*)) /\obj/\ ,@args)) ,object (LOADTIMECONSTANT (\Make-Method-Cache-Entry)))")
-
-                         elseif *BYTECOMPILER-IS-EXPANDING*
-                           then `(LET ((/\obj/\ ,object))
-                                          (DECLARE (LOCALVARS /\obj/\))
-                                          (LOOPS-FUNCALL (FetchMethodOrHelp /\obj/\
-                                                                ',selector)
-                                                 /\obj/\
-                                                 ,@args))
-                         else
-                         (LET*
-                          [(obj (if (LITATOM object)
-                                    then object
-                                  else (GENSYM)))
-                           [bindings (if (EQ obj object)
-                                         then NIL
-                                       else `((,obj ,object]
-                           (localVars (for binding in bindings collect (CAR binding]
-                          (if *Compile-Local-Message-Cache*
-                              then
-                              `(LET (,@bindings)
-
-                                    (* ;; 
-                              ",@(if localVars then `((DECLARE (LOCALVARS ,@localVars))) else NIL)")
-
-                                    (DECLARE (LOCALVARS . T))
-                                    (LOOPS-FUNCALL
-                                     (LET [(*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT (
-                                                                             \Make-Method-Cache-Entry
-                                                                                           ]
-
-                                 (* ;; "This bogus SPECVARS stuff is here to prevent the compiler from thinking that the in-line cache is a quoted constant.  Note that (almost) no user code gets called within this binding, so it is pretty safe.  (The potential exception is when the user has redefined the FetchMethodOrHelp method).")
-
-                                          (* ;; "(DECLARE (SPECVARS *LOOPS-INLINE-METHOD-CACHE*))")
-
-                                          (if [AND (Object? ,obj)
+                                                                                ]
+                               (DECLARE (LOCALVARS /\obj/\ *LOOPS-INLINE-METHOD-CACHE*))
+                               (LOOPS-FUNCALL (COND
+                                                 ((AND (Object? /\obj/\)
                                                        (EQ (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 0
                                                                   )
-                                                           (fetch (OBJECT CLASS)
-                                                              of ,obj]
-                                              then       (* ; "A cache hit")
-                                                    (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2)
-                                            else         (* ; "A cache miss")
-                                                  (Cached-FetchMethodOrHelp ,obj
-                                                         ',selector *LOOPS-INLINE-METHOD-CACHE*)))
+                                                           (fetch (OBJECT CLASS) of /\obj/\)))
+                                                             (* ; "A cache hit")
+                                                  (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2))
+                                                 (T          (* ; "A cache miss")
+                                                    (Cached-FetchMethodOrHelp /\obj/\
+                                                           ',selector *LOOPS-INLINE-METHOD-CACHE*)))
+                                      /\obj/\
+                                      ,@args)) 
+
+                         (* ;; "`((OPENLAMBDA (/\obj/\ *LOOPS-INLINE-METHOD-CACHE*) (DECLARE (LOCALVARS . T)) (CL:FUNCALL (if (AND (Object? /\obj/\) (EQ (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 0) (fetch (OBJECT CLASS) of /\obj/\))) then ; A cache hit (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2) else ; A cache miss (Cached-FetchMethodOrHelp /\obj/\ ',selector *LOOPS-INLINE-METHOD-CACHE*)) /\obj/\ ,@args)) ,object (LOADTIMECONSTANT (\Make-Method-Cache-Entry)))")
+
+                  elseif *BYTECOMPILER-IS-EXPANDING*
+                    then `(LET ((/\obj/\ ,object))
+                               (DECLARE (LOCALVARS /\obj/\))
+                               (LOOPS-FUNCALL (FetchMethodOrHelp /\obj/\ ',selector)
+                                      /\obj/\
+                                      ,@args))
+                  else
+                  (LET*
+                   [(obj (if (LITATOM object)
+                             then object
+                           else (GENSYM)))
+                    [bindings (if (EQ obj object)
+                                  then NIL
+                                else `((,obj ,object]
+                    (localVars (for binding in bindings collect (CAR binding]
+                   (if *Compile-Local-Message-Cache*
+                       then
+                       `(LET (,@bindings)
+
+                             (* ;; 
+                             ",@(if localVars then `((DECLARE (LOCALVARS ,@localVars))) else NIL)")
+
+                             (DECLARE (LOCALVARS . T))
+                             (LOOPS-FUNCALL (LET [(*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT
+                                                                                (
+                                                                             \Make-Method-Cache-Entry
+                                                                                 ]
+
+                                 (* ;; "This bogus SPECVARS stuff is here to prevent the compiler from thinking that the in-line cache is a quoted constant.  Note that (almost) no user code gets called within this binding, so it is pretty safe.  (The potential exception is when the user has redefined the FetchMethodOrHelp method).")
+
+                                                 (* ;; 
+                                                 "(DECLARE (SPECVARS *LOOPS-INLINE-METHOD-CACHE*))")
+
+                                                 (if [AND (Object? ,obj)
+                                                          (EQ (\GETBASEPTR 
+                                                                     *LOOPS-INLINE-METHOD-CACHE* 0)
+                                                              (fetch (OBJECT CLASS)
+                                                                 of ,obj]
+                                                     then    (* ; "A cache hit")
+                                                          (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2)
+                                                   else      (* ; "A cache miss")
+                                                        (Cached-FetchMethodOrHelp ,obj
+                                                               ',selector *LOOPS-INLINE-METHOD-CACHE*
+                                                               )))
+                                    ,obj
+                                    ,@args))
+                     elseif bindings
+                       then `(LET (,@bindings)
+                                  (DECLARE (LOCALVARS ,@localVars))
+                                  (LOOPS-FUNCALL (FetchMethodOrHelp ,obj ',selector)
+                                         ,obj
+                                         ,@args))
+                     else `(LOOPS-FUNCALL (FetchMethodOrHelp ,obj ',selector)
+                                  ,obj
+                                  ,@args])
+
+(DEFOPTIMIZER SEND (object selector &REST args)
+                   [if (AND *Compile-Local-Message-Cache* *BYTECOMPILER-IS-EXPANDING*)
+                       then `(LET [(/\obj/\ ,object)
+                                   (*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT (
+                                                                             \Make-Method-Cache-Entry
+                                                                                   ]
+                                  (DECLARE (LOCALVARS /\obj/\ *LOOPS-INLINE-METHOD-CACHE*))
+                                  (LOOPS-FUNCALL (COND
+                                                    ((AND (Object? /\obj/\)
+                                                          (EQ (\GETBASEPTR 
+                                                                     *LOOPS-INLINE-METHOD-CACHE* 0)
+                                                              (fetch (OBJECT CLASS) of /\obj/\)))
+                                                             (* ; "A cache hit")
+                                                     (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2))
+                                                    (T       (* ; "A cache miss")
+                                                       (Cached-FetchMethodOrHelp /\obj/\
+                                                              ',selector *LOOPS-INLINE-METHOD-CACHE*)
+                                                       ))
+                                         /\obj/\
+                                         ,@args)) 
+
+                            (* ;; "`((OPENLAMBDA (/\obj/\ *LOOPS-INLINE-METHOD-CACHE*) (DECLARE (LOCALVARS . T)) (CL:FUNCALL (if (AND (Object? /\obj/\) (EQ (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 0) (fetch (OBJECT CLASS) of /\obj/\))) then ; A cache hit (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE* 2) else ; A cache miss (Cached-FetchMethodOrHelp /\obj/\ ',selector *LOOPS-INLINE-METHOD-CACHE*)) /\obj/\ ,@args)) ,object (LOADTIMECONSTANT (\Make-Method-Cache-Entry)))")
+
+                     elseif *BYTECOMPILER-IS-EXPANDING*
+                       then `(LET ((/\obj/\ ,object))
+                                  (DECLARE (LOCALVARS /\obj/\))
+                                  (LOOPS-FUNCALL (FetchMethodOrHelp /\obj/\ ',selector)
+                                         /\obj/\
+                                         ,@args))
+                     else
+                     (LET*
+                      [(obj (if (LITATOM object)
+                                then object
+                              else (GENSYM)))
+                       [bindings (if (EQ obj object)
+                                     then NIL
+                                   else `((,obj ,object]
+                       (localVars (for binding in bindings collect (CAR binding]
+                      (if *Compile-Local-Message-Cache*
+                          then
+                          `(LET (,@bindings)
+
+                                (* ;; 
+                                ",@(if localVars then `((DECLARE (LOCALVARS ,@localVars))) else NIL)")
+
+                                (DECLARE (LOCALVARS . T))
+                                (LOOPS-FUNCALL (LET [(*LOOPS-INLINE-METHOD-CACHE* (LOADTIMECONSTANT
+                                                                                   (
+                                                                             \Make-Method-Cache-Entry
+                                                                                    ]
+
+                                 (* ;; "This bogus SPECVARS stuff is here to prevent the compiler from thinking that the in-line cache is a quoted constant.  Note that (almost) no user code gets called within this binding, so it is pretty safe.  (The potential exception is when the user has redefined the FetchMethodOrHelp method).")
+
+                                                    (* ;; 
+                                                   "(DECLARE (SPECVARS *LOOPS-INLINE-METHOD-CACHE*))")
+
+                                                    (if [AND (Object? ,obj)
+                                                             (EQ (\GETBASEPTR 
+                                                                        *LOOPS-INLINE-METHOD-CACHE* 0
+                                                                        )
+                                                                 (fetch (OBJECT CLASS)
+                                                                    of ,obj]
+                                                        then (* ; "A cache hit")
+                                                             (\GETBASEPTR *LOOPS-INLINE-METHOD-CACHE*
+                                                                    2)
+                                                      else   (* ; "A cache miss")
+                                                           (Cached-FetchMethodOrHelp
+                                                            ,obj
+                                                            ',selector *LOOPS-INLINE-METHOD-CACHE*)))
+                                       ,obj
+                                       ,@args))
+                        elseif bindings
+                          then `(LET (,@bindings)
+                                     (DECLARE (LOCALVARS ,@localVars))
+                                     (LOOPS-FUNCALL (FetchMethodOrHelp ,obj ',selector)
+                                            ,obj
+                                            ,@args))
+                        else `(LOOPS-FUNCALL (FetchMethodOrHelp ,obj ',selector)
                                      ,obj
-                                     ,@args))
-                            elseif bindings
-                              then `(LET (,@bindings)
-                                             (DECLARE (LOCALVARS ,@localVars))
-                                             (LOOPS-FUNCALL (FetchMethodOrHelp
-                                                             ,obj
-                                                             ',selector)
-                                                    ,obj
-                                                    ,@args))
-                            else `(LOOPS-FUNCALL (FetchMethodOrHelp ,obj ',selector)
-                                             ,obj
-                                             ,@args])
+                                     ,@args])
 
 (DEFMACRO SubclassResponsibility ()
    (DECLARE (CL:SPECIAL *ArgsOfMethodBeingCompiled* *ClassNameOfMethodOwner* 
-                       *SelectorOfMethodBeingCompiled* *SelfOfMethodBeingCompiled*))
+                   *SelectorOfMethodBeingCompiled* *SelfOfMethodBeingCompiled*))
    `(HELPCHECK (CONCAT "Method " ,*SelectorOfMethodBeingCompiled* " of class " 
                       ,*ClassNameOfMethodOwner* " needs to be defined in class ")
            (_ ,*SelfOfMethodBeingCompiled* ClassName)))
@@ -1140,61 +1100,36 @@ to try again"))
 
 (DECLARE%: EVAL@COMPILE 
 
-(PUTPROPS MapSupersForm MACRO ((mappingForm classRec . progArgs)
-                                                             (* dgb%: "12-JAN-82 14:55")
+(PUTPROPS MapSupersForm MACRO ((mappingForm classRec . progArgs)
+                               (PROG (supers (class classRec) . progArgs)
+                                     (COND
+                                        ((NULL class)
+                                         (RETURN NIL)))
+                                     (SETQ supers (Supers class))
+                                 LP
+                                 mappingForm
+                                 ON  (COND
+                                        ((SETQ class (pop supers))
+                                         (GO LP)))
+                                     (RETURN NIL))))
 
-         (* Maps through a class and its supers in order.
-       Returns if form has return statement, or NIL when finished %.
-       form can use class as free variable)
-
-                                       (PROG (supers (class classRec) . progArgs)
-                                             (COND
-                                                ((NULL class)
-                                                 (RETURN NIL)))
-                                             (SETQ supers (Supers class))
-                                         LP
-                                         mappingForm
-                                                             (* this is where the substitution 
-                                                           goes)
-                                         ON  (COND
-                                                ((SETQ class (pop supers))
-                                                             (* If there is a Super, iterate 
-                                                           around the Loop)
-                                                 (GO LP)))   (* Returns NIL if not found)
-                                             (RETURN NIL))))
-
-(PUTPROPS MapSupersUnlessBadList MACRO ((badList mappingForm classRec . progArgs)
-                                                             (* dgb%: "12-JAN-82 14:55")
-
-         (* Maps through a class and its supers in order.
-       Returns if form has return statement, or NIL when finished %.
-       form can use class as free variable)
-
-                                                (PROG (supers (class classRec) . progArgs)
-                                                      (COND
-                                                         ((NULL class)
-                                                          (RETURN NIL)))
-                                                      (SETQ supers (Supers class))
-                                                  LP         (* Skip if super is on badList.)
-                                                      (OR (FMEMB (ClassName class)
-                                                                 badList)
-                                                          mappingForm)
-                                                             (* this is where the substitution 
-                                                           goes)
-                                                  ON  (COND
-                                                         ((SETQ class (pop supers))
-                                                          (GO LP)))
-                                                             (* Returns NIL if not found)
-                                                      (RETURN NIL))))
+(PUTPROPS MapSupersUnlessBadList MACRO ((badList mappingForm classRec . progArgs)
+                                        (PROG (supers (class classRec) . progArgs)
+                                              (COND
+                                                 ((NULL class)
+                                                  (RETURN NIL)))
+                                              (SETQ supers (Supers class))
+                                          LP  (OR (FMEMB (ClassName class)
+                                                         badList)
+                                                  mappingForm)
+                                          ON  (COND
+                                                 ((SETQ class (pop supers))
+                                                  (GO LP)))
+                                              (RETURN NIL))))
 
 (PUTPROPS NextSuperClass MACRO [NIL (COND
-                                               ((SETQ class (pop supers))
-
-         (* * This code assumes that LP is a defined PROG label and supers and class are 
-       bound)
-                                                             (* If there is a Super, iterate 
-                                                           around the Loop)
-                                                (GO LP])
+                                       ((SETQ class (pop supers))
+                                        (GO LP])
 )
 (DEFINEQ
 
@@ -1272,16 +1207,18 @@ to try again"))
 )
 (PUTPROPS LOOPSMETHODS COPYRIGHT ("Venue & Xerox Corporation" 1984 1985 1986 1987 1988 1990 1991))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (6214 7140 (FetchMethodLocally 6224 . 6504) (_Apply 6506 . 7138)) (27276 57840 (
-AddMethod 27286 . 29050) (ApplyMethod 29052 . 30080) (ApplyMethodInTtyProcess 30082 . 30415) (
-DefMethObj 30417 . 32403) (DefineMethod 32405 . 35029) (DeleteMethod 35031 . 37849) (DoFringeMethods 
-37851 . 38846) (DoMethod 38848 . 39986) (FindSuperMethod 39988 . 40827) (IVFunction 40829 . 41108) (
-BootInstallMethod 41110 . 41500) (FullInstallMethod 41502 . 41729) (InstanceNotMethod 41731 . 42182) (
-LoopsHelp 42184 . 42727) (METH 42729 . 43925) (METHOBJ 43927 . 44427) (MessageAuthor 44429 . 44647) (
-MethName 44649 . 45067) (MoveMethod 45069 . 47344) (RenameMethod 47346 . 49454) (\ApplyMethod 49456 . 
-49917) (FindLocalMethod 49919 . 50224) (FindSelectorIndex 50226 . 50600) (FetchMethod 50602 . 52043) (
-FetchMethodOrHelp 52045 . 52407) (GetCallerClass 52409 . 53739) (GetNthMethod 53741 . 54033) (
-GetSuperMethod 54035 . 56375) (PutMethodNth 56377 . 56806) (DCM 56808 . 57838)) (57930 58457 (
-Cached-FetchMethodOrHelp 57940 . 58455)) (62040 64464 (GetMethodSource 62050 . 62396) (
-CheckMethodChanged 62398 . 63528) (CheckMethodForm 63530 . 64462)))))
+  (FILEMAP (NIL (3508 3584 (_ 3508 . 3584)) (3586 3663 (SEND 3586 . 3663)) (3665 3839 (_! 3665 . 3839)) 
+(3841 3957 (__ 3841 . 3957)) (3959 4348 (_New 3959 . 4348)) (4350 4515 (_IV 4350 . 4515)) (6114 7040 (
+FetchMethodLocally 6124 . 6404) (_Apply 6406 . 7038)) (22976 23396 (SubclassResponsibility 22976 . 
+23396)) (23397 53961 (AddMethod 23407 . 25171) (ApplyMethod 25173 . 26201) (ApplyMethodInTtyProcess 
+26203 . 26536) (DefMethObj 26538 . 28524) (DefineMethod 28526 . 31150) (DeleteMethod 31152 . 33970) (
+DoFringeMethods 33972 . 34967) (DoMethod 34969 . 36107) (FindSuperMethod 36109 . 36948) (IVFunction 
+36950 . 37229) (BootInstallMethod 37231 . 37621) (FullInstallMethod 37623 . 37850) (InstanceNotMethod 
+37852 . 38303) (LoopsHelp 38305 . 38848) (METH 38850 . 40046) (METHOBJ 40048 . 40548) (MessageAuthor 
+40550 . 40768) (MethName 40770 . 41188) (MoveMethod 41190 . 43465) (RenameMethod 43467 . 45575) (
+\ApplyMethod 45577 . 46038) (FindLocalMethod 46040 . 46345) (FindSelectorIndex 46347 . 46721) (
+FetchMethod 46723 . 48164) (FetchMethodOrHelp 48166 . 48528) (GetCallerClass 48530 . 49860) (
+GetNthMethod 49862 . 50154) (GetSuperMethod 50156 . 52496) (PutMethodNth 52498 . 52927) (DCM 52929 . 
+53959)) (54051 54578 (Cached-FetchMethodOrHelp 54061 . 54576)) (56363 58787 (GetMethodSource 56373 . 
+56719) (CheckMethodChanged 56721 . 57851) (CheckMethodForm 57853 . 58785)))))
 STOP
