@@ -1,8 +1,11 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "15-Oct-2022 14:03:58" {DSK}<home>larry>loops>truckin>TRUCKINP.;2 12427  
+(FILECREATED "16-Oct-2022 15:03:17" {DSK}<home>larry>loops>truckin>TRUCKINP.;2 12709  
 
-      :CHANGES-TO (CLASSES SystemPlayer)
+      :CHANGES-TO (FNS FindPlayer ListPlayers REPlayer)
+                  (CLASSES SystemPlayer RemotePlayer PlayerMeta Player InteractivePlayer 
+                         PeterBiltTruck FordTruck GasTruck GMCTruck MacTruck Bandit BanditCar 
+                         BanditCarMeta GasPlayer)
 
       :PREVIOUS-DATE "11-May-93 16:22:08" {DSK}<home>larry>loops>truckin>TRUCKINP.;1)
 
@@ -120,7 +123,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.
    (InstanceVariables (realClass NIL doc "name of real player class")))
 
 (DEFCLASS SystemPlayer
-   (MetaClass GameAbstractClass Edited%:)
+   (MetaClass GameAbstractClass Edited%:                     (* dgb%: "14-JUL-83 18:24"))
    (Supers GameObject)
    (ClassVariables (UnChangedIVs (name driver truck icon reverseIcon)
                           doc "list of IVs not to be changed")
@@ -130,7 +133,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.
           (reverseIcon NIL doc "Cache for BitMap for player's truck going backwards.")
           (icon NIL doc "Cache for BitMap containing icon for player's truck as well as player's name. Created by MakeIcon msg."
                 )
-          (driver NIL doc 
+          (driver "Name1" doc 
            "String name to appear with the truck on the first line on the board. Six chars or fewer."
                  )
           (maxMove 0)
@@ -253,17 +256,17 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.
 (DEFINEQ
 
 (FindPlayer
-  [LAMBDA (playerName)                                   (* dgb%: " 1-FEB-83 11:00")
+  [LAMBDA (playerName)                                       (* dgb%: " 1-FEB-83 11:00")
     (for player in (@ gameMaster players) do (COND
-                                                            ((EQ playerName (@ player driver))
-                                                             (RETURN player])
+                                                ((EQ playerName (@ player driver))
+                                                 (RETURN player])
 
 (ListPlayers
-  [LAMBDA NIL                                            (* dgb%: " 1-FEB-83 12:38")
+  [LAMBDA NIL                                                (* dgb%: " 1-FEB-83 12:38")
     (for player in (@ gameMaster players) collect (@ player driver)])
 
 (REPlayer
-  [LAMBDA (name)                                         (* dgb%: " 1-FEB-83 12:38")
+  [LAMBDA (name)                                             (* dgb%: " 1-FEB-83 12:38")
     (PROG (player (playerName name))
           (COND
              ((NULL playerName)
@@ -286,6 +289,6 @@ of the truck to be examined? " NIL "Name of driver of truck" T)))
 (\UnbatchMethodDefs)
 (PUTPROPS TRUCKINP COPYRIGHT ("Xerox Corporation" 1985 1987 1993))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (11060 12295 (FindPlayer 11070 . 11414) (ListPlayers 11416 . 11607) (REPlayer 11609 . 
-12293)))))
+  (FILEMAP (NIL (11366 12577 (FindPlayer 11376 . 11696) (ListPlayers 11698 . 11889) (REPlayer 11891 . 
+12575)))))
 STOP

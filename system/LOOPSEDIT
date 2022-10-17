@@ -1,13 +1,14 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "15-Jun-93 12:27:27" {DSK}<python>release>loops>2.0>src>LOOPSEDIT.;4 30880  
 
-      changes to%:  (FNS InstallClassSource InstallClassVariables GetSourceCVs)
+(FILECREATED "16-Oct-2022 14:53:42" {DSK}<home>larry>loops>system>LOOPSEDIT.;7 31836  
 
-      previous date%: "14-Jun-93 23:52:08" {DSK}<python>release>loops>2.0>src>LOOPSEDIT.;3)
+      :CHANGES-TO (FNS CheckMetaClass FromAnEditor? CheckClassSource)
+
+      :PREVIOUS-DATE "16-Oct-2022 14:24:52" {DSK}<home>larry>loops>system>LOOPSEDIT.;6)
 
 
 (* ; "
-Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1993 by Venue & Xerox Corporation.  All rights reserved.
+Copyright (c) 1983-1988, 1990, 1993 by Venue & Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT LOOPSEDITCOMS)
@@ -110,46 +111,47 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1993 by Venue & Xerox Co
                                                                                         errorOccurred
                                                                                         ))))
 
-(CheckClassSource
-  (LAMBDA (source className)                                 (* ; "Edited 27-May-87 17:03 by smL")
+(CheckClassSource
+  [LAMBDA (source className)                                 (* ; "Edited 16-Oct-2022 14:03 by lmm")
+                                                             (* ; "Edited 27-May-87 17:03 by smL")
 
-(* ;;; "")
+(* ;;; "")
 
-(* ;;; "Checks the list structure form of the definition to make sure that no simple problems exist.  If there are problems, notifies the user and calls ERROR.  This should cause the user to end up back in the editor.")
+(* ;;; "Checks the list structure form of the definition to make sure that no simple problems exist.  If there are problems, notifies the user and calls ERROR.  This should cause the user to end up back in the editor.")
 
-(* ;;; "")
+(* ;;; "")
 
-    (for item in source bind form ERRFLG do (SETQ form (CDR item))
+    (for item in source bind form ERRFLG do (SETQ form (CDR item))
                                             (SELECTQ (CAR item)
-                                                (MetaClass (SETQ ERRFLG (OR (CheckMetaClass form)
+                                                (MetaClass (SETQ ERRFLG (OR (CheckMetaClass form)
                                                                             ERRFLG)))
-                                                (Supers (SETQ ERRFLG (OR (CheckSupers form)
+                                                (Supers (SETQ ERRFLG (OR (CheckSupers form)
                                                                          ERRFLG)))
                                                 (ClassVariables 
-                                                     (SETQ ERRFLG (OR (CheckAlist "ClassVariable" 
+                                                     (SETQ ERRFLG (OR (CheckAlist "ClassVariable" 
                                                                              form)
                                                                       ERRFLG)))
                                                 (InstanceVariables 
-                                                     (SETQ ERRFLG (OR (CheckAlist "InstanceVariable" 
+                                                     (SETQ ERRFLG (OR (CheckAlist "InstanceVariable"
                                                                              form)
                                                                       ERRFLG)))
-                                                (Methods (SETQ ERRFLG (OR (CheckAlist "Method" form)
+                                                (Methods (SETQ ERRFLG (OR (CheckAlist "Method" form)
                                                                           ERRFLG)))
                                                 ((MethodFns IVsInherited CVsInherited) 
-                                                             (* ; 
-                                                             "Do nothing.  There to aid in editing")
-
+                                                             (* ; 
+                                                             "Do nothing.  There to aid in editing")
                                                      )
-                                                (PROGN (printout T item ,
-                                                     " is not a recognized item for class definition" 
+                                                (PROGN (printout T item %, 
+                                                     " is not a recognized item for class definition"
                                                               T)
-                                                       (SETQ ERRFLG T))) finally (RETURN ERRFLG))))
+                                                       (SETQ ERRFLG T))) finally (RETURN ERRFLG])
 
-(CheckMetaClass
-  (LAMBDA (form)                                             (* mjs%: " 1-JUL-82 16:45")
-          
-          (* * Checks to see if the metaClass is a real class and the property list 
-          length is even.)
+(CheckMetaClass
+  [LAMBDA (form)                                             (* ; "Edited 16-Oct-2022 14:49 by lmm")
+                                                             (* mjs%: " 1-JUL-82 16:45")
+
+         (* * Checks to see if the metaClass is a real class and the property list length 
+         is even.)
 
     (PROG (metaClass)
           (SETQ metaClass (CAR form))
@@ -158,14 +160,22 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1993 by Venue & Xerox Co
               (RETURN))
              ((NULL metaClass)
               (RPLACA form 'Class))
-             ((NULL (GoodClassName metaClass form))
+             ((NULL (GoodClassName metaClass form))
               (printout T "MetaClass " metaClass " is not a defined class" T)
               (RETURN T)))
-          (COND
-             ((NULL (OddLengthList form))
-              (printout T "Property list of class is not of even length" T)
-              (RETURN T)))
-          (RETURN NIL))))
+          (RETURN (for p on form by (CDDR p)
+                     do [IF (AND (EQ (CAR p)
+                                     'Edited%:)
+                                 (NEQ (CAR (LISTP (CADR p)))
+                                      '*))
+                            THEN (RPLACD p (CONS (LIST '* (CONCAT "autofixed " (IDATE)))
+                                                 (CDR p]
+                        (COND
+                           ((NULL (CDR p))
+                            (RETURN))) finally (printout T 
+                                                      "Property list of class is not of even length"
+                                                      T)
+                                             (RETURN T])
 
 (CheckSupers
   (LAMBDA (supersForm)                                       (* smL "18-Sep-86 10:28")
@@ -242,13 +252,12 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1993 by Venue & Xerox Co
          (GetClassRec name])
 
 (FromAnEditor?
-  [LAMBDA NIL                                            (* ; "Edited  4-Mar-88 11:13 by jrb:")
-
-    (* ;; 
-  "This works under Lyric SEdit only- it will have to change for Medley to sedit::whatever it is.")
-
-    (AND (STKPOS '\\verify.structure)
-         T])
+  [LAMBDA NIL                                                (* ; "Edited 15-Oct-2022 19:48 by lmm")
+                                                             (* ; "Edited  4-Mar-88 11:13 by jrb:")
+    (LET [(POS (STKPOS 'GETDEF]
+         (AND POS (PROG1 [FOR X IN (CL:FOURTH (STKARGS POS))
+                            THEREIS (MEMB X '(EDIT NODWIM NOCOPY]
+                         (RELSTK POS])
 
 (GetClassSource
   [LAMBDA (className)                                        (* ; "Edited  4-Mar-88 11:14 by jrb:")
@@ -611,7 +620,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1993 by Venue & Xerox Co
 )
 
 (ADDTOVAR DT.EDITMACROS (class ObjSource ObjInstallSource)
-                            (instance ObjSource ObjInstallSource))
+                        (instance ObjSource ObjInstallSource))
 
 
 
@@ -629,15 +638,15 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990, 1993 by Venue & Xerox Co
 (ADDTOVAR SHADOW-TYPES (METHOD-FNS METHODS FNS))
 (PUTPROPS LOOPSEDIT COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1993))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (1913 29879 (ChangeEditedClass 1923 . 2291) (ChangeEditedInstance 2293 . 2799) (
-ChangedClass 2801 . 3381) (CheckAlist 3383 . 5377) (CheckClassSource 5379 . 7730) (CheckMetaClass 7732
- . 8497) (CheckSupers 8499 . 9470) (ComputeSupersList 9472 . 10123) (DefineClass 10125 . 12760) (
-FromAnEditor? 12762 . 13056) (GetClassSource 13058 . 13918) (RemoveClassDef 13920 . 14194) (
-GetInstanceSource 14196 . 14782) (GetSourceCVs 14784 . 16460) (GetSourceIVs 16462 . 16854) (
-GetSourceInhCVs 16856 . 17593) (GetSourceInhIVs 17595 . 18155) (GetSourceMeta 18157 . 18415) (
-GetSourceMethods 18417 . 19189) (GetSourceSupers 19191 . 19375) (GoodClassName 19377 . 20531) (
-InstallClassSource 20533 . 21990) (InstallClassVariables 21992 . 22650) (InstallInstanceVariables 
-22652 . 23671) (InstallMetaClass 23673 . 23969) (InstallMethods 23971 . 25294) (InstallSupers 25296 . 
-28072) (OddLengthList 28074 . 28448) (RenameClassVariable 28450 . 29058) (RenameVariable 29060 . 29877
-)) (30008 30300 (ObjSource 30018 . 30147) (ObjInstallSource 30149 . 30298)))))
+  (FILEMAP (NIL (1850 30839 (ChangeEditedClass 1860 . 2228) (ChangeEditedInstance 2230 . 2736) (
+ChangedClass 2738 . 3318) (CheckAlist 3320 . 5314) (CheckClassSource 5316 . 7845) (CheckMetaClass 7847
+ . 9306) (CheckSupers 9308 . 10279) (ComputeSupersList 10281 . 10932) (DefineClass 10934 . 13569) (
+FromAnEditor? 13571 . 14016) (GetClassSource 14018 . 14878) (RemoveClassDef 14880 . 15154) (
+GetInstanceSource 15156 . 15742) (GetSourceCVs 15744 . 17420) (GetSourceIVs 17422 . 17814) (
+GetSourceInhCVs 17816 . 18553) (GetSourceInhIVs 18555 . 19115) (GetSourceMeta 19117 . 19375) (
+GetSourceMethods 19377 . 20149) (GetSourceSupers 20151 . 20335) (GoodClassName 20337 . 21491) (
+InstallClassSource 21493 . 22950) (InstallClassVariables 22952 . 23610) (InstallInstanceVariables 
+23612 . 24631) (InstallMetaClass 24633 . 24929) (InstallMethods 24931 . 26254) (InstallSupers 26256 . 
+29032) (OddLengthList 29034 . 29408) (RenameClassVariable 29410 . 30018) (RenameVariable 30020 . 30837
+)) (30968 31260 (ObjSource 30978 . 31107) (ObjInstallSource 31109 . 31258)))))
 STOP

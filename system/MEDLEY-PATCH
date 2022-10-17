@@ -1,11 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "XCL" BASE 10)
 
-(FILECREATED "16-Oct-2022 10:26:41" |{DSK}<home>larry>loops>system>MEDLEY-PATCH.;3| 2564   
+(FILECREATED "16-Oct-2022 15:03:37" |{DSK}<home>larry>loops>system>MEDLEY-PATCH.;5| 2511   
 
-      :CHANGES-TO (FNS LOOPSCOMPARE |FromAnEditor?|)
-                  (VARS MEDLEY-PATCHCOMS)
+      :CHANGES-TO (FNS |FromAnEditor?|)
 
-      :PREVIOUS-DATE "15-Aug-90 14:21:20" |{DSK}<home>larry>loops>system>MEDLEY-PATCH.;1|)
+      :PREVIOUS-DATE "16-Oct-2022 10:26:41" |{DSK}<home>larry>loops>system>MEDLEY-PATCH.;3|)
 
 
 ; Copyright (c) 1988, 1990 by Venue & Xerox Corporation.
@@ -61,5 +60,5 @@
 
 (PUTPROPS MEDLEY-PATCH COPYRIGHT ("Venue & Xerox Corporation" 1988 1990))
 (DECLARE\: DONTCOPY
-  (FILEMAP (NIL (861 2071 (|FromAnEditor?| 871 . 1327) (LOOPSCOMPARE 1329 . 2069)))))
+  (FILEMAP (NIL (808 2018 (|FromAnEditor?| 818 . 1274) (LOOPSCOMPARE 1276 . 2016)))))
 STOP

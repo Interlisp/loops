@@ -1,10 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "12-Oct-2022 19:59:54" {DSK}<home>larry>loops>truckin>TRUCKINLOAD.;4 3788   
+(FILECREATED "16-Oct-2022 12:06:03" {DSK}<home>larry>loops>truckin>TRUCKINLOAD.;7 3915   
 
       :CHANGES-TO (FNS LoadTruckin)
 
-      :PREVIOUS-DATE " 1-Aug-2022 11:26:47" {DSK}<home>larry>loops>truckin>TRUCKINLOAD.;3)
+      :PREVIOUS-DATE "12-Oct-2022 19:59:54" {DSK}<home>larry>loops>truckin>TRUCKINLOAD.;6)
 
 
 (* ; "
@@ -62,7 +62,8 @@ Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
 (DEFINEQ
 
 (LoadTruckin
-  [LAMBDA NIL                                                (* ; "Edited 12-Oct-2022 19:58 by lmm")
+  [LAMBDA NIL                                                (* ; "Edited 16-Oct-2022 12:03 by lmm")
+                                                             (* ; "Edited 12-Oct-2022 19:58 by lmm")
                                                              (* ; "Edited  7-Jul-2022 21:52 by lmm")
                                                              (* ; "Edited 18-Jul-88 20:01 by Bane")
     (CL:UNLESS (GETD 'LOADLOOPS)
@@ -82,12 +83,12 @@ Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
 
     (* ;; "Finally load Truckin")
 
-    (CNDIR TruckinDirectory)
-    (FILESLOAD TRUCKIN TRUCKINR TRUCKINDB TRUCKINP TRUCKINI LOOPSGATEWAY TRUCKINM TRUCKINV)
-    (InitializeTruckin)
+    (FILESLOAD (FROM VALUEOF TruckinDirectory)
+           TRUCKIN TRUCKINR TRUCKINDB TRUCKINP TRUCKINI LOOPSGATEWAY TRUCKINM TRUCKINV)
     (AND (CL:Y-OR-N-P "Shall I load all the players?")
          (FILESLOAD (FROM VALUEOF TruckinPlayersDirectory)
                 TRAVELER PEDDLER PLANNER BADAPPLES HIGHROLLER HOUSEPLAYER TEAMSTER))
+    (InitializeTruckin)
     "Load any other players, then say
 (_ ($ Truckin) New)
 (_ PlayerInterface BeginGame)
@@ -95,5 +96,5 @@ Copyright (c) 1987-1988, 1991, 2022 by Xerox Corporation.
 )
 (PUTPROPS TRUCKINLOAD COPYRIGHT ("Xerox Corporation" 1987 1988 1991 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2207 2396 (INMENU 2207 . 2396)) (2479 3690 (LoadTruckin 2489 . 3688)))))
+  (FILEMAP (NIL (2207 2396 (INMENU 2207 . 2396)) (2479 3817 (LoadTruckin 2489 . 3815)))))
 STOP
