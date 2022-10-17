@@ -1,31 +1,44 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "XCL" BASE 10)
-(FILECREATED "15-Aug-90 14:21:20" |{DSK}<usr>local>lde>SOURCES>loops>SYSTEM>MEDLEY-PATCH.;2| 1662   
 
-      |changes| |to:|  (VARS MEDLEY-PATCHCOMS)
+(FILECREATED "16-Oct-2022 10:26:41" |{DSK}<home>larry>loops>system>MEDLEY-PATCH.;3| 2564   
 
-      |previous| |date:| "24-Jun-88 19:03:20" 
-|{DSK}<usr>local>lde>SOURCES>loops>SYSTEM>MEDLEY-PATCH.;1|)
+      :CHANGES-TO (FNS LOOPSCOMPARE |FromAnEditor?|)
+                  (VARS MEDLEY-PATCHCOMS)
+
+      :PREVIOUS-DATE "15-Aug-90 14:21:20" |{DSK}<home>larry>loops>system>MEDLEY-PATCH.;1|)
 
 
-; Copyright (c) 1988, 1990 by Venue & Xerox Corporation.  All rights reserved.
+; Copyright (c) 1988, 1990 by Venue & Xerox Corporation.
 
 (PRETTYCOMPRINT MEDLEY-PATCHCOMS)
 
-(RPAQQ MEDLEY-PATCHCOMS ((FNS |FromAnEditor?|)
+(RPAQQ MEDLEY-PATCHCOMS ((FNS |FromAnEditor?| LOOPSCOMPARE)
                                                              (* \; 
-                                                           "Update of Lyric LOOPS SEdit interface")
-                             (ADVISE (REMOVE-COMMENTS :IN COMPILER::PROCESS-FORMS))
+                                                             "Update of Lyric LOOPS SEdit interface")
+                         (ADVISE (REMOVE-COMMENTS :IN COMPILER::PROCESS-FORMS))
                                                              (* \; "Fixes AR 10464")))
 (DEFINEQ
 
 (|FromAnEditor?|
-  (lambda nil                                            (* \; "Edited 26-Apr-88 19:50 by jrb:")
+  (LAMBDA NIL                                               (* \; "Edited 15-Oct-2022 19:48 by lmm")
+                                                             (* \; "Edited  4-Mar-88 11:13 by jrb:")
+    (LET ((POS (STKPOS 'GETDEF)))
+         (AND POS (PROG1 (FOR X IN (CL:FOURTH (STKARGS POS))
+                            THEREIS (MEMB X '(EDIT NODWIM NOCOPY)))
+                         (RELSTK POS))))))
 
-    (* |;;| 
-  "This works under Lyric SEdit only- it will have to change for Medley to sedit::whatever it is.")
-
-    (and (stkpos 'sedit::verify-structure)
-         t)))
+(LOOPSCOMPARE
+  (LAMBDA NIL                                               (* \; "Edited 16-Oct-2022 10:26 by lmm")
+    (FOR DIR IN '((|users| |users|)
+                  (|users/rules| |users/rules|)
+                  (|systems| |src|)
+                  (|library| |library/src|)
+                  (|truckin| |truckin-src|)
+                  (|truckin/players| |truckin-src/players|))
+       |do| (CDBROWSER (COMPAREDIRECTORIES (CONCAT "/home/larry/loops/" (CAR DIR))
+                              (CONCAT "/home/larry/loops/obsolete/2.0/" (CADR DIR)
+                                     NIL NIL "*.DFASL" NIL NIL NIL T)))
+            (UNTIL (CL:Y-OR-N-P (CL:FORMAT NIL "Done comparing ~a?" DIR)) |do| NIL))))
 )
 
 
@@ -36,7 +49,7 @@
 (XCL:REINSTALL-ADVICE '(REMOVE-COMMENTS :IN COMPILER::PROCESS-FORMS)
        :AROUND
        '((:LAST (IF (EQ (CAAR XCL:ARGLIST)
-                            'DEFCLASS)
+                        'DEFCLASS)
                     THEN (CAR XCL:ARGLIST)
                   ELSE *))))
 
@@ -48,5 +61,5 @@
 
 (PUTPROPS MEDLEY-PATCH COPYRIGHT ("Venue & Xerox Corporation" 1988 1990))
 (DECLARE\: DONTCOPY
-  (FILEMAP (NIL (848 1165 (|FromAnEditor?| 858 . 1163)))))
+  (FILEMAP (NIL (861 2071 (|FromAnEditor?| 871 . 1327) (LOOPSCOMPARE 1329 . 2069)))))
 STOP

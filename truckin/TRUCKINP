@@ -1,12 +1,14 @@
-(DEFINE-FILE-INFO PACKAGE "IL" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "11-May-93 16:22:08" {DSK}<usr>local>lde>loops>system>TRUCKINP.;2 12564  
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-      previous date%: "17-Dec-87 08:28:32" 
-|{POGO:AISNORTH:XEROX}<LOOPSCORE>LYRIC>USERS>TRUCKIN>TRUCKINP.;3|)
+(FILECREATED "15-Oct-2022 14:03:58" {DSK}<home>larry>loops>truckin>TRUCKINP.;2 12427  
+
+      :CHANGES-TO (CLASSES SystemPlayer)
+
+      :PREVIOUS-DATE "11-May-93 16:22:08" {DSK}<home>larry>loops>truckin>TRUCKINP.;1)
 
 
 (* ; "
-Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
+Copyright (c) 1985, 1987, 1993 by Xerox Corporation.
 ")
 
 (PRETTYCOMPRINT TRUCKINPCOMS)
@@ -14,14 +16,14 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
 (RPAQQ TRUCKINPCOMS
        ((DECLARE%: DONTCOPY (PROP MAKEFILE-ENVIRONMENT TRUCKINP))
                                                              (* ; 
-                                                         "Copyright (c) 1983 by Xerox Corporation.")
+                                                           "Copyright (c) 1983 by Xerox Corporation.")
         
         (* ;; "Generic Players and Trucks for the TRUCKIN game. TRUCKIN is a mini-expert system for teaching knowledge representation techniques in the Loops programming system. Truckin provides a simple simulation environment for novice Loops users in which small bodies of knowledge can be created and tested interactively. Knowledge in Truckin is in the form of rules for controlling a game piece to maximize profit.")
 
                                                              (* ; 
-     "Written in January 1983 by the Loops Group -- Daniel Bobrow, Sanjay Mittal, and Mark Stefik.")
+       "Written in January 1983 by the Loops Group -- Daniel Bobrow, Sanjay Mittal, and Mark Stefik.")
                                                              (* ; 
-                               "System classes for Players. Includes an interactive manual player.")
+                                 "System classes for Players. Includes an interactive manual player.")
         (CLASSES * TRUCKINPCLASSES)
         (VARS * TRUCKINPVARS)
                                                              (* ; "Kinds of Trucks.")
@@ -70,13 +72,13 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
 
 (DEFCLASSES GasPlayer InteractivePlayer Player PlayerMeta RemotePlayer SystemPlayer)
 (DEFCLASS GasPlayer
-   (MetaClass GameClass doc "SystemPlayer used to refresh qty at GasStations." Edited%: 
+   (MetaClass GameClass doc "SystemPlayer used to refresh qty at GasStations." Edited%: 
                                                              (* sm%: "28-JUN-83 14:14"))
    (Supers SystemPlayer))
 
 (DEFCLASS InteractivePlayer
    (MetaClass PlayerMeta doc "Specialization of Player used for debugging. Pops up an interactive window for getting the Player moves directly from the the mouse instead of using knowledge encoded in rules."
-          Edited%:                                       (* sm%: " 5-JUL-83 18:47"))
+          Edited%:                                           (* sm%: " 5-JUL-83 18:47"))
    (Supers Player)
    (ClassVariables (UnChangedIVs (name driver truck icon reverseIcon window x y)
                           doc "list of IVs not to be changed")
@@ -86,7 +88,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
           (y NIL doc "y Origin of interaction window.")))
 
 (DEFCLASS Player
-   (MetaClass PlayerMeta doc "Participant in the Truckin Simulation." Edited%: 
+   (MetaClass PlayerMeta doc "Participant in the Truckin Simulation." Edited%: 
                                                              (* sm%: "16-SEP-83 15:42"))
    (Supers SystemPlayer)
    (ClassVariables (Handicap 0 doc "Free time allowed to compensate for slowness"))
@@ -105,12 +107,12 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
 
 (DEFCLASS PlayerMeta
    (MetaClass GameMetaClass doc 
-          "MetaClass for Player. Provides interactive method for defining new players." Edited%: 
+          "MetaClass for Player. Provides interactive method for defining new players." Edited%: 
                                                              (* mjs%: "16-MAR-83 16:19"))
    (Supers GameClass))
 
 (DEFCLASS RemotePlayer
-   (MetaClass PlayerMeta Edited%:                        (* sm%: "29-JUN-83 12:49")
+   (MetaClass PlayerMeta Edited%:                            (* sm%: "29-JUN-83 12:49")
           doc "Used for players which are running on a separate machine but simulated on this m/c")
    (Supers Player)
    (ClassVariables (CopyCV NIL)
@@ -118,7 +120,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
    (InstanceVariables (realClass NIL doc "name of real player class")))
 
 (DEFCLASS SystemPlayer
-   (MetaClass GameAbstractClass Edited%:                 (* dgb%: "14-JUL-83 18:24"))
+   (MetaClass GameAbstractClass Edited%:)
    (Supers GameObject)
    (ClassVariables (UnChangedIVs (name driver truck icon reverseIcon)
                           doc "list of IVs not to be changed")
@@ -128,7 +130,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
           (reverseIcon NIL doc "Cache for BitMap for player's truck going backwards.")
           (icon NIL doc "Cache for BitMap containing icon for player's truck as well as player's name. Created by MakeIcon msg."
                 )
-          (driver "Name1" doc 
+          (driver NIL doc 
            "String name to appear with the truck on the first line on the board. Six chars or fewer."
                  )
           (maxMove 0)
@@ -150,7 +152,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
 
 (DEFCLASSES MacTruck GMCTruck GasTruck FordTruck PeterBiltTruck)
 (DEFCLASS MacTruck
-   (MetaClass GameClass doc "Good Workhorse truck. Medium in range, weight, and speed." Edited%: 
+   (MetaClass GameClass doc "Good Workhorse truck. Medium in range, weight, and speed." Edited%: 
                                                              (* sm%: "21-FEB-83 15:56"))
    (Supers Truck)
    (ClassVariables (InitCash 10000)
@@ -162,7 +164,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
           (MaxFuel 160)))
 
 (DEFCLASS GMCTruck
-   (MetaClass GameClass doc "GMC is a big fast mover, but spends a lot on fuel." Edited%: 
+   (MetaClass GameClass doc "GMC is a big fast mover, but spends a lot on fuel." Edited%: 
                                                              (* sm%: "21-FEB-83 15:56"))
    (Supers Truck)
    (ClassVariables (InitCash 10000)
@@ -174,14 +176,13 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
           (MaxFuel 240)))
 
 (DEFCLASS GasTruck
-   (MetaClass Class doc "Truck used by Gas Player." Edited%: 
-                                                             (* mjs%: "16-MAR-83 14:45"))
+   (MetaClass Class doc "Truck used by Gas Player." Edited%: (* mjs%: "16-MAR-83 14:45"))
    (Supers SystemTruck)
    (ClassVariables (Icon GasTruckIcon)))
 
 (DEFCLASS FordTruck
    (MetaClass GameClass doc 
-          "Ford is a good lightweight truck. Fast with high mileage, but a low capacity." Edited%: 
+          "Ford is a good lightweight truck. Fast with high mileage, but a low capacity." Edited%: 
                                                              (* sm%: "14-FEB-83 08:46"))
    (Supers Truck)
    (ClassVariables (InitCash 10000)
@@ -195,7 +196,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
 (DEFCLASS PeterBiltTruck
    (MetaClass GameClass doc 
           "PeterBilt is a good heavy long distance mover, with an efficient engine. But he is slow."
-          Edited%:                                       (* smL "19-Dec-85 18:10"))
+          Edited%:                                           (* smL "19-Dec-85 18:10"))
    (Supers Truck)
    (ClassVariables (Icon PeterBiltTruckIcon)
           (Gpm 4)
@@ -214,11 +215,11 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
 
 (DEFCLASSES BanditCarMeta BanditCar Bandit)
 (DEFCLASS BanditCarMeta
-   (MetaClass GameMetaClass Edited%:                     (* sm%: "26-JAN-83 16:38"))
+   (MetaClass GameMetaClass Edited%:                         (* sm%: "26-JAN-83 16:38"))
    (Supers GameClass))
 
 (DEFCLASS BanditCar
-   (MetaClass BanditCarMeta Edited%:                     (* sm%: " 7-JUN-83 14:18"))
+   (MetaClass BanditCarMeta Edited%:                         (* sm%: " 7-JUN-83 14:18"))
    (Supers SystemTruck)
    (ClassVariables (CopyCV (InitCash MaxFuel MaxVolume MaxWeight MaxDamage MaxDist Gpm Icon))
           (Icon BlackMariaIcon)
@@ -231,7 +232,7 @@ Copyright (c) 1985, 1987, 1993 by Xerox Corporation.  All rights reserved.
           (InitCash 0)))
 
 (DEFCLASS Bandit
-   (MetaClass GameClass Edited%:                         (* sm%: "28-JUN-83 14:07"))
+   (MetaClass GameClass Edited%:                             (* sm%: "28-JUN-83 14:07"))
    (Supers SystemPlayer Consumer)
    (ClassVariables (CopyCV (Pr Qty Commodity))
           (Commodity Commodity)
@@ -285,6 +286,6 @@ of the truck to be examined? " NIL "Name of driver of truck" T)))
 (\UnbatchMethodDefs)
 (PUTPROPS TRUCKINP COPYRIGHT ("Xerox Corporation" 1985 1987 1993))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (11197 12432 (FindPlayer 11207 . 11551) (ListPlayers 11553 . 11744) (REPlayer 11746 . 
-12430)))))
+  (FILEMAP (NIL (11060 12295 (FindPlayer 11070 . 11414) (ListPlayers 11416 . 11607) (REPlayer 11609 . 
+12293)))))
 STOP

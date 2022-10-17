@@ -1,0 +1,62 @@
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
+
+(FILECREATED "12-Oct-2022 17:54:29" {DSK}<home>larry>loops>LOADME.;11 1384   
+
+      :PREVIOUS-DATE "12-Oct-2022 14:51:55" {DSK}<home>larry>loops>LOADME.;10)
+
+
+(PRETTYCOMPRINT LOADMECOMS)
+
+(RPAQQ LOADMECOMS
+       (
+
+(* ;;; "Set up so you can run as a greetfile")
+
+        (P (LOAD? (CONCAT (OR (UNIX-GETENV "MEDLEYDIR")
+                              "")
+                         "/sources/MEDLEYDIR.LCOM"))
+           (MEDLEY-INIT-VARS))
+        (FILES MEDLEYDIR-INIT)
+        [P (CNDIR)
+           (CNDIR (PACKFILENAME.STRING 'NAME NIL 'EXTENSION NIL 'VERSION NIL 'BODY (INPUT]
+        
+
+(* ;;; " conn <loopsdirectory> and then LOAD(LOADME) to load LOOPS and TRUCKIN")
+
+        (FILES MEDLEYDIR-INIT)
+        (P (CNDIR "system")
+           (FILESLOAD "LOADLOOPS")
+           (LOADLOOPS))))
+
+
+
+(* ;;; "Set up so you can run as a greetfile")
+
+
+(LOAD? (CONCAT (OR (UNIX-GETENV "MEDLEYDIR")
+                   "")
+              "/sources/MEDLEYDIR.LCOM"))
+
+(MEDLEY-INIT-VARS)
+
+(FILESLOAD MEDLEYDIR-INIT)
+
+(CNDIR)
+
+(CNDIR (PACKFILENAME.STRING 'NAME NIL 'EXTENSION NIL 'VERSION NIL 'BODY (INPUT)))
+
+
+
+(* ;;; " conn <loopsdirectory> and then LOAD(LOADME) to load LOOPS and TRUCKIN")
+
+
+(FILESLOAD MEDLEYDIR-INIT)
+
+(CNDIR "system")
+
+(FILESLOAD "LOADLOOPS")
+
+(LOADLOOPS)
+(DECLARE%: DONTCOPY
+  (FILEMAP (NIL)))
+STOP

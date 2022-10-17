@@ -1,10 +1,6 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 1-Aug-2022 09:28:41" {DSK}<home>larry>git-loops>system>LOADLOOPS.;11 20004  
-
-      :CHANGES-TO (VARS LOADLOOPSCOMS)
-
-      :PREVIOUS-DATE " 9-Jul-2022 20:50:48" {DSK}<home>larry>git-loops>system>LOADLOOPS.;10)
+(FILECREATED "13-Oct-2022 11:18:41" {DSK}<home>larry>loops>system>LOADLOOPS.;10 18136  )
 
 
 (* ; "
@@ -21,7 +17,7 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
         
         (* ;; "Bootstrap function until LOOPSBROWSE is loaded")
 
-        (FNS LOADLOOPS LoadLispUsers NOCACHEMACRO UnMarkChanges)
+        (FNS LOADLOOPS LoadLispUsers UnMarkChanges)
         (VARS (LispUserFilesForLoops '(GRAPHER))
               (LoopsPatchFiles NIL)
               (*DEFAULT-CLEANUP-COMPILER* 'CL:COMPILE-FILE)
@@ -124,96 +120,70 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 (DEFINEQ
 
 (LOADLOOPS
-  [LAMBDA (sysout-dir load-option)                           (* ; "Edited  7-Jul-2022 19:44 by lmm")
+  [LAMBDA (load-option)                                      (* ; "Edited 12-Oct-2022 18:24 by lmm")
+                                                             (* ; "Edited  7-Jul-2022 19:44 by lmm")
                                                           (* ; "Edited 28-Jun-88 18:08 by JAMES.PA")
     (DECLARE (GLOBALVARS LoopsPatchFiles LOOPSFILES LoadLoopsForms LOOPSDIRECTORY LoopsDate 
                     *FEATURES*))
     (CNDIR LOOPSDIRECTORY)
-    (RESETLST
+    (PROG ((BEFOREFILES FILELST))
 
-        (* ;; "stop the tty window from hanging up while loading files")
+     (* ;; "Load the files")
 
-        [RESETSAVE (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN (FUNCTION NILL))
-               (LIST (FUNCTION WINDOWPROP)
-                     \TopLevelTtyWindow
-                     'PAGEFULLFN
-                     (WINDOWPROP \TopLevelTtyWindow 'PAGEFULLFN]
-                                                             (* ; 
-                           "Binding the variables LISPXHIST and LISPXHISTORY so history is not saved")
-        [RESETVARS (LISPXHISTORY)
-                   (PROG ((DIRECTORIES (CONS NIL (CONS (DIRECTORYNAME T T)
-                                                       DIRECTORIES)))
-                          LISPXHIST)
+          (LoadLispUsers)
+          (DOFILESLOAD (CONS (MKLIST (OR load-option 'COMPILED))
+                             LOOPSFILES))
 
-                    (* ;; "Load the files")
+     (* ;; "Replace any boot-strapping stuff with the real thing")
 
-                         (COND
-                            (LoopsPatchFiles (for file in LoopsPatchFiles when (ATOM file)
-                                                do (PUTPROP (ROOTFILENAME file)
-                                                          'FILEDATES NIL))
-                                   (DOFILESLOAD LoopsPatchFiles)))
-                         (LoadLispUsers)
-                         (DOFILESLOAD (CONS (MKLIST (OR load-option 'COMPILED))
-                                            LOOPSFILES))
-                         (COND
-                            ((EQ MAKESYSNAME ':MEDLEY)       (* ; "This load must be conditionalized here since the file will be compiled in Medley and not loadable in Lyric at all.")
-                             (FILESLOAD MEDLEY-PATCH.DFASL)))
+          (MOVD 'FullInstallMethod 'InstallMethod)
+          (MOVD 'FullNameObject 'NameObject)
+          (FILEPKGTYPE 'FNS 'WHENCHANGED (NCONC1 (FILEPKGTYPE 'FNS 'WHENCHANGED)
+                                                'FnOrMethodChanged))
 
-                    (* ;; "Replace any boot-strapping stuff with the real thing")
+     (* ;; "Remember info about the state of the system")
 
-                         (MOVD 'FullInstallMethod 'InstallMethod)
-                         (MOVD 'FullNameObject 'NameObject)
-                         (FILEPKGTYPE 'FNS 'WHENCHANGED (NCONC1 (FILEPKGTYPE 'FNS 'WHENCHANGED)
-                                                               'FnOrMethodChanged))
+          (PUSHNEW *FEATURES* 'LOOPS :LOOPS)
+          (SETQ LoopsDate (DATE))
 
-                    (* ;; "Remember info about the state of the system")
+     (* ;; "Now do any user specified initialization")
 
-                         (push *FEATURES* 'LOOPS :LOOPS)
-                         (SETQ LoopsDate (DATE))
-
-                    (* ;; "Now do any user specified initialization")
-
-                         (for form in LoadLoopsForms do (EVAL form])
-    (COND
-       (sysout-dir (SETQ FILELST NIL)
-              (SETQ LOGINHOST/DIR NIL)
-              (SETQ INITIALSLST)
-              (SETQ USERNAME NIL)
-              (SETQ FIRSTNAME 'SirOrMadam)
-              (CLEARW \TopLevelTtyWindow)
-              (UnMarkChanges)
-              (ENDLOADUP)
-              (COND
-                 ((NEQ T sysout-dir)
-                  (/CNDIR sysout-dir)))
-              (MAKESYS 'LOOPS.SYSOUT (PACK* 'LOOPS "/" MAKESYSNAME])
+          (for form in LoadLoopsForms do (EVAL form))
+          (FILESLOAD LOOPSMS)
+          (COND
+             ((CL:Y-OR-N-P "Load Truckin?")
+              (CNDIR "../truckin")
+              (FILESLOAD TRUCKINLOAD)
+              (OR (BOUNDP 'TRUCKINVARS)
+                  (SETQ TRUCKINVRS))
+              (LoadTruckin)))
+          (COND
+             ((CL:Y-OR-N-P "Load sources?")
+              (pushnew DIRECTORIES TruckinPlayersDirectory)
+              (FOR X IN (REVERSE FILELST) WHEN (NOT (MEMBER X BEFOREFILES))
+                 DO (LOAD X 'PROP)
+                    (MASTERSCOPE `(ANALYZE ANY ON ',X])
 
 (LoadLispUsers
-  [LAMBDA NIL                                            (* edited%: " 4-Apr-86 10:35")
+  [LAMBDA NIL                                                (* ; "Edited 12-Oct-2022 20:27 by lmm")
+                                                             (* edited%: " 4-Apr-86 10:35")
 
-         (* * Load the usual Lispusers files for Loops)
+(* ;;; "Load the usual Lispusers files for Loops")
 
-    (DOFILESLOAD (CONS '(SYSLOAD FROM VALUEOF LISPUSERSDIRECTORIES)
-                       OptionalLispuserFiles))
-    (DOFILESLOAD (CONS '(SYSLOAD FROM VALUEOF LISPUSERSDIRECTORIES)
-                       LispUserFilesForLoops])
-
-(NOCACHEMACRO
-  [LAMBDA (FN BODY ENV)
-    (CL:FUNCALL FN BODY ENV])
+    (DOFILESLOAD OptionalLispuserFiles)
+    (DOFILESLOAD LispUserFilesForLoops])
 
 (UnMarkChanges
-  [LAMBDA (FILES)                                        (* smL "10-Dec-86 19:19")
+  [LAMBDA (FILES)                                            (* smL "10-Dec-86 19:19")
 
-         (* * Unmark all changes that have been made and forget files to list and 
-       compile)
+         (* * Unmark all changes that have been made and forget files to list and compile)
 
     (SETQ NOTLISTEDFILES NIL)
     (SETQ NOTCOMPILEDFILES NIL)
     (UPDATEFILES)
     [SETQ OLDCHANGES (for file in FILELST first (SETQ $$VAL (FILEPKGCHANGES))
                         when (OR (NULL FILES)
-                                     (FMEMB file FILES)) join (CDR (GETPROP file 'FILE]
+                                 (FMEMB file FILES)) join (CDR (GETPROP file 'FILE]
     [for COM in OLDCHANGES when (NEQ COMMENTFLG (CAR COM))
        do (for ITEM in (CDR COM) do (UNMARKASCHANGED ITEM (CAR COM]
     OLDCHANGES])
@@ -251,10 +221,10 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 (DEFINEQ
 
 (PromptEval
-  [LAMBDA (promptString window sameLine?)                (* ; "Edited 17-Nov-87 10:26 by jrb:")
+  [LAMBDA (promptString window sameLine?)                    (* ; "Edited 17-Nov-87 10:26 by jrb:")
                                                              (* Printout promptString in 
-                                                           promptwindow and return value of 
-                                                           expression read there)
+                                                             promptwindow and return value of 
+                                                             expression read there)
     (PROG [NEWVALUE (mainWindow (WINDOWPROP window 'MAINWINDOW]
           (RESETLST
               (RESETSAVE (TTYDISPLAYSTREAM (OR window PROMPTWINDOW)))
@@ -270,20 +240,20 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 
               (if mainWindow
                   then (WINDOWPROP mainWindow 'PROCESS (WINDOWPROP window 'PROCESS))
-                        (WINDOWADDPROP mainWindow 'CLOSEFN 'Don'tCloseIfBusy 'FIRST))
+                       (WINDOWADDPROP mainWindow 'CLOSEFN 'Don'tCloseIfBusy 'FIRST))
               (CL:UNWIND-PROTECT
                   (SETQ NEWVALUE (LISPX (LISPXREAD T T)
                                         '>))
                   (AND mainWindow (WINDOWPROP mainWindow 'PROCESS NIL)))
                                                              (* clear tty buffer because it 
-                                                           sometimes has stuff left.)
+                                                             sometimes has stuff left.)
               (CLEARBUF T T))
           (RETURN NEWVALUE])
 
 (PromptRead
-  [LAMBDA (promptString window sameLine?)                (* ; "Edited 17-Nov-87 10:23 by jrb:")
+  [LAMBDA (promptString window sameLine?)                    (* ; "Edited 17-Nov-87 10:23 by jrb:")
                                                              (* ; 
-                  "Printout promptString in promptwindow and return value of expression read there")
+                    "Printout promptString in promptwindow and return value of expression read there")
     (PROG [NEWVALUE (mainWindow (WINDOWPROP window 'MAINWINDOW]
           (RESETLST
               (RESETSAVE (TTYDISPLAYSTREAM (OR window PROMPTWINDOW)))
@@ -295,13 +265,13 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
                   then (printout T "> ")
                 else (printout T T "> "))
               (CLEARBUF T T)                                 (* ; 
-                                            "clear tty buffer because it sometimes has stuff left.")
+                                              "clear tty buffer because it sometimes has stuff left.")
 
               (* ;; "Make sure that buttoning the main window drags the TTY back here if window is an attachedwindow, and that it won't close until done")
 
               (if mainWindow
                   then (WINDOWPROP mainWindow 'PROCESS (WINDOWPROP window 'PROCESS))
-                        (WINDOWADDPROP mainWindow 'CLOSEFN 'Don'tCloseIfBusy 'FIRST))
+                       (WINDOWADDPROP mainWindow 'CLOSEFN 'Don'tCloseIfBusy 'FIRST))
               (ALLOW.BUTTON.EVENTS)
               (CL:UNWIND-PROTECT
                   [SETQ NEWVALUE (CAR (ERSETQ (TTYINREAD T T]
@@ -328,7 +298,7 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 (DEFINEQ
 
 (NiceMenu
-  [LAMBDA (items title)                                  (* ; "Edited 13-Jun-88 18:56 by TAL")
+  [LAMBDA (items title)                                      (* ; "Edited 13-Jun-88 18:56 by TAL")
     (COND
        ((NULL items)
         (PROMPTPRINT "No items for " title)
@@ -337,12 +307,12 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
                                       35]
                (MENU (create MENU
                             CHANGEOFFSETFLG _ T
-                            ITEMS _ (ColumnateMenuItems items columns)
+                            ITEMS _ (ColumnateMenuItems items columns)
                             TITLE _ title
                             MENUCOLUMNS _ columns])
 
 (ColumnateMenuItems
-  [LAMBDA (items columns nullItem)                       (* ; "Edited  8-Feb-88 14:26 by mcf")
+  [LAMBDA (items columns nullItem)                           (* ; "Edited  8-Feb-88 14:26 by mcf")
 
     (* ;; "Organize items in order by columns instead of by rows")
 
@@ -357,13 +327,10 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
          (COND
             ((NOT (ZEROP (IREMAINDER len columns)))
              (add rows 1)))
-         (for row to rows join (for x in (NTH items row)
-                                              by (NTH x (ADD1 rows)) as col from 0
-                                              collect x finally (COND
-                                                                           ((NEQ col columns)
-                                                                            (change $$VAL
-                                                                                   (NCONC1 DATUM 
-                                                                                          nullItem])
+         (for row to rows join (for x in (NTH items row) by (NTH x (ADD1 rows)) as col from 0
+                                  collect x finally (COND
+                                                       ((NEQ col columns)
+                                                        (change $$VAL (NCONC1 DATUM nullItem])
 )
 
 
@@ -433,7 +400,7 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
 (PUTPROPS LOADLOOPS COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
 1993 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (6536 10947 (LOADLOOPS 6546 . 9760) (LoadLispUsers 9762 . 10168) (NOCACHEMACRO 10170 . 
-10241) (UnMarkChanges 10243 . 10945)) (11728 14953 (PromptEval 11738 . 13434) (PromptRead 13436 . 
-14951)) (15559 17323 (NiceMenu 15569 . 16124) (ColumnateMenuItems 16126 . 17321)))))
+  (FILEMAP (NIL (6386 9323 (LOADLOOPS 6396 . 8270) (LoadLispUsers 8272 . 8633) (UnMarkChanges 8635 . 
+9321)) (10104 13345 (PromptEval 10114 . 11819) (PromptRead 11821 . 13343)) (13951 15455 (NiceMenu 
+13961 . 14524) (ColumnateMenuItems 14526 . 15453)))))
 STOP

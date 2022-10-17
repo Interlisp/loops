@@ -1,61 +1,51 @@
-(DEFINE-FILE-INFO READTABLE "XCL" PACKAGE "INTERLISP")
-(FILECREATED "27-Jul-90 07:37:36" |{DSK}<usr>local>lde>loops>src>SYSTEM>INSPECT-PATCH.;2| 2859   
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "XCL" BASE 10)
 
-      |changes| |to:|  (VARS INSPECT-PATCHCOMS)
-
-      |previous| |date:| "14-Jun-88 16:11:55" |{DSK}<usr>local>lde>loops>src>SYSTEM>INSPECT-PATCH.;1|
-)
+(FILECREATED "13-Oct-2022 11:18:41" |{DSK}<home>larry>loops>system>INSPECT-PATCH.;2| 2718   )
 
 
-; Copyright (c) 1988, 1990 by Venue & Xerox Corporation.  All rights reserved.
+; Copyright (c) 1988, 1990, 2022 by Venue & Xerox Corporation.
 
 (PRETTYCOMPRINT INSPECT-PATCHCOMS)
 
-(RPAQQ INSPECT-PATCHCOMS ((FNS INSPECT/AS/FUNCTION)))
+(RPAQQ INSPECT-PATCHCOMS ((FNS INSPECT/AS/FUNCTION)))
 (DEFINEQ
 
-(inspect/as/function
-  (lambda (atm stkp window)                                  (* \; "Edited 14-Jun-88 16:11 by raf")
-          
-          (* |;;| "calls an editor on function ATM.  STKP and WINDOW are the stack pointer and window of the break in which this inspect command was called")
+(INSPECT/AS/FUNCTION
+  (LAMBDA (ATM STKP WINDOW)                                 (* \; "Edited 13-Oct-2022 11:07 by lmm")
+                                                             (* \; "Edited 14-Jun-88 16:11 by raf")
 
-    (let ((editor (select.fns.editor atm))
-          frame codebase proc)
-         (and editor
-              (|if| (eq editor 'inspectcode)
-                    |then|
-                    (cond
-                       ((and (stackp stkp)
-                             (not (|fetch| (fx invalidp)
-                                         |of|
-                                         (setq frame (|fetch| (stackp edfxp)
-                                                            |of| stkp)))))
-                        (inspectcode (cond
-                                        ((eq (\\get-compiled-code-base atm)
-                                             (setq codebase (|fetch| (fx fnheader)
-                                                                   |of| frame)))
-                                         atm)
-                                        (t 
-          
-          (* |;;| "Function executing in this frame is not the one in the definition cell of its name, so fetch the real code.  Have to pass a CCODEP")
+    (* |;;| "calls an editor on function ATM.  STKP and WINDOW are the stack pointer and window of the break in which this inspect command was called")
 
-                                           (make-compiled-closure codebase)))
-                               nil nil nil (|fetch| (fx pc)
-                                                  |of| frame)))
-                       (t (inspectcode atm)))
-                    |else|
-                    (let ((proc (and window (windowprop window 'process)))
-                          (editorargs (|if| (eq editor 'ed)
-                                            |then|
-                                            (list atm '(method-fns functions fns \:dontwait \:display
-                                                              ))
-                                            |else|
-                                            (list atm))))
-                         (|if| proc |then| (process.apply proc editor editorargs)
-                               |else|
-                               (cl:apply editor editorargs))))))))
+    (LET ((EDITOR (SELECT.FNS.EDITOR ATM))
+          FRAME CODEBASE PROC)
+         (AND EDITOR
+              (|if| (EQ EDITOR 'INSPECTCODE)
+                  |then| (COND
+                            ((AND (STACKP STKP)
+                                  (NOT (|fetch| (FX INVALIDP) |of| (SETQ FRAME (|fetch| (STACKP
+                                                                                         EDFXP)
+                                                                                  |of| STKP)))))
+                             (INSPECTCODE (COND
+                                             ((EQ (\\GET-COMPILED-CODE-BASE ATM)
+                                                  (SETQ CODEBASE (|fetch| (FX FNHEADER) |of| FRAME)))
+                                              ATM)
+                                             (T 
+
+                                 (* |;;| "Function executing in this frame is not the one in the definition cell of its name, so fetch the real code.  Have to pass a CCODEP")
+
+                                                (MAKE-COMPILED-CLOSURE CODEBASE)))
+                                    NIL NIL NIL (|fetch| (FX PC) |of| FRAME)))
+                            (T (INSPECTCODE ATM)))
+                |else| (LET ((PROC (AND WINDOW (WINDOWPROP WINDOW 'PROCESS)))
+                             (EDITORARGS (|if| (EQ EDITOR 'ED)
+                                             |then| (LIST ATM '(METHOD-FNS FUNCTIONS FNS :DONTWAIT 
+                                                                      :DISPLAY))
+                                           |else| (LIST ATM))))
+                            (|if| PROC
+                                |then| (PROCESS.APPLY PROC EDITOR EDITORARGS)
+                              |else| (CL:APPLY EDITOR EDITORARGS))))))))
 )
-(PUTPROPS INSPECT-PATCH COPYRIGHT ("Venue & Xerox Corporation" 1988 1990))
+(PUTPROPS INSPECT-PATCH COPYRIGHT ("Venue & Xerox Corporation" 1988 1990 2022))
 (DECLARE\: DONTCOPY
-  (FILEMAP (NIL (487 2761 (INSPECT/AS/FUNCTION 497 . 2759)))))
+  (FILEMAP (NIL (327 2615 (INSPECT/AS/FUNCTION 337 . 2613)))))
 STOP
