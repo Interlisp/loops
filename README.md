@@ -12,7 +12,39 @@ Directories:
    (LOADLOOPS)
     ```
 
-This will load thc compiled version.
+**But note that** if you are using the default Medley sysout, you will be in the `XCL` 
+(Xerox Common Lisp) environment, where the above won't work. The right thing to do is
+to switch to the `INTERLISP` environment. To do this, right-button the desktop, mouse 
+to the `EXEC` item, mouse out to the right, and choose `INTERLISP`. You will be prompted
+to position a new executive window, which will be in the `INTERLISP` environment.
+
+However, if you do all this, the above spell still won't work, for reasons which seem 
+to imply that `LOADLOOPS` expects an `XCL` environment. If you now switch to your `XCL`
+executive window, which you probably still have open, and invoke:
+
+``` lisp
+   (IL:LOADLOOPS)
+```
+
+Loops will load correctly.
+
+The wrong thing to do, which also works is, from within the `XCL` executive window in
+a fresh copy of the Medley sysout:
+
+``` lisp
+   (IL:CNDIR "your/loops/system")
+   (IL:FILELOAD LOADLOOPS)
+   (IL:LOADLOOPS)
+```
+
+This will load the compiled version.
+
+To verify that Loops has indeed loaded and is working, right click on the desktop. An 
+item should have been added to the menu, `Loops Logo`; drive out to the right on this item 
+and you should see a submenu with items `Browse Class` and `Browse File`. A message will 
+appear in the prompt window (black background) "Please tell me the name of the root object"
+Enter `Object`, and you should be prompted to position the class browser.
+
 Loading the sources with (LOADLOOPS NIL 'SOURCE) first fails.
 
 LOADLOOPS doesn't seem to load the files in the same order as they appear in LOOPSFILES. 
