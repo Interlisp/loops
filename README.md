@@ -33,7 +33,7 @@ a fresh copy of the Medley sysout:
 
 ``` lisp
    (IL:CNDIR "your/loops/system")
-   (IL:FILELOAD LOADLOOPS)
+   (IL:FILESLOAD LOADLOOPS)
    (IL:LOADLOOPS)
 ```
 
