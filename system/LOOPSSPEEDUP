@@ -1,15 +1,13 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "11-Mar-2022 19:19:08" {DSK}<Users>briggs>Projects>loops>src>LOOPSSPEEDUP.;2 13756  
+(FILECREATED "27-Jan-2024 15:50:00" {DSK}<home>larry>il>loops>system>LOOPSSPEEDUP.;2 13599  
+
+      :EDIT-BY "lmm"
 
       :CHANGES-TO (MACROS \GETDTD)
 
-      :PREVIOUS-DATE " 6-Nov-91 16:43:37" {DSK}<Users>briggs>Projects>loops>src>LOOPSSPEEDUP.;1)
+      :PREVIOUS-DATE "11-Mar-2022 19:19:08" {DSK}<home>larry>il>loops>system>LOOPSSPEEDUP.;1)
 
-
-(* ; "
-Copyright (c) 1986-1987, 1990-1991, 2022 by Venue & Xerox Corporation.
-")
 
 (PRETTYCOMPRINT LOOPSSPEEDUPCOMS)
 
@@ -340,9 +338,8 @@ Copyright (c) 1986-1987, 1990-1991, 2022 by Venue & Xerox Corporation.
 )
 
 (ADDTOVAR GLOBALVARS *Global-Method-Cache*)
-(PUTPROPS LOOPSSPEEDUP COPYRIGHT ("Venue & Xerox Corporation" 1986 1987 1990 1991 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2216 3423 (Make-Not-Reference-Counted 2226 . 3421)) (9871 11360 (FlushIVIndexCache 9881
- . 10625) (\Make-IV-Cache-Entry 10627 . 11358)) (11804 13225 (FlushMethodCache 11814 . 12466) (
-\Make-Method-Cache-Entry 12468 . 13223)))))
+  (FILEMAP (NIL (2148 3355 (Make-Not-Reference-Counted 2158 . 3353)) (9803 11292 (FlushIVIndexCache 9813
+ . 10557) (\Make-IV-Cache-Entry 10559 . 11290)) (11736 13157 (FlushMethodCache 11746 . 12398) (
+\Make-Method-Cache-Entry 12400 . 13155)))))
 STOP
