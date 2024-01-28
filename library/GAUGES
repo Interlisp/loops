@@ -1,14 +1,13 @@
-(DEFINE-FILE-INFO PACKAGE "IL" READTABLE "INTERLISP" BASE 10)
-(FILECREATED "15-Aug-90 16:52:11" {DSK}<usr>local>lde>SOURCES>loops>LIBRARY>GAUGES.;2 45139  
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-      changes to%:  (VARS GAUGESCOMS)
+(FILECREATED "27-Jan-2024 15:48:33" {DSK}<home>larry>il>loops>library>GAUGES.;1 45378  
 
-      previous date%: "11-Mar-88 12:01:17" {DSK}<usr>local>lde>SOURCES>loops>LIBRARY>GAUGES.;1)
+      :EDIT-BY "lmm"
 
+      :CHANGES-TO (FNS DrawHTick)
 
-(* ; "
-Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporation.  All rights reserved.
-")
+      :PREVIOUS-DATE "15-Aug-90 16:52:11" {DSK}<home>larry>il>loops>library>GAUGES.;1)
+
 
 (PRETTYCOMPRINT GAUGESCOMS)
 
@@ -16,7 +15,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
        ((DECLARE%: DONTCOPY (PROP MAKEFILE-ENVIRONMENT GAUGES)
                (PROP FILETYPE GAUGES))
                                                              (* ; 
-                                                       "Copyright (c) Xerox Corporation 1983, 1987")
+                                                         "Copyright (c) Xerox Corporation 1983, 1987")
         (CLASSES Gauge GaugeAV)
         (METHODS Gauge.Attach Gauge.AttachProbe Gauge.Attached? Gauge.ChangeFont Gauge.Close 
                Gauge.Destroy Gauge.Detach Gauge.DetachProbe Gauge.Reset Gauge.SaveInIT 
@@ -44,7 +43,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
 (DEFCLASSES Gauge GaugeAV)
 (DEFCLASS Gauge
    (MetaClass AbstractClass doc "An object which presents a dynamic graphical image of a Loops value"
-          Edited%:                                       (* edited%: "29-Jan-87 03:28"))
+          Edited%:                                           (* edited%: "29-Jan-87 03:28"))
    (Supers Window)
    [ClassVariables (LeftButtonItems ((Update 'Update "Update gauge to show all labels")
                                      ("Save in IT" 'SaveInIT "(SavedValue) and IT _ this gauge")))
@@ -61,7 +60,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                  )))
 
 (DEFCLASS GaugeAV
-   (MetaClass Class Edited%:                             (* RBGMartin "19-May-86 16:11")
+   (MetaClass Class Edited%:                                 (* RBGMartin "19-May-86 16:11")
           doc "This is the default metaClass for all classes")
    (Supers LocalStateActiveValue)
    (InstanceVariables (gauge NIL doc "the gauge that is connected to this active value")
@@ -179,57 +178,57 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
          (_@ gaugeAV type Type)
          (_@ gaugeAV gauge self)
          (_@ containedInAV (CONS gaugeAV (@ containedInAV))) (* CONSing to (@ containedInAV) to 
-                                                           handle barcharts)
+                                                             handle barcharts)
          (_ gaugeAV AddActiveValue Obj VarName PropName Type)))
 
-(Method ((Gauge Attached?) self dontPrintFlg)            (* ; "edited: 29-Jan-87 10:29")
+(Method ((Gauge Attached?) self dontPrintFlg)                (* ; "edited: 29-Jan-87 10:29")
    "print what gauge is attached to"
    [LET (promptW (containedInAV (@ containedInAV)))
         (COND
            (dontPrintFlg containedInAV)
            [containedInAV (bind [pW _ (GETPROMPTWINDOW (@ window)
-                                                 (ADD1 (TIMES 2 (LENGTH containedInAV)))
-                                                 '(MODERN 10] for AV in containedInAV
-                             as rest on containedInAV first (CLEARW pW)
-                                                                    (printout pW "Attached to:" T)
+                                             (ADD1 (TIMES 2 (LENGTH containedInAV)))
+                                             '(MODERN 10] for AV in containedInAV as rest
+                             on containedInAV first (CLEARW pW)
+                                                    (printout pW "Attached to:" T)
                              do (RESETLST
-                                        (RESETSAVE (DSPRIGHTMARGIN 1000 pW)
-                                               (LIST 'DSPRIGHTMARGIN (DSPRIGHTMARGIN NIL pW)
-                                                     pW))
-                                        (printout pW "Obj: " (COND
-                                                                ((GetObjectName (@ AV object)))
-                                                                (T "No Name"))
-                                               T "Var: " (@ AV varName))
-                                        [PROG ((propN (@ AV propName)))
-                                              (COND
-                                                 (propN (printout pW ":," propN]
-                                        (AND (CDR rest)
-                                             (printout pW T)))]
+                                    (RESETSAVE (DSPRIGHTMARGIN 1000 pW)
+                                           (LIST 'DSPRIGHTMARGIN (DSPRIGHTMARGIN NIL pW)
+                                                 pW))
+                                    (printout pW "Obj: " (COND
+                                                            ((GetObjectName (@ AV object)))
+                                                            (T "No Name"))
+                                           T "Var: " (@ AV varName))
+                                    [PROG ((propN (@ AV propName)))
+                                          (COND
+                                             (propN (printout pW ":," propN]
+                                    (AND (CDR rest)
+                                         (printout pW T)))]
            (T [SETQ promptW (GETPROMPTWINDOW (@ window)
                                    2
                                    '(MODERN 10]
               (CLEARW promptW)
               (printout promptW "Not attached"])
 
-(Method ((Gauge ChangeFont) self newFont)                (* ; "RBGMartin 28-Apr-86 15:28")
+(Method ((Gauge ChangeFont) self newFont)                    (* ; "RBGMartin 28-Apr-86 15:28")
    "Change the font of a gauge to the newFont. Update the gauge. Return the old font."
    (PROG1 (@ font)
        (_@ font newFont)
        (_ self Update)))
 
-(Method ((Gauge Close) self dontDetachFlg)               (* ; "dgb:  6-Mar-84 15:32")
+(Method ((Gauge Close) self dontDetachFlg)                   (* ; "dgb:  6-Mar-84 15:32")
    "Detach the gauge and close the window"
    (AND (NULL dontDetachFlg)
         (_ self Attached? T)
         (_ self Detach))
    (_Super self Close))
 
-(Method ((Gauge Destroy) self)                           (* ; "smL 27-Feb-85 15:54")
+(Method ((Gauge Destroy) self)                               (* ; "smL 27-Feb-85 15:54")
    "Destroy the gauge, detaching it first"
    (_ self Detach)
    (_Super ))
 
-(Method ((Gauge Detach) self)                            (* ; "edited: 27-Jan-87 22:59")
+(Method ((Gauge Detach) self)                                (* ; "edited: 27-Jan-87 22:59")
    "Detach gauge from attachedPlaces it is attached to"
    (_ self ClearPromptWindow)
    (COND
@@ -237,12 +236,11 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
        (_ self PromptPrint "Detaching 
 ")
        (DISMISS 300)
-       (for AV in (@ containedInAV) finally (_@ containedInAV NIL)
-          do (_ self DetachProbe AV)))
+       (for AV in (@ containedInAV) finally (_@ containedInAV NIL) do (_ self DetachProbe AV)))
       (T (_ self PromptPrint "Not Attached 
 "))))
 
-(Method ((Gauge DetachProbe) self av)                    (* ; "edited: 28-Oct-86 10:18")
+(Method ((Gauge DetachProbe) self av)                        (* ; "edited: 28-Oct-86 10:18")
    "Delete active value that connects object being monitored to gauge."
 
 (* ;;; "The test for DestroyedObject is in here because of a bug in ActiveValue.DeleteNestedValue that will stack overflow if the containingObj argument is a DestroyedObject")
@@ -255,59 +253,59 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                  (@ av varName)
                  (@ av propName)
                  (@ av type)))                               (* delete any links the gaugeAV may 
-                                                           have elsewhere)
+                                                             have elsewhere)
        (for iv in (_ av ListAttribute 'IVs) do (PutValueOnly av iv NIL])
 
-(Method ((Gauge Reset) self newReading)                  (* ; "dgb:  6-JUN-83 17:43")
+(Method ((Gauge Reset) self newReading)                      (* ; "dgb:  6-JUN-83 17:43")
    "set reading to value, and then update gauge so that it shows that reading without going through intermediate states"
    (_@ reading newReading)
    (_ self Update))
 
-(Method ((Gauge SaveInIT) self)                          (* ; "edited: 27-Jan-87 22:27")
+(Method ((Gauge SaveInIT) self)                              (* ; "edited: 27-Jan-87 22:27")
    "New method template"
    (PutSavedValue self))
 
-(Method ((Gauge SetParameters) self)                     (* ; "RBGMartin 29-Apr-86 16:11")
+(Method ((Gauge SetParameters) self)                         (* ; "RBGMartin 29-Apr-86 16:11")
    "Set the font for the window"
    (DSPFONT (@ font)
           (@ window)))
 
-(Method ((Gauge SetScale) self min max labelScale)       (* ; "dgb: 23-JUN-83 15:50")
+(Method ((Gauge SetScale) self min max labelScale)           (* ; "dgb: 23-JUN-83 15:50")
    "compute the scale and redisplay if necessary"
    (_ self ComputeScale min max labelScale)
    (_ self Update?))
 
-(Method ((Gauge Shape) self newRegion noUpdateFlg)       (* ; "RBGMartin  5-May-86 16:11")
+(Method ((Gauge Shape) self newRegion noUpdateFlg)           (* ; "RBGMartin  5-May-86 16:11")
    "Shapes outside of region to specified shape. Uses GETREGION and width:,min height:,min"
    (PROG ((window (@ window)))
          (CLEARW window)
          (_Super self Shape [if newRegion
                                 then (GetMinRegion newRegion self)
                               else (GETREGION (@ width%:,min)
-                                              (@ height%:,min)
-                                              (WINDOWPROP (@ window)
-                                                     'REGION]
+                                          (@ height%:,min)
+                                          (WINDOWPROP (@ window)
+                                                 'REGION]
                       noUpdateFlg)))
 
-(Method ((Gauge ShapeToHold) self)                       (* ; "RBGMartin 30-Apr-86 16:19")
+(Method ((Gauge ShapeToHold) self)                           (* ; "RBGMartin 30-Apr-86 16:19")
    "shapes a gauge to its smallest size."
 
    (* ;; "JRB - Don't bother if it's not going to change")
 
    [if [OR (NOT (EQUAL (@ width)
-                           (@ width%:,min)))
-               (NOT (EQUAL (@ height)
-                           (@ height%:,min)]
+                       (@ width%:,min)))
+           (NOT (EQUAL (@ height)
+                       (@ height%:,min)]
        then (_ self Shape (CREATEREGION (@ left)
-                                     (@ bottom)
-                                     (@ width%:,min)
-                                     (@ height%:,min)))])
+                                 (@ bottom)
+                                 (@ width%:,min)
+                                 (@ height%:,min)))])
 
-(Method ((Gauge ShowInstrument) self)                    (* ; "edited: 13-NOV-83 18:22")
+(Method ((Gauge ShowInstrument) self)                        (* ; "edited: 13-NOV-83 18:22")
    "Cause an error, becuase this should be implemented in subclass"
    (ERROR "ShowInstrument should be implemented in " (Class self)))
 
-(Method ((Gauge Update) self)                            (* ; "RBGMartin 19-May-86 12:03")
+(Method ((Gauge Update) self)                                (* ; "RBGMartin 19-May-86 12:03")
    "Set up display window for instrument. Reinitialize to reflect current state"
    (_Super )
 
@@ -320,7 +318,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
    (_ self ShowReading)
    self)
 
-(Method ((Gauge Update?) self)                           (* ; "RBGMartin  7-Apr-86 14:51")
+(Method ((Gauge Update?) self)                               (* ; "RBGMartin  7-Apr-86 14:51")
    "Update if there is a window and it is open"
    (AND [NOT (NotSetValue (GetIVHere self 'window]
         (OPENWP (GetValue self 'window))
@@ -355,10 +353,10 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
    "Send the Set message to the IV gauge of the active value."
    (_ (@ gauge)
       Set newValue (@ label))                                (* ; 
-                                                           "(@ label) arg is needed for BarCharts")
+                                                             "(@ label) arg is needed for BarCharts")
    (_Super self PutWrappedValue containingObj varName newValue propName type))
 
-(Method ((GaugeAV WrappingPrecedence) self)              (* ; "edited: 15-May-86 13:54")
+(Method ((GaugeAV WrappingPrecedence) self)                  (* ; "edited: 15-May-86 13:54")
    "What is the wrapping precedence for this active value? The larger the number, the more the active value wants to be on the outside. NIL forces innermost nesting, T forces outermost nesting."
    10)
 
@@ -378,7 +376,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
 (DEFINEQ
 
 (CenterPrint
-  [LAMBDA (string xpos ypos window)                          (* RBGMartin "29-Apr-86 18:44")
+  [LAMBDA (string xpos ypos window)                          (* RBGMartin "29-Apr-86 18:44")
                                                              (* Print string centered around xpos 
                                                              at height ypos)
     (PROG ((font (DSPFONT NIL window)))
@@ -391,7 +389,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
           (PRIN1 string window])
 
 (ChangeHorizontalSetting
-  [LAMBDA (yPos oldXPos newXPos window settingWidth shade)   (* edited%: "29-Oct-86 23:31")
+  [LAMBDA (yPos oldXPos newXPos window settingWidth shade)   (* edited%: "29-Oct-86 23:31")
                                                              (* Move a bar to left or right as 
                                                              needed)
     (COND
@@ -403,7 +401,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                settingWidth shade])
 
 (ChangeVerticalSetting
-  [LAMBDA (xPos oldYPos newYPos window settingWidth shade)   (* edited%: "29-Oct-86 23:32")
+  [LAMBDA (xPos oldYPos newYPos window settingWidth shade)   (* edited%: "29-Oct-86 23:32")
     (COND
        ((GREATERP oldYPos newYPos)
         (LineLower xPos oldYPos newYPos (@ window)
@@ -413,19 +411,15 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                settingWidth shade])
 
 (ComputeLabels
-  [LAMBDA (goodMinVal goodIncr goodMaxVal labelScale)        (* edited%: "31-Dec-84 10:30")
+  [LAMBDA (goodMinVal goodIncr goodMaxVal labelScale)        (* edited%: "31-Dec-84 10:30")
     (PROG (incr labelList endPtr lab1 lab)
           [SETQ lab (COND
                        ((GREATERP 1 (ABS goodIncr))
                         goodMinVal)
-                       (T 
-          
-          (* for increments greater than 1, set the base to be a fixed number)
-
-                          (FIX goodMinVal]
-          
-          (* For ranges greater than 10, set the increment to a fixed number)
-
+                       (T                                    (* for increments greater than 1, set 
+                                                             the base to be a fixed number)
+                          (FIX goodMinVal]                   (* For ranges greater than 10, set the 
+                                                             increment to a fixed number)
           (OR (GREATERP 10 (DIFFERENCE goodMaxVal goodMinVal))
               (SETQ goodIncr (FIX goodIncr)))
       LP  (COND
@@ -444,10 +438,10 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
       OUT (RETURN labelList])
 
 (ConcatNSpaces
-  [LAMBDA (N string)                                         (* dgb%: "25-JAN-83 16:23")
-          
-          (* Put N Spaces on the front of a string.
-          Good for making fixed width strings)
+  [LAMBDA (N string)                                         (* dgb%: "25-JAN-83 16:23")
+
+         (* Put N Spaces on the front of a string.
+         Good for making fixed width strings)
 
     (CONCAT (SELECTQ N
                 (0 "")
@@ -463,10 +457,10 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
               (T string])
 
 (DigiMeterNEWREGIONfn
-  [LAMBDA (FP MP self)                                       (* RBGMartin "30-Apr-86 10:06")
-          
-          (* When prompting user for a new region for a DigiMeter, this guarantees the 
-          height and width of the "ghost region" are the correct dimensions.)
+  [LAMBDA (FP MP self)                                       (* RBGMartin "30-Apr-86 10:06")
+
+         (* When prompting user for a new region for a DigiMeter, this guarantees the 
+         height and width of the "ghost region" are the correct dimensions.)
 
     (LET [(SpaceForLCD (@ spaceForLCD))
           (SpaceForLabelScale (@ spaceForLabelScale))
@@ -484,9 +478,9 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                                    (IDIFFERENCE (IABS DY)
                                                           (IPLUS titleHeight SpaceForLCD 
                                                                  SpaceForLabelScale)))
-          
-          (* subtract from DY the height of the LCD, the height of the label, and height 
-          of the title. Check to make sure region for meter is square.)
+
+         (* subtract from DY the height of the LCD, the height of the label, and height of 
+         the title. Check to make sure region for meter is square.)
 
                                             (SETQ YCOORD (IPLUS (fetch (POSITION YCOORD) of FP)
                                                                 (ITIMES (IPLUS (IABS DX)
@@ -512,7 +506,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
             (T FP])
 
 (DrawBox
-  [LAMBDA (left bottom width height lineWidth operation window)
+  [LAMBDA (left bottom width height lineWidth operation window)
                                                              (* dgb%: "29-JAN-83 01:01")
     (PROG ((topy (IPLUS bottom height))
            (topx (IPLUS left width)))                        (* left)
@@ -525,8 +519,9 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
           (DRAWLINE left topy topx topy lineWidth operation window])
 
 (DrawHTick
-  [LAMBDA (self x y incr)                                    (* edited%: "22-May-86 13:08")
-                                                             (* Draw a horizontal line for a tick)
+  [LAMBDA (self x y incr)                                    (* ; "Edited 26-Jan-2024 21:00 by lmm")
+                                                             (* edited%: "22-May-86 13:08")
+                                                             (* ; "Draw a horizontal line for a tick")
     (PROG ((smallTicks (@ ticks%:,smallTicks))
            (window (@ window))
            (tickLength (@ ticks%:,tickLength)))
@@ -534,7 +529,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                  y
                  (@ brushWidth)
                  'PAINT window)
-          (AND incr smallTicks (bin ysmall for N to smallTicks
+          (AND incr smallTicks (bind ysmall for N to smallTicks
                                   do [SETQ ysmall (IPLUS y (TIMES N (FQUOTIENT incr (ADD1 smallTicks]
                                      (DRAWLINE x ysmall (IPLUS x (IQUOTIENT tickLength 2))
                                             ysmall
@@ -544,7 +539,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                             'PAINT window])
 
 (DrawLines
-  [LAMBDA (pointList window fromPointN toPointN width operation color)
+  [LAMBDA (pointList window fromPointN toPointN width operation color)
                                                              (* dgb%: "25-MAR-83 19:35")
     (OR fromPointN (SETQ fromPointN 1))
     (OR toPointN (SETQ toPointN (LENGTH pointList)))
@@ -560,18 +555,18 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                        width operation window color])
 
 (DrawRay
-  [LAMBDA (x y length angle width operation window color invisLength)
+  [LAMBDA (x y length angle width operation window color invisLength)
                                                              (* dgb%: "11-JAN-83 13:12")
-          
-          (* Draw a ray from center xy y at angle of length.
-          If invisLength is given, only draw the end of the ray that is visible)
+
+         (* Draw a ray from center xy y at angle of length.
+         If invisLength is given, only draw the end of the ray that is visible)
 
     (PROG ((s (SIN angle))
            (c (COS angle)))
           (DRAWLINE (COND
                        (invisLength (PLUS x (TIMES invisLength c)))
                        (T x))
-                  (COND
+                 (COND
                     (invisLength (PLUS y (TIMES invisLength s)))
                     (T y))
                  (PLUS x (TIMES length c))
@@ -579,7 +574,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                  width operation window color])
 
 (DrawTick
-  [LAMBDA (self angle numExtraTicks incr smallSizeFactor)    (* edited%: "22-May-86 13:13")
+  [LAMBDA (self angle numExtraTicks incr smallSizeFactor)    (* edited%: "22-May-86 13:13")
                                                              (* Draw a tick and potentially some 
                                                              small ticks)
     (PROG ((tickLength (@ ticks%:,tickLength))
@@ -613,7 +608,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                        NIL invisLength])
 
 (DrawVTick
-  [LAMBDA (self x y incr)                                    (* edited%: "22-May-86 13:09")
+  [LAMBDA (self x y incr)                                    (* edited%: "22-May-86 13:09")
                                                              (* Draw a horizontal line for a tick)
     (PROG ((smallTicks (@ ticks%:,smallTicks))
            (window (@ window))
@@ -630,38 +625,35 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                             'PAINT window])
 
 (EvenIntervals
-  [LAMBDA (lower range numIntervals includeLastFlg)          (* edited%: "22-May-86 00:43")
-          
-          (* Produces a list of integers in best approximation of an integer linear scale 
-          between ower and lower+range. Include lower+range only if includeLastFlg=T.)
+  [LAMBDA (lower range numIntervals includeLastFlg)          (* edited%: "22-May-86 00:43")
+
+         (* Produces a list of integers in best approximation of an integer linear scale 
+         between ower and lower+range. Include lower+range only if includeLastFlg=T.)
 
     (bind (delta _ (FQUOTIENT range numIntervals)) for i from 0 to numIntervals
        when (OR includeLastFlg (NEQ i numIntervals)) collect (PLUS lower (TIMES i delta])
 
 (FloorOfLog
-  [LAMBDA (number)                                           (* RBGMartin "29-Apr-86 16:43")
+  [LAMBDA (number)                                           (* RBGMartin "29-Apr-86 16:43")
     (LET [(EXPO (FQUOTIENT (LOG number)
-                       (LOG 10]
-          
-          (* number = 10^EXPO. The COND computes the floor of EXPO.)
-
+                       (LOG 10]                              (* number = 10^EXPO.
+                                                             The COND computes the floor of EXPO.)
          (COND
             ((MINUSP EXPO)
              (FIX (SUB1 EXPO)))
             (T (FIX EXPO])
 
 (GetMinRegion
-  [LAMBDA (region self)                                      (* RBGMartin "29-Apr-86 14:15")
-          
-          (* returns a region that is at least the minimum width and height.)
-
+  [LAMBDA (region self)                                      (* RBGMartin "29-Apr-86 14:15")
+                                                             (* returns a region that is at least 
+                                                             the minimum width and height.)
     (create REGION using region WIDTH _ (MAX (@ width%:,min)
                                              (fetch WIDTH of region))
                          HEIGHT _ (MAX (@ height%:,min)
                                        (fetch HEIGHT of region])
 
 (GetPathObj
-  [LAMBDA (obj path)                                         (* sm%: "12-MAY-83 15:37")
+  [LAMBDA (obj path)                                         (* sm%: "12-MAY-83 15:37")
     (COND
        ((NULL path)
         obj)
@@ -669,31 +661,29 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                  (CDR path])
 
 (InteriorHeight
-  [LAMBDA (self)                                             (* edited%: "15-May-86 02:02")
+  [LAMBDA (self)                                             (* edited%: "15-May-86 02:02")
     (IDIFFERENCE (@ height)
            (PLUS (FONTHEIGHT (DSPFONT NIL WindowTitleDisplayStream))
                  (TIMES 2 (WINDOWPROP (@ window)
                                  'BORDER])
 
 (InteriorWidth
-  [LAMBDA (self)                                             (* RBGMartin "29-Apr-86 15:01")
+  [LAMBDA (self)                                             (* RBGMartin "29-Apr-86 15:01")
     (DIFFERENCE (@ width)
            (TIMES 2 (WINDOWPROP (@ window)
                            'BORDER])
 
 (LineLeft
-  [LAMBDA (XA XB Y window height)                            (* edited%: "15-May-86 00:52")
-          
-          (* Draw a thick line, reducing the size from XB to XA.
-          XA>XB to work)
-
+  [LAMBDA (XA XB Y window height)                            (* edited%: "15-May-86 00:52")
+                                                             (* Draw a thick line, reducing the 
+                                                             size from XB to XA. XA>XB to work)
     (for I from 1 to (IDIFFERENCE XA XB) do (BITBLT NIL NIL NIL window (IDIFFERENCE XA I)
                                                    Y 1 (OR height 4)
                                                    'TEXTURE
                                                    'REPLACE WHITESHADE])
 
 (LineLower
-  [LAMBDA (X YA YB window width)                             (* edited%: "15-May-86 00:54")
+  [LAMBDA (X YA YB window width)                             (* edited%: "15-May-86 00:54")
     (for I from 1 to (IABS (IDIFFERENCE YB YA)) do (BITBLT NIL NIL NIL window X
                                                           (IDIFFERENCE (IMAX YA YB)
                                                                  I)
@@ -703,7 +693,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                                           'REPLACE WHITESHADE])
 
 (LineRaise
-  [LAMBDA (X YA YB window width shade)                       (* edited%: "15-May-86 00:54")
+  [LAMBDA (X YA YB window width shade)                       (* edited%: "15-May-86 00:54")
     (for I from 0 to (SUB1 (IABS (IDIFFERENCE YB YA))) do (BITBLT NIL NIL NIL window X
                                                                  (IPLUS I (IMIN YA YB))
                                                                  (OR width 4)
@@ -713,7 +703,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                                                  (OR shade BLACKSHADE])
 
 (LineRight
-  [LAMBDA (XA XB Y window height shade)                      (* edited%: "15-May-86 00:52")
+  [LAMBDA (XA XB Y window height shade)                      (* edited%: "15-May-86 00:52")
     (for I from 0 to (SUB1 (IDIFFERENCE XB XA)) do (BITBLT NIL NIL NIL window (IPLUS I XA)
                                                           Y 1 (OR height 4)
                                                           'TEXTURE
@@ -721,10 +711,10 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                                           (OR shade BLACKSHADE])
 
 (MeterNEWREGIONfn
-  [LAMBDA (FP MP self)                                       (* RBGMartin "30-Apr-86 16:08")
-          
-          (* When prompting user for a new region for a Meter this guarantees the height 
-          and width of the "ghost region" are the correct dimensions.)
+  [LAMBDA (FP MP self)                                       (* RBGMartin "30-Apr-86 16:08")
+
+         (* When prompting user for a new region for a Meter this guarantees the height 
+         and width of the "ghost region" are the correct dimensions.)
 
     (LET ((titleHeight (COND
                           ((@ title)
@@ -740,9 +730,9 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                            [(IGREATERP (IABS DX)
                                                    (IDIFFERENCE (IABS DY)
                                                           (IPLUS titleHeight SpaceForLabelScale)))
-          
-          (* subtract from DY the height of the label and the title.
-          Check to make sure region for meter is square.)
+
+         (* subtract from DY the height of the label and the title.
+         Check to make sure region for meter is square.)
 
                                             (SETQ YCOORD (IPLUS (fetch (POSITION YCOORD) of FP)
                                                                 (ITIMES (IPLUS (IABS DX)
@@ -766,10 +756,10 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
             (T FP])
 
 (MoveImageRight
-  [LAMBDA (WINDOW XDELTA)                                    (* dgb%: "11-JAN-83 10:54")
-          
-          (* scrolling function that scrolls by blting existing bits and then filling 
-          with background the newly exposed bits. Copied from SCROLLBYREPAINTFN)
+  [LAMBDA (WINDOW XDELTA)                                    (* dgb%: "11-JAN-83 10:54")
+
+         (* scrolling function that scrolls by blting existing bits and then filling with 
+         background the newly exposed bits. Copied from SCROLLBYREPAINTFN)
 
     (PROG ((DSP (WINDOWPROP WINDOW 'DSP))
            (EXTENT (WINDOWPROP WINDOW 'EXTENT))
@@ -780,9 +770,8 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                    (COND
                       ((AND EXTENT (NEQ (fetch (REGION WIDTH) of EXTENT)
                                         -1))                 (* limit amount by the extent)
-          
-          (* for now limit right extent to right of window to keep it always visible.)
-
+                                                             (* for now limit right extent to right 
+                                                             of window to keep it always visible.)
                        (SETQ XDELTA (IMIN (IDIFFERENCE (fetch (REGION LEFT) of CLIPREG)
                                                  (fetch (REGION LEFT) of EXTENT))
                                           (IMAX (IDIFFERENCE (fetch (REGION PRIGHT) of CLIPREG)
@@ -800,9 +789,8 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
               (WXOFFSET XDELTA DSP)
               (FILLWITHBACKGROUND WINDOW (COND
                                             ((IGREATERP XDELTA 0)
-          
-          (* moving to right, create new region on left for repaintfn)
-
+                                                             (* moving to right, create new region 
+                                                             on left for repaintfn)
                                              (create REGION
                                                     LEFT _ (WTODSX 0 WINDOW)
                                                     BOTTOM _ (WTODSY 0 WINDOW)
@@ -824,10 +812,10 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                                                       HEIGHT _ (fetch (REGION HEIGHT) of CLIPREG])
 
 (PinnedSetting
-  [LAMBDA (reading minSetting maxSetting)                    (* dgb%: "25-JAN-83 16:31")
-          
-          (* Returns the value of reading if it is between minSetting and maxSetting, 
-          else the "pinned" value)
+  [LAMBDA (reading minSetting maxSetting)                    (* dgb%: "25-JAN-83 16:31")
+
+         (* Returns the value of reading if it is between minSetting and maxSetting, else 
+         the "pinned" value)
 
     (COND
        ((GREATERP minSetting reading)
@@ -837,7 +825,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
        (T reading])
 
 (PrintLabelScale
-  [LAMBDA (self)                                             (* dgb%: "28-JAN-83 18:38")
+  [LAMBDA (self)                                             (* dgb%: "28-JAN-83 18:38")
     (COND
        ((NEQ 1 (@ labelScale))
         (MOVETO 1 1 (@ window))
@@ -846,7 +834,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                (@ window)])
 
 (RotateLine
-  [LAMBDA (xorg yorg length angle newAngle window width deltaAngle color)
+  [LAMBDA (xorg yorg length angle newAngle window width deltaAngle color)
                                                              (* dgb%: "11-JUL-83 14:16")
     (PROG (incr (diff (IDIFFERENCE newAngle angle)))
           (COND
@@ -867,12 +855,12 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
           (DrawRay xorg yorg length newAngle width 'INVERT window color])
 
 (SetUpBarChart
-  [LAMBDA (listOfObjects ivName chartTitle maxScale path)    (* sm%: "12-MAY-83 15:32")
-          
-          (* Attach a bar chart to the iv of specified by the object in the list, and the 
-          path. path can be an atom, meaning that IV, or it can be a list of atoms to be 
-          followed, each an iv name. Each bar on the chart will be labelled with the name 
-          of the object on listOfObjects. title will be used for the BarChart.)
+  [LAMBDA (listOfObjects ivName chartTitle maxScale path)    (* sm%: "12-MAY-83 15:32")
+
+         (* Attach a bar chart to the iv of specified by the object in the list, and the 
+         path. path can be an atom, meaning that IV, or it can be a list of atoms to be 
+         followed, each an iv name. Each bar on the chart will be labelled with the name 
+         of the object on listOfObjects. title will be used for the BarChart.)
 
     (bind gaugedObj bc first (_@ (SETQ bc (_ ($ BarChart)
                                              New))
@@ -883,7 +871,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
           (AND maxScale (_ bc SetScale 0 maxScale)) finally (RETURN bc])
 
 (ShowRayLabel
-  [LAMBDA (self angle string)                                (* edited%: "28-Jan-87 00:44")
+  [LAMBDA (self angle string)                                (* edited%: "28-Jan-87 00:44")
     (PROG ((s (SIN angle))
            (c (COS angle)))
           (CenterPrint string (PLUS (@ xc)
@@ -901,7 +889,7 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
                  (@ window)])
 
 (TellInstrument
-  [LAMBDA (self varName newValue propName activeVal type)    (* mjs%: "17-FEB-83 15:11")
+  [LAMBDA (self varName newValue propName activeVal type)    (* mjs%: "17-FEB-83 15:11")
                                                              (* This is a putFn for changing 
                                                              attached instruments)
     (PROG ((temp (PutLocalState activeVal newValue self varName propName type)))
@@ -909,19 +897,18 @@ Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1990 by Venue & Xerox Corporat
           (RETURN temp])
 
 (TitleWidth
-  [LAMBDA (str)                                              (* dgb%: "21-JAN-83 14:44")
+  [LAMBDA (str)                                              (* dgb%: "21-JAN-83 14:44")
     (STRINGWIDTH str (DSPFONT NIL WindowTitleDisplayStream])
 )
-(PUTPROPS GAUGES COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (16647 45023 (CenterPrint 16657 . 17366) (ChangeHorizontalSetting 17368 . 17924) (
-ChangeVerticalSetting 17926 . 18308) (ComputeLabels 18310 . 19515) (ConcatNSpaces 19517 . 20081) (
-DigiMeterNEWREGIONfn 20083 . 23447) (DrawBox 23449 . 24241) (DrawHTick 24243 . 25286) (DrawLines 25288
- . 26094) (DrawRay 26096 . 26865) (DrawTick 26867 . 28414) (DrawVTick 28416 . 29399) (EvenIntervals 
-29401 . 29911) (FloorOfLog 29913 . 30287) (GetMinRegion 30289 . 30777) (GetPathObj 30779 . 31014) (
-InteriorHeight 31016 . 31324) (InteriorWidth 31326 . 31551) (LineLeft 31553 . 32084) (LineLower 32086
- . 32726) (LineRaise 32728 . 33414) (LineRight 33416 . 33928) (MeterNEWREGIONfn 33930 . 36942) (
-MoveImageRight 36944 . 40584) (PinnedSetting 40586 . 40989) (PrintLabelScale 40991 . 41269) (
-RotateLine 41271 . 42528) (SetUpBarChart 42530 . 43483) (ShowRayLabel 43485 . 44328) (TellInstrument 
-44330 . 44846) (TitleWidth 44848 . 45021)))))
+  (FILEMAP (NIL (16494 45355 (CenterPrint 16504 . 17209) (ChangeHorizontalSetting 17211 . 17763) (
+ChangeVerticalSetting 17765 . 18143) (ComputeLabels 18145 . 19486) (ConcatNSpaces 19488 . 20036) (
+DigiMeterNEWREGIONfn 20038 . 23374) (DrawBox 23376 . 24164) (DrawHTick 24166 . 25318) (DrawLines 25320
+ . 26122) (DrawRay 26124 . 26877) (DrawTick 26879 . 28422) (DrawVTick 28424 . 29403) (EvenIntervals 
+29405 . 29899) (FloorOfLog 29901 . 30343) (GetMinRegion 30345 . 30934) (GetPathObj 30936 . 31167) (
+InteriorHeight 31169 . 31473) (InteriorWidth 31475 . 31696) (LineLeft 31698 . 32316) (LineLower 32318
+ . 32954) (LineRaise 32956 . 33638) (LineRight 33640 . 34148) (MeterNEWREGIONfn 34150 . 37134) (
+MoveImageRight 37136 . 40970) (PinnedSetting 40972 . 41359) (PrintLabelScale 41361 . 41635) (
+RotateLine 41637 . 42890) (SetUpBarChart 42892 . 43827) (ShowRayLabel 43829 . 44668) (TellInstrument 
+44670 . 45182) (TitleWidth 45184 . 45353)))))
 STOP
