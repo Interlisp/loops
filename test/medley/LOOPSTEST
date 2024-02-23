@@ -1,20 +1,38 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "22-Feb-2024 17:34:11" {DSK}<home>larry>il>loops>LOOPSTEST.;2 6613   
+(FILECREATED "23-Feb-2024 12:02:55" {DSK}<home>larry>il>loops>test>medley>LOOPSTEST.;2 7729   
 
       :EDIT-BY "lmm"
 
-      :CHANGES-TO (FNS TESTLOOPS)
-                  (VARS LOOPSTESTCOMS)
+      :CHANGES-TO (VARS LOOPSTESTCOMS)
+                  (FNS MAKE-TEDIT-TEST TESTLOOPS)
 
       :PREVIOUS-DATE "22-Feb-2024 15:52:27" {DSK}<home>larry>il>loops>system>LOOPSTEST.;1)
 
 
 (PRETTYCOMPRINT LOOPSTESTCOMS)
 
-(RPAQQ LOOPSTESTCOMS ((FNS TESTLOOPS)
+(RPAQQ LOOPSTESTCOMS ((FNS MAKE-TEDIT-TEST TESTLOOPS)
                       (VARS TESTAV1 TESTAV2)))
 (DEFINEQ
+
+(MAKE-TEDIT-TEST
+  [LAMBDA (COMMANDS)                                         (* ; "Edited 23-Feb-2024 12:00 by lmm")
+    (LET ((STR (OPENTEXTSTREAM)))
+         (FOR X IN COMMANDS DO (IF (EQ (CAR (LISTP X))
+                                       '*)
+                                   THEN 
+                                        (* ;; "Interlisp comment")
+
+                                        (TEDIT.INSERT STR [CONCAT ";; " (CL:THIRD X)
+                                                                 (CONSTANT (MKSTRING (CHARACTER
+                                                                                      13]
+                                               NIL NIL T)
+                                 ELSE (TEDIT.INSERT STR ">  " NIL NIL T)
+                                      (TEDIT.INSERT.OBJECT (BKSYSOBJ (MKSTRING X))
+                                             STR))
+                               (TEDIT.INSERT STR (CONSTANT (MKSTRING (CHARACTER 13)))
+                                      NIL NIL T])
 
 (TESTLOOPS
   [LAMBDA NIL                                                (* ; "Edited 22-Feb-2024 16:33 by lmm")
@@ -260,5 +278,5 @@
            AddIV
            'highTrigger 100)))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (473 1404 (TESTLOOPS 483 . 1402)))))
+  (FILEMAP (NIL (517 2520 (MAKE-TEDIT-TEST 527 . 1597) (TESTLOOPS 1599 . 2518)))))
 STOP
