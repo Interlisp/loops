@@ -1,11 +1,11 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "23-Feb-2024 12:02:55" {DSK}<home>larry>il>loops>test>medley>LOOPSTEST.;2 7729   
+(FILECREATED "23-Feb-2024 12:10:03" {DSK}<home>larry>il>loops>test>medley>LOOPSTEST.;3 7840   
 
       :EDIT-BY "lmm"
 
-      :CHANGES-TO (VARS LOOPSTESTCOMS)
-                  (FNS MAKE-TEDIT-TEST TESTLOOPS)
+      :CHANGES-TO (FNS MAKE-TEDIT-TEST TESTLOOPS)
+                  (VARS LOOPSTESTCOMS)
 
       :PREVIOUS-DATE "22-Feb-2024 15:52:27" {DSK}<home>larry>il>loops>system>LOOPSTEST.;1)
 
@@ -17,7 +17,7 @@
 (DEFINEQ
 
 (MAKE-TEDIT-TEST
-  [LAMBDA (COMMANDS)                                         (* ; "Edited 23-Feb-2024 12:00 by lmm")
+  [LAMBDA (COMMANDS)                                         (* ; "Edited 23-Feb-2024 12:07 by lmm")
     (LET ((STR (OPENTEXTSTREAM)))
          (FOR X IN COMMANDS DO (IF (EQ (CAR (LISTP X))
                                        '*)
@@ -29,10 +29,12 @@
                                                                                       13]
                                                NIL NIL T)
                                  ELSE (TEDIT.INSERT STR ">  " NIL NIL T)
-                                      (TEDIT.INSERT.OBJECT (BKSYSOBJ (MKSTRING X))
+                                      (TEDIT.INSERT.OBJECT (BKSYSOBJ (CONCAT (MKSTRING X)
+                                                                            " "))
                                              STR))
                                (TEDIT.INSERT STR (CONSTANT (MKSTRING (CHARACTER 13)))
-                                      NIL NIL T])
+                                      NIL NIL T))
+         (TEDIT STR])
 
 (TESTLOOPS
   [LAMBDA NIL                                                (* ; "Edited 22-Feb-2024 16:33 by lmm")
@@ -278,5 +280,5 @@
            AddIV
            'highTrigger 100)))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (517 2520 (MAKE-TEDIT-TEST 527 . 1597) (TESTLOOPS 1599 . 2518)))))
+  (FILEMAP (NIL (517 2631 (MAKE-TEDIT-TEST 527 . 1708) (TESTLOOPS 1710 . 2629)))))
 STOP
