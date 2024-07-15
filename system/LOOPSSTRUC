@@ -1,15 +1,13 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 6-Jul-2022 15:03:42" {DSK}<home>larry>loops>src>LOOPSSTRUC.;2 68244  
+(FILECREATED " 6-Jul-2024 12:43:36" {DSK}<Users>larry>il>loops>system>LOOPSSTRUC.;2 68365  
 
-      :CHANGES-TO (MACROS Class)
+      :EDIT-BY "lmm"
 
-      :PREVIOUS-DATE "15-Jun-93 13:59:37" {DSK}<home>larry>loops>src>LOOPSSTRUC.;1)
+      :CHANGES-TO (FNS PutObjectName)
 
+      :PREVIOUS-DATE " 6-Jul-2022 15:03:42" {DSK}<Users>larry>il>loops>system>LOOPSSTRUC.;1)
 
-(* ; "
-Copyright (c) 1983-1988, 1990-1991, 1993 by Venue & Xerox Corporation.
-")
 
 (PRETTYCOMPRINT LOOPSSTRUCCOMS)
 
@@ -1032,22 +1030,23 @@ DONTEVAL@COMPILE DOCOPY
     facts])
 
 (PutObjectName
-  [LAMBDA (name obj)                                         (* smL " 8-Apr-87 19:18")
-          
-          (* * Puts a new name for object in nameTable)
+  [LAMBDA (name obj)                                         (* ; "Edited  6-Jul-2024 12:42 by lmm")
+                                                             (* smL " 8-Apr-87 19:18")
 
-    (PROG (newNames oldNames)
-          
-          (* First make sure object has a UID if it is to be named)
+         (* * Puts a new name for object in nameTable)
 
+    (if (OR (EQ name 'NOBIND)
+            (EQ obj 'NOBIND))
+        then (HELP "NOBIND passed to PutObjectName"))
+    (PROG (newNames oldNames)                                (* First make sure object has a UID if 
+                                                             it is to be named)
           (UID obj)
           (SETQ oldNames (GETHASH obj ObjNameTable))
           [SETQ newNames (COND
                             ((NULL oldNames)
-                             (if (LISTP name)
-                                 then
-                                 (LIST name)
-                                 else name))
+                             (if (LISTP name)
+                                 then (LIST name)
+                               else name))
                             ((AND (LITATOM oldNames)
                                   (LISTP name))
                              (LIST name oldNames))
@@ -1453,20 +1452,18 @@ DONTEVAL@COMPILE DOCOPY
                                                     T
                                              else NIL]
 )
-(PUTPROPS LOOPSSTRUC COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
-1993))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (4843 6411 (Once-Only 4843 . 6411)) (6413 9607 (WithIVValue 6413 . 9607)) (9609 9985 (
-ChangeIVValue 9609 . 9985)) (10261 10453 (MakeIVPropDescr 10261 . 10453)) (10455 10729 (
-WithIVPropDescr 10455 . 10729)) (10731 11103 (WithIVPropDescr! 10731 . 11103)) (23788 24530 (
-GetInitialValue 23788 . 24530)) (24847 33885 (Parse@ 24857 . 26803) (Parse@* 26805 . 27345) (
-ParseAccess 27347 . 30012) (ParseBang 30014 . 31664) (ParseExpr 31666 . 32796) (ParsePut@ 32798 . 
-33883)) (34185 49103 (CreateEntity 34195 . 34678) (DeleteObjectName 34680 . 36448) (
-FastClassInitialize 36450 . 37878) (GetIVHere 37880 . 38702) (GetValueOnly 38704 . 40665) (GetClassRec
- 40667 . 41258) (GetLispClass 41260 . 41785) (GetObjectName 41787 . 42548) (GetObjectRec 42550 . 43125
-) (MakeMixinClass 43127 . 44474) (NameEntity 44476 . 45540) (NewEntity 45542 . 46357) (PutObjectName 
-46359 . 47671) (PutValueOnly 47673 . 48834) ($! 48836 . 49101)) (51762 67179 (BlankInstance 51772 . 
-53112) (BootNameObject 53114 . 53535) (FullNameObject 53537 . 53808) (FillInst 53810 . 54615) (FillIVs
- 54617 . 55226) (IVSource 55228 . 58278) (ModifyInstance 58280 . 59767) (NewClass 59769 . 61265) (
-NewObject 61267 . 61807) (UpdateClassIVs 61809 . 63741) (UpdateIVDescrs 63743 . 67177)))))
+  (FILEMAP (NIL (4804 6372 (Once-Only 4804 . 6372)) (6374 9568 (WithIVValue 6374 . 9568)) (9570 9946 (
+ChangeIVValue 9570 . 9946)) (10222 10414 (MakeIVPropDescr 10222 . 10414)) (10416 10690 (
+WithIVPropDescr 10416 . 10690)) (10692 11064 (WithIVPropDescr! 10692 . 11064)) (23749 24491 (
+GetInitialValue 23749 . 24491)) (24808 33846 (Parse@ 24818 . 26764) (Parse@* 26766 . 27306) (
+ParseAccess 27308 . 29973) (ParseBang 29975 . 31625) (ParseExpr 31627 . 32757) (ParsePut@ 32759 . 
+33844)) (34146 49332 (CreateEntity 34156 . 34639) (DeleteObjectName 34641 . 36409) (
+FastClassInitialize 36411 . 37839) (GetIVHere 37841 . 38663) (GetValueOnly 38665 . 40626) (GetClassRec
+ 40628 . 41219) (GetLispClass 41221 . 41746) (GetObjectName 41748 . 42509) (GetObjectRec 42511 . 43086
+) (MakeMixinClass 43088 . 44435) (NameEntity 44437 . 45501) (NewEntity 45503 . 46318) (PutObjectName 
+46320 . 47900) (PutValueOnly 47902 . 49063) ($! 49065 . 49330)) (51991 67408 (BlankInstance 52001 . 
+53341) (BootNameObject 53343 . 53764) (FullNameObject 53766 . 54037) (FillInst 54039 . 54844) (FillIVs
+ 54846 . 55455) (IVSource 55457 . 58507) (ModifyInstance 58509 . 59996) (NewClass 59998 . 61494) (
+NewObject 61496 . 62036) (UpdateClassIVs 62038 . 63970) (UpdateIVDescrs 63972 . 67406)))))
 STOP

@@ -1,16 +1,29 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "14-Aug-2022 10:36:07" {DSK}<home>larry>loops>truckin>TRUCKIN.;2 94977  
+(FILECREATED " 6-Jul-2024 16:15:50" {DSK}<Users>larry>il>LOOPS>TRUCKIN>TRUCKIN.;7 95404  
 
-      :CHANGES-TO (FNS GameClass.New GameMasterMeta.New GameObject.NewInstance)
-                  (VARS TRUCKINCOMS)
+      :EDIT-BY "lmm"
 
-      :PREVIOUS-DATE " 3-Aug-2022 11:36:04" {DSK}<home>larry>loops>truckin>TRUCKIN.;1)
+      :CHANGES-TO (CLASSES TruckinParameters TruckinDMParameters TDMTParameters GameParameters 
+                         GameObject GameMetaClass GameClass GameBoard GameAbstractClass CommodityMeta
+                         CommodityClassMeta)
+                  (VARS HandicapRatio)
+                  (FNS AuxBuyMade AuxMoveMade AuxSellMade BanditGotYou? BrokenRules ChangeValue 
+                       CheckVictim CommodityClassMeta.New CreateNewPlayer CreatePlayers DrawRoadMarks
+                       Drive DriveLeft DriveRight ELIMINATE FindFirstNIL FindLocIndex FindRandomNIL 
+                       GameClass.New GameControlMenu GameMasterMeta.New GameObject.NewInstance 
+                       GenConsumerPr GenConsumerQty GetRuleSetMethods InCopyCV? InformBandit&WS 
+                       InitializeTruckin IntervalToEvent InvertIcon KillGame MailOut MakeDriveBitMaps
+                       MakePlayerFile NormalizeValue PlayerInterruptMenu RunPlayerRE RunPlayerRE1 
+                       RandomRoomAvailable ReceiveIn ReflectIcon STRINGNUM SendOut SetMachineDepPara
+                       SetUpGame SettifyCopyCV SetupGameBrowsers SmashCreateCommodity 
+                       SmashRandomPerishable SubstituteStop SuspendGame SwitchMenu TalkinBuyMade 
+                       TalkinMoveMade TalkinSellMade TruckinError TruckinRE UpdateConsumerDisplay 
+                       UpdatePrDisplay UpdateProducerSoldout UpdateQtyDisplay WSRuleViolated? 
+                       WaitIfControlKey WakeGame WriteGameStatus)
 
+      :PREVIOUS-DATE "14-Aug-2022 10:36:07" {DSK}<Users>larry>il>LOOPS>TRUCKIN>TRUCKIN.;6)
 
-(* ; "
-Copyright (c) 1985, 1987, 2022 by Xerox Corporation.
-")
 
 (PRETTYCOMPRINT TRUCKINCOMS)
 
@@ -773,16 +786,13 @@ Higher delay means slower motion")))
                      (T index])
 
 (GameClass.New
-  [LAMBDA (self a1 a2 a3 a4 a5)                              (* ; "Edited 14-Aug-2022 10:28 by lmm")
-                                                             (* sm%: "21-SEP-83 09:26")
-                                                             (* ; 
-                                         "New method --- sends NewInstance to newly created instance")
-    (CL:COMPILER-LET ((*SelectorOfMethodBeingCompiled* 'New)
-                      (*SelfOfMethodBeingCompiled* 'self))
-           (PROG (inst)
-                 (SETQ inst (_Super self New))               (* ; 
-                                                             "(_ inst NewInstance a1 a2 a3 a4 a5)")
-                 (RETURN inst])
+  [LAMBDA (self a1 a2 a3 a4 a5)                              (* sm%: "21-SEP-83 09:26")
+                                                             (* New method -
+                                                             sends NewInstance to newly created 
+                                                             instance)
+    (PROG (inst)
+          (SETQ inst (_Super self New))                      (* (_ inst NewInstance a1 a2 a3 a4 a5))
+          (RETURN inst])
 
 (GameControlMenu
   [LAMBDA NIL                                                (* sm%: "16-SEP-83 17:32")
@@ -800,45 +810,38 @@ Higher delay means slower motion")))
            NIL])
 
 (GameMasterMeta.New
-  [LAMBDA (self gameBoardType)                               (* ; "Edited 14-Aug-2022 10:31 by lmm")
-                                                             (* sm%: "14-JUN-83 11:32")
-                                                             (* ; 
-                                                          "Creates and initializes a new GameMaster.")
-                                                             (* ; 
-                                          "if gameBoardType is not specified, uses default gameBoard")
-    (CL:COMPILER-LET ((*SelectorOfMethodBeingCompiled* 'New)
-                      (*SelfOfMethodBeingCompiled* 'self))
-           (PROG (gbClass)
-                 (SETQ gameMaster (_Super self New))         (* ; "Close Game Parameters Window")
-                 (AND GameParamW (CLOSEW GameParamW))
-                 (AND GameCommandW (CLOSEW GameCommandW))
+  [LAMBDA (self gameBoardType)                               (* sm%: "14-JUN-83 11:32")
+                                                             (* Creates and initializes a new 
+                                                             GameMaster.)
+                                                             (* if gameBoardType is not specified, 
+                                                             uses default gameBoard)
+    (PROG (gbClass)
+          (SETQ gameMaster (_Super self New))                (* Close Game Parameters Window)
+          (AND GameParamW (CLOSEW GameParamW))
+          (AND GameCommandW (CLOSEW GameCommandW))
 
-(* ;;; "Create a GameBoard.")
+         (* * Create a GameBoard.)
 
-                 [COND
-                    ((AND (GetObjectRec gameBoardType)
-                          (_ (GetObjectRec gameBoardType)
-                             InstOf
-                             'GameBoard))
-                     (SETQ gbClass gameBoardType))
-                    (T (SETQ gbClass (@ gameMaster gameBoard)]
-                 (SETQ gameBoard (_ (GetObjectRec gbClass)
-                                    New))
-                 (_ gameBoard NewBoard)
-                 (_ gameMaster AttachBoard gameBoard)
-                 (_ gameMaster SetUpGauges)
-                 (RETURN gameMaster])
+          [COND
+             ((AND (GetObjectRec gameBoardType)
+                   (_ (GetObjectRec gameBoardType)
+                      InstOf
+                      'GameBoard))
+              (SETQ gbClass gameBoardType))
+             (T (SETQ gbClass (@ gameMaster gameBoard)]
+          (SETQ gameBoard (_ (GetObjectRec gbClass)
+                             New))
+          (_ gameBoard NewBoard)
+          (_ gameMaster AttachBoard gameBoard)
+          (_ gameMaster SetUpGauges)
+          (RETURN gameMaster])
 
 (GameObject.NewInstance
-  [LAMBDA (self name a1 a2 a3 a4)                            (* ; "Edited 14-Aug-2022 10:34 by lmm")
-                                                             (* dgb%: "22-SEP-83 15:03")
-                                                             (* ; 
-                                                             "Received when new instance is created")
-                                                             (* ; 
-                                                             "Any specialization must return self")
-    (CL:COMPILER-LET ((*SelectorOfMethodBeingCompiled* 'NewInstance)
-                      (*SelfOfMethodBeingCompiled* 'self))
-           (_Super self NewInstance name a1 a2 a3 a4)])
+  [LAMBDA (self name a1 a2 a3 a4)                            (* dgb%: "22-SEP-83 15:03")
+                                                             (* Received when new instance is 
+                                                             created)
+                                                             (* Any specialization must return self)
+    (_Super self NewInstance name a1 a2 a3 a4)])
 
 (GenConsumerPr
   [LAMBDA (self)                                             (* sm%: "25-JAN-83 13:54")
@@ -1917,27 +1920,26 @@ Higher delay means slower motion")))
              (ERRORSET changeExp T])
 
 (\UnbatchMethodDefs)
-(PUTPROPS TRUCKIN COPYRIGHT ("Xerox Corporation" 1985 1987 2022))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (11527 78836 (AuxBuyMade 11537 . 12231) (AuxMoveMade 12233 . 12836) (AuxSellMade 12838
- . 13503) (BanditGotYou? 13505 . 14045) (BrokenRules 14047 . 17154) (ChangeValue 17156 . 18577) (
-CheckVictim 18579 . 20333) (CommodityClassMeta.New 20335 . 20735) (CreateNewPlayer 20737 . 21828) (
-CreatePlayers 21830 . 26024) (DrawRoadMarks 26026 . 27398) (Drive 27400 . 31196) (DriveLeft 31198 . 
-33366) (DriveRight 33368 . 35531) (ELIMINATE 35533 . 36100) (FindFirstNIL 36102 . 36321) (FindLocIndex
- 36323 . 36695) (FindRandomNIL 36697 . 37624) (GameClass.New 37626 . 38374) (GameControlMenu 38376 . 
-39279) (GameMasterMeta.New 39281 . 40863) (GameObject.NewInstance 40865 . 41630) (GenConsumerPr 41632
- . 42374) (GenConsumerQty 42376 . 42934) (GetRuleSetMethods 42936 . 43433) (InCopyCV? 43435 . 44237) (
-InformBandit&WS 44239 . 47584) (InitializeTruckin 47586 . 53080) (IntervalToEvent 53082 . 54249) (
-InvertIcon 54251 . 54639) (KillGame 54641 . 54884) (MailOut 54886 . 55206) (MakeDriveBitMaps 55208 . 
-55846) (MakePlayerFile 55848 . 58084) (NormalizeValue 58086 . 58494) (PlayerInterruptMenu 58496 . 
-58865) (RunPlayerRE 58867 . 59693) (RunPlayerRE1 59695 . 60328) (RandomRoomAvailable 60330 . 61285) (
-ReceiveIn 61287 . 61806) (ReflectIcon 61808 . 62366) (STRINGNUM 62368 . 62702) (SendOut 62704 . 62851)
- (SetMachineDepPara 62853 . 63408) (SetUpGame 63410 . 63620) (SettifyCopyCV 63622 . 64059) (
-SetupGameBrowsers 64061 . 65057) (SmashCreateCommodity 65059 . 66547) (SmashRandomPerishable 66549 . 
-67101) (SubstituteStop 67103 . 67731) (SuspendGame 67733 . 68851) (SwitchMenu 68853 . 69020) (
-TalkinBuyMade 69022 . 69321) (TalkinMoveMade 69323 . 69546) (TalkinSellMade 69548 . 69843) (
-TruckinError 69845 . 69973) (TruckinRE 69975 . 71004) (UpdateConsumerDisplay 71006 . 71515) (
-UpdatePrDisplay 71517 . 72149) (UpdateProducerSoldout 72151 . 72693) (UpdateQtyDisplay 72695 . 73349) 
-(WSRuleViolated? 73351 . 74469) (WaitIfControlKey 74471 . 75625) (WakeGame 75627 . 76248) (
-WriteGameStatus 76250 . 78834)))))
+  (FILEMAP (NIL (12898 79329 (AuxBuyMade 12908 . 13602) (AuxMoveMade 13604 . 14207) (AuxSellMade 14209
+ . 14874) (BanditGotYou? 14876 . 15416) (BrokenRules 15418 . 18525) (ChangeValue 18527 . 19948) (
+CheckVictim 19950 . 21704) (CommodityClassMeta.New 21706 . 22106) (CreateNewPlayer 22108 . 23199) (
+CreatePlayers 23201 . 27395) (DrawRoadMarks 27397 . 28769) (Drive 28771 . 32567) (DriveLeft 32569 . 
+34737) (DriveRight 34739 . 36902) (ELIMINATE 36904 . 37471) (FindFirstNIL 37473 . 37692) (FindLocIndex
+ 37694 . 38066) (FindRandomNIL 38068 . 38995) (GameClass.New 38997 . 39511) (GameControlMenu 39513 . 
+40416) (GameMasterMeta.New 40418 . 41674) (GameObject.NewInstance 41676 . 42123) (GenConsumerPr 42125
+ . 42867) (GenConsumerQty 42869 . 43427) (GetRuleSetMethods 43429 . 43926) (InCopyCV? 43928 . 44730) (
+InformBandit&WS 44732 . 48077) (InitializeTruckin 48079 . 53573) (IntervalToEvent 53575 . 54742) (
+InvertIcon 54744 . 55132) (KillGame 55134 . 55377) (MailOut 55379 . 55699) (MakeDriveBitMaps 55701 . 
+56339) (MakePlayerFile 56341 . 58577) (NormalizeValue 58579 . 58987) (PlayerInterruptMenu 58989 . 
+59358) (RunPlayerRE 59360 . 60186) (RunPlayerRE1 60188 . 60821) (RandomRoomAvailable 60823 . 61778) (
+ReceiveIn 61780 . 62299) (ReflectIcon 62301 . 62859) (STRINGNUM 62861 . 63195) (SendOut 63197 . 63344)
+ (SetMachineDepPara 63346 . 63901) (SetUpGame 63903 . 64113) (SettifyCopyCV 64115 . 64552) (
+SetupGameBrowsers 64554 . 65550) (SmashCreateCommodity 65552 . 67040) (SmashRandomPerishable 67042 . 
+67594) (SubstituteStop 67596 . 68224) (SuspendGame 68226 . 69344) (SwitchMenu 69346 . 69513) (
+TalkinBuyMade 69515 . 69814) (TalkinMoveMade 69816 . 70039) (TalkinSellMade 70041 . 70336) (
+TruckinError 70338 . 70466) (TruckinRE 70468 . 71497) (UpdateConsumerDisplay 71499 . 72008) (
+UpdatePrDisplay 72010 . 72642) (UpdateProducerSoldout 72644 . 73186) (UpdateQtyDisplay 73188 . 73842) 
+(WSRuleViolated? 73844 . 74962) (WaitIfControlKey 74964 . 76118) (WakeGame 76120 . 76741) (
+WriteGameStatus 76743 . 79327)))))
 STOP
