@@ -1,12 +1,12 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 5-Jul-2024 07:53:04" {DSK}<Users>larry>il>loops>system>LOOPSSPEEDUP.;2 13339  
+(FILECREATED "27-Jan-2024 15:50:00" {DSK}<home>larry>il>loops>system>LOOPSSPEEDUP.;2 13599  
 
       :EDIT-BY "lmm"
 
-      :CHANGES-TO (VARS LOOPSSPEEDUPCOMS)
+      :CHANGES-TO (MACROS \GETDTD)
 
-      :PREVIOUS-DATE "27-Jan-2024 15:50:00" {DSK}<Users>larry>il>loops>system>LOOPSSPEEDUP.;1)
+      :PREVIOUS-DATE "11-Mar-2022 19:19:08" {DSK}<home>larry>il>loops>system>LOOPSSPEEDUP.;1)
 
 
 (PRETTYCOMPRINT LOOPSSPEEDUPCOMS)
@@ -14,21 +14,22 @@
 (RPAQQ LOOPSSPEEDUPCOMS
        (
 
-(* ;;; "Need the following low-level stuff to make a datatype non-garbage-collectable.  This saves us the effort of maintaining reference counts")
+(* ;;; "Need the following low-level stuff to make a datatype non-garbage-collectable.  This saves us the effort of maintaining reference counts")
 
         (FNS Make-Not-Reference-Counted)
         (DECLARE%: EVAL@COMPILE DONTCOPY (FILES (LOADCOMP)
-                                                LLGC LLDATATYPE))
+                                                LLGC LLDATATYPE)
+               (EXPORT (MACROS \GETDTD)))
         
 
-(* ;;; "Datatype for in-line caches")
+(* ;;; "Datatype for in-line caches")
 
         (CONSTANTS (\IN-LINE-CACHE-BLOCK-SIZE 100))
         (RECORDS \IN-LINE-CACHE-BLOCK)
         (P (Make-Not-Reference-Counted '\IN-LINE-CACHE-BLOCK))
         
 
-(* ;;; "IV Lookup cache stuff")
+(* ;;; "IV Lookup cache stuff")
 
         (FNS FlushIVIndexCache \Make-IV-Cache-Entry)
         [INITVARS (*IV-Cache-Block* (CREATE \IN-LINE-CACHE-BLOCK))
@@ -39,7 +40,7 @@
         (ADDVARS (GLOBALVARS *Global-IV-Cache-Block*))
         
 
-(* ;;; "Method lookup caching stuff")
+(* ;;; "Method lookup caching stuff")
 
         (FNS FlushMethodCache \Make-Method-Cache-Entry)
         [INITVARS (*Method-Cache-Block* (CREATE \IN-LINE-CACHE-BLOCK))
@@ -87,6 +88,15 @@
 
 (FILESLOAD (LOADCOMP)
        LLGC LLDATATYPE)
+
+(* "FOLLOWING DEFINITIONS EXPORTED")(DECLARE%: EVAL@COMPILE 
+
+(PUTPROPS \GETDTD MACRO ((typeNum)
+                         (ADDBASE \DTDSpaceBase (ITIMES typeNum 18))))
+)
+
+(* "END EXPORTED DEFINITIONS")
+
 )
 
 
@@ -329,7 +339,7 @@
 
 (ADDTOVAR GLOBALVARS *Global-Method-Cache*)
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (2100 3307 (Make-Not-Reference-Counted 2110 . 3305)) (9543 11032 (FlushIVIndexCache 9553
- . 10297) (\Make-IV-Cache-Entry 10299 . 11030)) (11476 12897 (FlushMethodCache 11486 . 12138) (
-\Make-Method-Cache-Entry 12140 . 12895)))))
+  (FILEMAP (NIL (2148 3355 (Make-Not-Reference-Counted 2158 . 3353)) (9803 11292 (FlushIVIndexCache 9813
+ . 10557) (\Make-IV-Cache-Entry 10559 . 11290)) (11736 13157 (FlushMethodCache 11746 . 12398) (
+\Make-Method-Cache-Entry 12400 . 13155)))))
 STOP
