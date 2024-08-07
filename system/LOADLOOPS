@@ -1,20 +1,18 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 1-Aug-2022 09:28:41" {DSK}<home>larry>git-loops>system>LOADLOOPS.;11 20004  
+(FILECREATED "16-Jul-2024 20:44:01" {DSK}<Users>larry>il>LOOPS>SYSTEM>LOADLOOPS.;2 19901  
+
+      :EDIT-BY "lmm"
 
       :CHANGES-TO (VARS LOADLOOPSCOMS)
 
-      :PREVIOUS-DATE " 9-Jul-2022 20:50:48" {DSK}<home>larry>git-loops>system>LOADLOOPS.;10)
+      :PREVIOUS-DATE " 1-Aug-2022 09:28:41" {DSK}<Users>larry>il>LOOPS>SYSTEM>LOADLOOPS.;1)
 
-
-(* ; "
-Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
-")
 
 (PRETTYCOMPRINT LOADLOOPSCOMS)
 
 (RPAQQ LOADLOOPSCOMS
-       [
+       (
 
 (* ;;; "Loops loadup stuff")
 
@@ -110,7 +108,8 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
         (VARS (DIRECTORIES (UNION (LIST LOOPSDIRECTORY LOOPSLIBRARYDIRECTORY LOOPSUSERSDIRECTORY 
                                         LOOPSUSERSRULESDIRECTORY)
                                   DIRECTORIES)))
-        (P (MOVD? 'NILL 'UpdateClassBrowsers])
+        (P (MOVD? 'NILL 'UpdateClassBrowsers))
+        (TEMPLATES CL:COMPILER-LET)))
 
 
 
@@ -430,10 +429,10 @@ Copyright (c) 1983-1988, 1990-1991, 1993, 2022 by Venue & Xerox Corporation.
                          DIRECTORIES))
 
 (MOVD? 'NILL 'UpdateClassBrowsers)
-(PUTPROPS LOADLOOPS COPYRIGHT ("Venue & Xerox Corporation" 1983 1984 1985 1986 1987 1988 1990 1991 
-1993 2022))
+
+(SETTEMPLATE 'CL:COMPILER-LET 'MACRO)
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (6536 10947 (LOADLOOPS 6546 . 9760) (LoadLispUsers 9762 . 10168) (NOCACHEMACRO 10170 . 
-10241) (UnMarkChanges 10243 . 10945)) (11728 14953 (PromptEval 11738 . 13434) (PromptRead 13436 . 
-14951)) (15559 17323 (NiceMenu 15569 . 16124) (ColumnateMenuItems 16126 . 17321)))))
+  (FILEMAP (NIL (6506 10917 (LOADLOOPS 6516 . 9730) (LoadLispUsers 9732 . 10138) (NOCACHEMACRO 10140 . 
+10211) (UnMarkChanges 10213 . 10915)) (11698 14923 (PromptEval 11708 . 13404) (PromptRead 13406 . 
+14921)) (15529 17293 (NiceMenu 15539 . 16094) (ColumnateMenuItems 16096 . 17291)))))
 STOP
