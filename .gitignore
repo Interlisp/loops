@@ -1,38 +1,16 @@
-# loadup interim steps
-
-tmp/*
-
-# all loadup files 
-
-library/exports.all
-library/RDSYS*
-loadups/lisp.sysout
-loadups/full.sysout
-loadups/*.dribble
-loadups/whereis.hash
+# .gitignore for submodules  -- medley/loops
+*.pdf
+index.html
 
 # manual cross-reference files
-
 *.IMPTR
 
-#compiled code -- leave in for now
-
-# *.lcom
-# *.LCOM
-# *.dfasl
-# *.DFASL
-
 # older versions
-
 *~
 
 # emacs detritus
 *\#
 \.\#*
-
-# core files
-
-core
 
 # Mac OS detritus
 .DS_Store
